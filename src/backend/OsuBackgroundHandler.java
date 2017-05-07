@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Anthony on 09/02/2017.
+ * A class than controls all of the {@link OsuSongFolder} in the osu! song folder.
  */
 class OsuBackgroundHandler implements OsuBackgroundHandlers {
 
@@ -15,7 +15,7 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     private ArrayList<OsuSongFolder> songFolders;
     private File songDirectory;
 
-    public OsuBackgroundHandler() {
+    OsuBackgroundHandler() {
         directory = null;
         songFolders = new ArrayList<>(0);
     }

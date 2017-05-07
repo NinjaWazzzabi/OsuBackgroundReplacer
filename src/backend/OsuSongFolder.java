@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
- * Created by Anthony on 09/02/2017.
+ * A class that can handle all background images in a osu song folder.
  */
 class OsuSongFolder {
 
@@ -95,8 +95,7 @@ class OsuSongFolder {
                     String imageName = splittedSentence[1];
 
                     // Will only add the image name to the imageName list if there's no duplicate of it there.
-                    if (new File(folderPath+"/"+imageName).exists()){
-                    } else {
+                    if (!new File(folderPath+"/"+imageName).exists()) {
                         System.out.println("Image file \"" + imageName +"\" doesn't exist in the directory \"" + folderPath +"\"");
                     }
 
@@ -148,7 +147,7 @@ class OsuSongFolder {
     /**
      * @return Returns the path of all of the images in the directory separately in a list.
      */
-    public ArrayList<String> getAllOsuBackgroundFilePaths() {
+    ArrayList<String> getAllOsuBackgroundFilePaths() {
         ArrayList<String> pathsToImages = new ArrayList<>(0);
 
         // For every image in the folder, adds the file path and file name to the list.
@@ -160,7 +159,7 @@ class OsuSongFolder {
     /**
      * @return the name of the folder.
      */
-    public String getDirectoryName() {
+    String getDirectoryName() {
         File path = new File(folderPath);
         return path.getName();
     }
@@ -168,7 +167,7 @@ class OsuSongFolder {
      *
      * @return the path to the osu installation directory
      */
-    public String getDirectoryPath(){
+    String getDirectoryPath(){
         return folderPath;
     }
 
@@ -176,7 +175,6 @@ class OsuSongFolder {
     /**
      * @param filePath Path to the folder containing the background image.
      * @param fileName Name of the background image that will replace the ones in this song directory.
-     * @throws IOException The image is not found.
      */
     void replaceBackgrounds(String fileName, String filePath) {
         //By now the files should have been verified to exist so no need to add exception to method.
@@ -200,7 +198,7 @@ class OsuSongFolder {
      * @param saveDirectory The directory that the images from the song directory will be copied to.
      * @throws IOException If directory is not found.
      */
-    public void copyBackgrounds(String saveDirectory) throws IOException {
+    void copyBackgrounds(String saveDirectory) throws IOException {
         for (OsuBackground bg: osuBackgrounds) {
             if (bg.getFileName().chars().allMatch(c -> c < 128)) {
                 Path source = Paths.get(bg.getFilePath() + "/" + bg.getFileName());
@@ -222,10 +220,8 @@ class OsuSongFolder {
     }
     /**
      * Removes all the background images in the folder.
-     *
-     * @throws IOException Throws this exception if the images can't be found.
      */
-    public void removeAllBackgrounds() {
+    void removeAllBackgrounds() {
         for (OsuBackground bg : osuBackgrounds) {
             Path target = Paths.get(bg.getFilePath() + "/" + bg.getFileName());
 
