@@ -22,6 +22,11 @@
                <font>
                   <Font size="20.0" />
                </font></JFXButton>
+            <JFXButton fx:id="about" layoutX="663.0" layoutY="11.0" prefHeight="28.0" prefWidth="70.0" styleClass="lightSmallButton" stylesheets="@styles.css" text="About">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="50.0" prefHeight="367.0" prefWidth="466.0" styleClass="darkBackground" stylesheets="@styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">

@@ -51,6 +51,9 @@ public class MainScreen implements VisualComponent {
     @FXML
     private Text workDone;
 
+    @FXML
+    private JFXButton about;
+
     private Parent visualComponent;
     private List<MainScreenListener> listeners;
 
@@ -145,6 +148,14 @@ public class MainScreen implements VisualComponent {
             @Override
             public void handle(MouseEvent event) {
                 listeners.forEach(MainScreenListener::saveBrowse);
+            }
+        });
+
+        //About clicked
+        about.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                listeners.forEach(MainScreenListener::about);
             }
         });
     }

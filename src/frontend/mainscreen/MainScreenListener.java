@@ -39,4 +39,9 @@ public interface MainScreenListener {
      * Called when saveBrowse has been pressed.
      */
     void saveBrowse();
+
+    /**
+     * Called when About has been pressed.
+     */
+    void about();
 }
