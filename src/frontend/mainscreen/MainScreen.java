@@ -5,16 +5,18 @@ import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
 import frontend.util.VisualComponent;
 import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
@@ -55,6 +57,7 @@ public class MainScreen implements VisualComponent {
     private JFXButton about;
 
     private Parent visualComponent;
+    private Stage stage;
     private List<MainScreenListener> listeners;
 
     private double xOffset;
@@ -69,6 +72,19 @@ public class MainScreen implements VisualComponent {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        stage = new Stage();
+        stage.setScene(new Scene(getVisualComponent(), 800, 600));
+        stage.setResizable(false);
+        stage.setTitle("Osu Background Replacer");
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.getScene().setFill(null);
+
+        //Fade in
+        stage.getScene().getRoot().setOpacity(0);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(325),stage.getScene().getRoot());
+        fadeIn.setToValue(1);
+        stage.show();
+        fadeIn.play();
 
         listeners = new ArrayList<>();
         initializeActionListeners();
@@ -96,68 +112,36 @@ public class MainScreen implements VisualComponent {
         });
 
         //Exit button pressed
-        exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        exit.setOnMouseClicked(event -> {
+            FadeTransition ft = new FadeTransition(Duration.millis(250),stage.getScene().getRoot());
+            ft.setToValue(0);
+            ft.setOnFinished(event1 -> {
+                stage.close();
                 listeners.forEach(MainScreenListener::exitPressed);
-            }
+            });
+            ft.play();
         });
 
         //SaveAll button pressed
-        saveAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::saveAll);
-            }
-        });
+        saveAll.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::saveAll));
 
         //ReplaceAll button pressed
-        replaceAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::replaceAll);
-            }
-        });
+        replaceAll.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::replaceAll));
 
         //RemoveAll button pressed
-        removeAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::removeAll);
-            }
-        });
+        removeAll.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::removeAll));
 
         //BrowseInstallation button clicked
-        browseInstallation.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::installationBrowse);
-            }
-        });
+        browseInstallation.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::installationBrowse));
 
         //BrowseImage clicked
-        browseImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::imageBrowse);
-            }
-        });
+        browseImage.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::imageBrowse));
 
         //BrowseSave clicked
-        browseSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::saveBrowse);
-            }
-        });
+        browseSave.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::saveBrowse));
 
         //About clicked
-        about.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                listeners.forEach(MainScreenListener::about);
-            }
-        });
+        about.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::about));
     }
 
 

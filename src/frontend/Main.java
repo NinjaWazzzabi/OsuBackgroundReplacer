@@ -7,15 +7,11 @@ import frontend.about.About;
 import frontend.loadingScreen.Loading;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
-import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,7 +19,6 @@ import java.io.IOException;
 
 public class Main extends Application implements MainScreenListener, WorkListener{
 
-    private Stage stage;
     private MainScreen mainScreen;
     private OsuBackgroundHandlers obh;
 
@@ -32,62 +27,37 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
     @Override
     public void start(Stage stage) throws Exception{
+        //Creates loading screen
         Loading loading = new Loading();
-        this.stage = stage;
-        initializeBackend();
-        initializeRoot();
-        initializeStage();
-        loading.close();
-    }
-    private void initializeBackend(){
+
+        //Creates main screen
+        mainScreen = new MainScreen();
+        mainScreen.addListener(this);
+
         //Creates backend and adds this as listener.
         obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
         obh.addWorkListener(this);
 
-        //Autosearches after osu install directory.
+        //Auto searches after osu install directory.
         try {
             obh.findOsuDirectory();
+            String path = obh.getOsuAbsolutePath();
+            mainScreen.setOsuPathText(path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             //TODO Alert user to manually find osu directory
         }
-    }
-    private void initializeRoot(){
-        //Creates MainScreen
-        mainScreen = new MainScreen();
-        mainScreen.addListener(this);
 
-        //Sets path text if there is a osu Path in the backend.
-        try {
-            String path = obh.getOsuAbsolutePath();
-            mainScreen.setOsuPathText(path);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            //TODO Alert about no osu installation found
-        }
+        //Closes loading screen
+        loading.close();
     }
-    private void initializeStage(){
-        stage.setScene(new Scene(mainScreen.getVisualComponent(), 800, 600));
-        stage.setTitle("Hello World");
-        stage.setResizable(false);
-        stage.setTitle("Osu Background Replacer");
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.getScene().setFill(null);
-        stage.getScene().getRoot().setOpacity(0);
 
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(325),stage.getScene().getRoot());
-        fadeIn.setToValue(1);
-        stage.show();
-        fadeIn.play();
-    }
+
 
 
     @Override
     public void exitPressed() {
-        FadeTransition ft = new FadeTransition(Duration.millis(250),stage.getScene().getRoot());
-        ft.setToValue(0);
-        ft.setOnFinished(event -> Platform.exit());
-        ft.play();
+        Platform.exit();
     }
     @Override
     public void saveAll() {
@@ -124,20 +94,33 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
     @Override
     public void installationBrowse() {
-        String path = folderBrowseExplorer();
+        //Tries to get path from user
+        boolean directoryChosen = false;
+        String path = "";
+        try {
+            path = folderBrowseExplorer();
+            directoryChosen = true;
+        } catch (NullPointerException n){
+            //User exited browser without choosing folder
+        }
 
         //Updates both backend and frontend about new path only if it's a valid path.
-        try {
-            obh.setDirectory(path);
-            mainScreen.setOsuPathText(path);
-        } catch (IOException e) {
-            //TODO Handle if new path is invalid.
-            e.printStackTrace();
+        if (directoryChosen){
+            try {
+                obh.setDirectory(path);
+                mainScreen.setOsuPathText(path);
+            } catch (IOException e) {
+                //TODO Handle if new path is invalid.
+            }
         }
     }
     @Override
     public void imageBrowse() {
-        imageFile = fileBrowseExplorer();
+        try {
+            imageFile = fileBrowseExplorer();
+        } catch (NullPointerException n){
+            //User exited browser without choosing file
+        }
 
         if (imageFile != null){
             mainScreen.setImageLocationText(imageFile);
@@ -148,14 +131,17 @@ public class Main extends Application implements MainScreenListener, WorkListene
     }
     @Override
     public void saveBrowse() {
-        saveFolder = folderBrowseExplorer();
+        try {
+            saveFolder = folderBrowseExplorer();
+        } catch (NullPointerException n){
+            //User exited browser without choosing folder
+        }
         if (saveFolder != null){
             mainScreen.setSavePathText(saveFolder);
         } else {
             mainScreen.setSavePathText("No folder specified");
         }
     }
-
     @Override
     public void about() {
             new About();
@@ -184,7 +170,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
         //Sets initial directory and shows directory chooser
         File defaultDirectory = new File(dir);
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedDirectory = chooser.showOpenDialog(stage);
+        File selectedDirectory = chooser.showOpenDialog(new Stage());
 
         //Saves only if the user selected a folder and didn't just close down the window.
         String filePath = null;
@@ -216,7 +202,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
         //Sets initial directory and shows directory chooser
         File defaultDirectory = new File(dir);
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedDirectory = chooser.showDialog(stage);
+        File selectedDirectory = chooser.showDialog(new Stage());
 
         //Saves only if the user selected a folder and didn't just close down the window.
         String folderPath = null;

@@ -79,9 +79,13 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
 
     @Override
     public void setDirectory(String path) throws IOException {
-        directory = new File(path);
-        songDirectory = new File(path+"/Songs");
-        songFolders = getAllSongFolders();
+        if (isOsuDirectory(path)){
+            directory = new File(path);
+            songDirectory = new File(path+"/Songs");
+            songFolders = getAllSongFolders();
+        } else {
+            throw new IOException("Not a valid osu installation folder");
+        }
     }
     @Override
     public String getOsuAbsolutePath() throws ClassNotFoundException {
