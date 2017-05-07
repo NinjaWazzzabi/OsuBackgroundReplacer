@@ -4,6 +4,7 @@ import backend.OsuBackgroundHandlerFactory;
 import backend.OsuBackgroundHandlers;
 import backend.WorkListener;
 import frontend.about.About;
+import frontend.loadingScreen.Loading;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
 import javafx.animation.FadeTransition;
@@ -29,13 +30,14 @@ public class Main extends Application implements MainScreenListener, WorkListene
     private String saveFolder;
     private String imageFile;
 
-
     @Override
     public void start(Stage stage) throws Exception{
+        Loading loading = new Loading();
         this.stage = stage;
         initializeBackend();
         initializeRoot();
         initializeStage();
+        loading.close();
     }
     private void initializeBackend(){
         //Creates backend and adds this as listener.
