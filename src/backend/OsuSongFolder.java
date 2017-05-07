@@ -14,9 +14,9 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 class OsuSongFolder {
 
     // The list that holds all of the background images in the directory.
-    private ArrayList<OsuBackground> osuBackgrounds = new ArrayList<>();
+    private final ArrayList<OsuBackground> osuBackgrounds;
     // The File that indicates which directory this class will operate in.
-    private String folderPath;
+    private final String folderPath;
 
     /**
      * @param path The path to the directory this object will bind itself to.

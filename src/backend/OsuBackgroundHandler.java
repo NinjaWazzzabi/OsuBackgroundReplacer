@@ -21,31 +21,50 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     }
 
     @Override
-    public void replaceAll(String imageName, String imageDirectory) throws IOException {
+    public synchronized void replaceAll(String imageName, String imageDirectory) throws IOException {
         //TODO Make sure the path is pointed at a picture, and not something else.
 
         if (!new File(imageDirectory + "/" + imageName).exists()) {
             throw new IOException("Image not found");
-        }
-        for (OsuSongFolder obg : songFolders) {
-            obg.replaceBackgrounds(imageName, imageDirectory);
+        } else {
+            //Run in new thread to not delay other processes.
+            Thread thread = new Thread(() -> {
+                for (OsuSongFolder obg : songFolders) {
+                    obg.replaceBackgrounds(imageName, imageDirectory);
+                }
+            });
+            thread.start();
         }
     }
     @Override
-    public void saveAll(String directory) throws IOException {
+    public synchronized void saveAll(String directory) throws IOException {
         directory = directory+ "/OsuBackgrounds";
         if (!new File(directory).exists()) {
             new File(directory).mkdir();
-        }
-        for (OsuSongFolder background : songFolders) {
-            background.copyBackgrounds(directory);
+        } else {
+            String finalDirectory = directory;
+            //Run in new thread to not delay other processes.
+            Thread thread = new Thread(() -> {
+                for (OsuSongFolder background : songFolders) {
+                    try {
+                        background.copyBackgrounds(finalDirectory);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
         }
     }
     @Override
-    public void removeAll() {
-        for (OsuSongFolder songFolder : songFolders) {
-            songFolder.removeAllBackgrounds();
-        }
+    public synchronized void removeAll() {
+        //Run in new thread to not delay other processes.
+        Thread thread = new Thread(() -> {
+            for (OsuSongFolder songFolder : songFolders) {
+                songFolder.removeAllBackgrounds();
+            }
+        });
+        thread.start();
     }
 
     @Override
