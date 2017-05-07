@@ -6,6 +6,7 @@ import backend.WorkListener;
 import frontend.about.About;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,17 +69,23 @@ public class Main extends Application implements MainScreenListener, WorkListene
         stage.setTitle("Hello World");
         stage.setResizable(false);
         stage.setTitle("Osu Background Replacer");
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.getScene().setFill(null);
+        stage.getScene().getRoot().setOpacity(0);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(325),stage.getScene().getRoot());
+        fadeIn.setToValue(1);
         stage.show();
+        fadeIn.play();
     }
 
 
     @Override
     public void exitPressed() {
-        //Exits application
-        System.out.println("exit");
-        Platform.exit();
-        System.exit(0);
+        FadeTransition ft = new FadeTransition(Duration.millis(250),stage.getScene().getRoot());
+        ft.setToValue(0);
+        ft.setOnFinished(event -> Platform.exit());
+        ft.play();
     }
     @Override
     public void saveAll() {
