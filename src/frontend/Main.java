@@ -2,6 +2,7 @@ package frontend;
 
 import backend.OsuBackgroundHandlerFactory;
 import backend.OsuBackgroundHandlers;
+import backend.WorkListener;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
 import javafx.application.Application;
@@ -12,11 +13,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Main extends Application implements MainScreenListener{
+public class Main extends Application implements MainScreenListener, WorkListener{
 
     private Stage stage;
     private MainScreen mainScreen;
@@ -34,8 +36,9 @@ public class Main extends Application implements MainScreenListener{
         initializeStage();
     }
     private void initializeBackend(){
-        //Creates backend.
+        //Creates backend and adds this as listener.
         obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
+        obh.addWorkListener(this);
 
         //Autosearches after osu install directory.
         try {
@@ -209,6 +212,16 @@ public class Main extends Application implements MainScreenListener{
         }
 
         throw new NullPointerException("No folder chosen");
+    }
+
+
+    @Override
+    public void alertWorkStarted() {
+        mainScreen.workStarted();
+    }
+    @Override
+    public void alertWorkFinished() {
+        mainScreen.workFinished();
     }
 
 

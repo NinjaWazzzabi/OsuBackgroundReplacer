@@ -15,23 +15,29 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     private ArrayList<OsuSongFolder> songFolders;
     private File songDirectory;
 
+    private boolean isWorking;
+    private List<WorkListener> workListeners;
+
     OsuBackgroundHandler() {
+        isWorking = false;
         directory = null;
+        workListeners = new ArrayList<>();
         songFolders = new ArrayList<>(0);
     }
 
     @Override
     public synchronized void replaceAll(String imageName, String imageDirectory) throws IOException {
         //TODO Make sure the path is pointed at a picture, and not something else.
-
         if (!new File(imageDirectory + "/" + imageName).exists()) {
             throw new IOException("Image not found");
         } else {
             //Run in new thread to not delay other processes.
+            startedWorking();
             Thread thread = new Thread(() -> {
                 for (OsuSongFolder obg : songFolders) {
                     obg.replaceBackgrounds(imageName, imageDirectory);
                 }
+                finishedWorking();
             });
             thread.start();
         }
@@ -44,6 +50,7 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
         } else {
             String finalDirectory = directory;
             //Run in new thread to not delay other processes.
+            startedWorking();
             Thread thread = new Thread(() -> {
                 for (OsuSongFolder background : songFolders) {
                     try {
@@ -52,6 +59,7 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
                         e.printStackTrace();
                     }
                 }
+                finishedWorking();
             });
             thread.start();
         }
@@ -59,10 +67,12 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     @Override
     public synchronized void removeAll() {
         //Run in new thread to not delay other processes.
+        startedWorking();
         Thread thread = new Thread(() -> {
             for (OsuSongFolder songFolder : songFolders) {
                 songFolder.removeAllBackgrounds();
             }
+            finishedWorking();
         });
         thread.start();
     }
@@ -129,6 +139,8 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
 
         throw new FileNotFoundException("Osu directory not found");
     }
+
+
     private ArrayList<OsuSongFolder> getAllSongFolders() {
         File[] listOfFolders = songDirectory.listFiles();
         ArrayList<OsuSongFolder> tempOsuSongsBackgrounds = new ArrayList<>(0);
@@ -143,7 +155,6 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
 
         return tempOsuSongsBackgrounds;
     }
-
     /**
      * Checks if the directory contains a osu!.exe
      *
@@ -159,5 +170,29 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
         }
 
         return false;
+    }
+
+
+    private synchronized void startedWorking(){
+        isWorking = true;
+        workListeners.forEach(WorkListener::alertWorkStarted);
+    }
+    private synchronized void finishedWorking(){
+        isWorking = false;
+        workListeners.forEach(WorkListener::alertWorkFinished);
+    }
+
+
+    @Override
+    public boolean isWorking() {
+        return isWorking;
+    }
+    @Override
+    public void addWorkListener(WorkListener listener) {
+        workListeners.add(listener);
+    }
+    @Override
+    public void removeWorkListener(WorkListener listener) {
+        workListeners.remove(listener);
     }
 }

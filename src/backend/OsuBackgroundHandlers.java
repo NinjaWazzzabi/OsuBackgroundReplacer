@@ -49,4 +49,14 @@ public interface OsuBackgroundHandlers {
      * @throws FileNotFoundException Osu installation directory not found.
      */
     String findOsuDirectory() throws FileNotFoundException;
+
+    /**
+     * @return true if the object is changing background images.
+     */
+    boolean isWorking();
+
+
+    void addWorkListener(WorkListener listener);
+
+    void removeWorkListener(WorkListener listener);
 }

@@ -1,15 +1,22 @@
 package frontend.mainscreen;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
 import frontend.util.VisualComponent;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +45,11 @@ public class MainScreen implements VisualComponent {
     private JFXButton browseSave;
     @FXML
     private JFXTextField savePath;
+
+    @FXML
+    private JFXSpinner progressBar;
+    @FXML
+    private Text workDone;
 
     private Parent visualComponent;
     private List<MainScreenListener> listeners;
@@ -146,6 +158,52 @@ public class MainScreen implements VisualComponent {
     }
     public void setImageLocationText(String path) {
         imageLocation.setText(path);
+    }
+
+    private final int fadeLength = 500;
+    public void workStarted(){
+        //Progressbar fade in animation
+        FadeTransition progressFade = new FadeTransition(Duration.millis(fadeLength),progressBar);
+        progressFade.setFromValue(progressBar.getOpacity());
+        progressFade.setToValue(1);
+        progressFade.play();
+
+        workDone.getTransforms().clear();
+        //Text fade out if it still has some opacity
+        FadeTransition textFade = new FadeTransition(Duration.millis(fadeLength/2),progressBar);
+        textFade.setFromValue(workDone.getOpacity());
+        textFade.setToValue(0);
+        textFade.play();
+    }
+
+    public void workFinished(){
+        //Progressbar fade out animation
+        FadeTransition ftProgressBar = new FadeTransition(Duration.millis(fadeLength),progressBar);
+        ftProgressBar.setFromValue(progressBar.getOpacity());
+        ftProgressBar.setToValue(0);
+
+        //Text delay
+        //Text stay visible
+        PauseTransition delay = new PauseTransition(Duration.millis(fadeLength/2));
+
+        //Text fade in animation
+        FadeTransition textFadeIn = new FadeTransition(Duration.millis(fadeLength),workDone);
+        textFadeIn.setFromValue(workDone.getOpacity());
+        textFadeIn.setToValue(1);
+
+        //Text stay visible
+        PauseTransition textStayVisible = new PauseTransition(Duration.millis(fadeLength*4));
+
+        //Text fade out animation
+        FadeTransition textFadeOut = new FadeTransition(Duration.millis(fadeLength),workDone);
+        textFadeOut.setFromValue(1);
+        textFadeOut.setToValue(0);
+
+        //Combine text animation
+        SequentialTransition textSeq = new SequentialTransition(delay,textFadeIn,textStayVisible,textFadeOut);
+
+        textSeq.play();
+        ftProgressBar.play();
     }
 
 

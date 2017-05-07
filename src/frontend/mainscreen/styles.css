@@ -23,6 +23,10 @@
     -jfx-button-type: RAISED;
 }
 
+.handCursor {
+    -fx-cursor: hand;
+}
+
 .lightBigText {
     -fx-font-size: 30;
     -fx-fill: #eeeeee;
