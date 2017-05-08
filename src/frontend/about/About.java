@@ -1,6 +1,8 @@
 package frontend.about;
 
 import com.jfoenix.controls.JFXButton;
+import com.oracle.jrockit.jfr.DurationEvent;
+import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.io.IOException;
@@ -50,9 +53,27 @@ public class About{
         Stage stage = new Stage();
         stage.setTitle("About section");
         stage.setScene(new Scene(visualComponent, 600, 300));
+
+        /*
+        There's currently a bug in the code that's creating
+        a white glow when closing or opening the about tab.
+        This bug is now a feature, because I like it.
+
+        If by any means you would want to fade it to transparent
+        instead of white, then change the "StageStyle.UNDECORATED"
+        to "StageStyle.TRANSPARENT".
+         */
         stage.initStyle(StageStyle.UNDECORATED);
+        stage.getScene().setFill(null);
         stage.setResizable(false);
+
+        visualComponent.setOpacity(0);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(250),visualComponent);
+        fadeIn.setToValue(1);
+
         stage.show();
+        fadeIn.play();
+
     }
 
     private void initializeActionListeners() {
@@ -78,8 +99,13 @@ public class About{
         exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Stage stage = (Stage) topSection.getScene().getWindow();
-                stage.close();
+                FadeTransition fadeOut = new FadeTransition(Duration.millis(250), visualComponent);
+                fadeOut.setToValue(0);
+                fadeOut.setOnFinished(event1 -> {
+                    Stage stage = (Stage) topSection.getScene().getWindow();
+                    stage.close();
+                });
+                fadeOut.play();
             }
         });
 
