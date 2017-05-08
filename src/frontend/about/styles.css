@@ -42,6 +42,17 @@
     -fx-fill: #eeeeee;
 }
 
+
+.mediumLinkText {
+    -fx-font-size: 20;
+    -fx-fill: #4a00d4;
+    -fx-cursor: hand;
+}
+
+.mediumLinkText:hover {
+    -fx-fill: #7f40ff;
+}
+
 .darkBackground {
     -fx-background-color:  #33333f;
 }

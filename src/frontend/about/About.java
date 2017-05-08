@@ -8,11 +8,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by Anthony on 07/05/2017.
@@ -24,6 +28,8 @@ public class About{
     private JFXButton exit;
     @FXML
     private AnchorPane topSection;
+    @FXML
+    private Text linkText;
 
     private double xOffset;
     private double yOffset;
@@ -43,7 +49,7 @@ public class About{
 
         Stage stage = new Stage();
         stage.setTitle("About section");
-        stage.setScene(new Scene(visualComponent, 450, 250));
+        stage.setScene(new Scene(visualComponent, 600, 300));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(false);
         stage.show();
@@ -76,5 +82,17 @@ public class About{
                 stage.close();
             }
         });
+
+
+        //linkText text pressed (They visited my github page ^^)
+        linkText.setOnMouseClicked(event -> {
+                    try {
+                        Desktop.getDesktop().browse(new URI("https://github.com/NinjaWazzzabi/OsuBackgroundReplacer"));
+                    } catch (IOException | URISyntaxException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+        );
     }
+
 }
