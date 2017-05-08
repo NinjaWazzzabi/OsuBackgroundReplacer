@@ -1,3 +1,5 @@
+/*  BUTTONS  */
+
 .darkButton {
     -fx-font-size: 23;
     -fx-background-color:  #222229;
@@ -5,14 +7,24 @@
     -fx-text-fill: #d0d0d0;
     -fx-fill: #d0d0d0;
     -jfx-button-type: RAISED;
+    -fx-cursor: hand;
+}
+
+.darkButton:hover {
+    -fx-background-color: #393940;
 }
 
 .lightSmallButton {
     -fx-font-size: 16;
     -jfx-button-type: RAISED;
-    -fx-background-color: #bbbbbb;
+    -fx-background-color: #cccccc;
     -fx-padding: 0;
     -fx-text-fill: #1a1a1a;
+    -fx-cursor: hand;
+}
+
+.lightSmallButton:hover {
+    -fx-background-color: #efefef;
 }
 
 .darkSmallButton {
@@ -21,12 +33,14 @@
     -fx-font-size: 12;
     -fx-text-fill: #d0d0d0;
     -jfx-button-type: RAISED;
-}
-
-.handCursor {
     -fx-cursor: hand;
 }
 
+.darkSmallButton:hover {
+    -fx-background-color: #393940;
+}
+
+/*  TEXT  */
 .lightBigText {
     -fx-font-size: 30;
     -fx-fill: #eeeeee;
@@ -53,6 +67,9 @@
     -fx-fill: #7f40ff;
 }
 
+
+/*  BACKGROUNDS  */
+
 .customDarkBackground {
     -fx-background-color:  #33333f;
     -fx-border-radius: 15;
@@ -67,4 +84,11 @@
 
 .mediumBackground {
     -fx-background-color:  #44444f;
+}
+
+
+/*  EXTRAS  */
+
+.handCursor {
+    -fx-cursor: hand;
 }

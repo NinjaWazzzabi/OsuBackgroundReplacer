@@ -18,10 +18,6 @@
                </font>
             </Text>
             <Text fill="WHITE" layoutX="360.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightSmallText" text="Alpha!" />
-            <JFXButton fx:id="exit" layoutX="758.0" layoutY="10.0" prefHeight="28.0" prefWidth="28.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="⨉" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
-               <font>
-                  <Font size="20.0" />
-               </font></JFXButton>
             <JFXButton fx:id="about" layoutX="663.0" layoutY="11.0" prefHeight="28.0" prefWidth="70.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="About">
                <font>
                   <Font size="20.0" />
@@ -29,8 +25,36 @@
             </JFXButton>
          </children>
       </AnchorPane>
+      <JFXButton fx:id="exit" prefHeight="28.0" prefWidth="28.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="⨉" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
       <AnchorPane layoutY="50.0" prefHeight="367.0" prefWidth="466.0" styleClass="darkBackground" stylesheets="@/css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
+            <JFXTextField fx:id="osuFolderLocation" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="74.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No osu installation found" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXButton fx:id="browseInstallation" buttonType="RAISED" layoutX="663.0" layoutY="74.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </JFXButton>
+            <Text layoutX="37.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
+            <JFXTextField fx:id="imageLocation" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="178.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No image chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXButton fx:id="browseImage" buttonType="RAISED" layoutX="663.0" layoutY="178.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </JFXButton>
+            <Text layoutX="37.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Replacing image" />
+            <JFXTextField fx:id="savePath" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="288.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXButton fx:id="browseSave" buttonType="RAISED" layoutX="663.0" layoutY="288.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </JFXButton>
+            <Text layoutX="37.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Save location" />
+            <Text fx:id="workDone" layoutX="345.0" layoutY="408.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Finished" />
+            <JFXSpinner fx:id="progressBar" layoutX="336.0" layoutY="332.0" opacity="0.0" radius="60.0" startingAngle="0.0" />
             <HBox layoutY="472.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane prefHeight="45.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -56,29 +80,6 @@
                   <AnchorPane prefHeight="45.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <JFXTextField fx:id="osuFolderLocation" editable="false" focusColor="#a4a4a4" layoutX="37.0" layoutY="74.0" prefHeight="34.0" prefWidth="618.0" promptText="No osu installation found" styleClass="darkButton" stylesheets="@/css/styles.css" />
-            <JFXButton fx:id="browseInstallation" buttonType="RAISED" layoutX="663.0" layoutY="74.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
-               <font>
-                  <Font size="23.0" />
-               </font>
-            </JFXButton>
-            <Text layoutX="37.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
-            <JFXTextField fx:id="imageLocation" editable="false" focusColor="#a4a4a4" layoutX="37.0" layoutY="178.0" prefHeight="34.0" prefWidth="618.0" promptText="No image chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
-            <JFXButton fx:id="browseImage" buttonType="RAISED" layoutX="663.0" layoutY="178.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
-               <font>
-                  <Font size="23.0" />
-               </font>
-            </JFXButton>
-            <Text layoutX="37.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Replacing image" />
-            <JFXTextField fx:id="savePath" editable="false" focusColor="#a4a4a4" layoutX="37.0" layoutY="288.0" prefHeight="34.0" prefWidth="618.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
-            <JFXButton fx:id="browseSave" buttonType="RAISED" layoutX="663.0" layoutY="288.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
-               <font>
-                  <Font size="23.0" />
-               </font>
-            </JFXButton>
-            <Text layoutX="37.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Save location" />
-            <Text fx:id="workDone" layoutX="345.0" layoutY="408.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Finished" />
-            <JFXSpinner fx:id="progressBar" layoutX="336.0" layoutY="332.0" opacity="0.0" radius="60.0" startingAngle="0.0" />
          </children>
       </AnchorPane>
    </children>
