@@ -37,7 +37,7 @@ public class About{
 
     public About(){
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("about.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/about.fxml"));
         loader.setController(this);
         try {
             this.visualComponent = loader.load();

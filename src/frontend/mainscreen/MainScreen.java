@@ -64,7 +64,7 @@ public class MainScreen {
 
 
     public MainScreen(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainScreen.fxml"));
         loader.setController(this);
         try {
             this.visualComponent = loader.load();

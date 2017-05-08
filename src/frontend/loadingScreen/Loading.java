@@ -1,8 +1,6 @@
 package frontend.loadingScreen;
 
 import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +19,7 @@ public class Loading {
     private Stage stage;
 
     public Loading(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("loading.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loading.fxml"));
         loader.setController(this);
         try {
             this.visualComponent = loader.load();
