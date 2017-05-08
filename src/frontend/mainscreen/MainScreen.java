@@ -6,19 +6,16 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +23,7 @@ import java.util.List;
 public class MainScreen {
     @FXML
     private AnchorPane topSection;
-    @FXML
-    private JFXButton exit;
-    @FXML
-    private JFXButton saveAll;
-    @FXML
-    private JFXButton replaceAll;
-    @FXML
-    private JFXButton removeAll;
+
     @FXML
     private JFXButton browseInstallation;
     @FXML
@@ -48,21 +38,32 @@ public class MainScreen {
     private JFXTextField savePath;
 
     @FXML
+    private JFXButton exit;
+    @FXML
+    private JFXButton about;
+
+    @FXML
+    private JFXButton saveAll;
+    @FXML
+    private JFXButton replaceAll;
+    @FXML
+    private JFXButton removeAll;
+
+    @FXML
     private JFXSpinner progressBar;
     @FXML
     private Text workDone;
 
-    @FXML
-    private JFXButton about;
-
-    private Parent visualComponent;
     private Stage stage;
+    private Parent visualComponent;
     private List<MainScreenListener> listeners;
 
     private double xOffset;
     private double yOffset;
 
-
+    /**
+     * A menu screen is created and creates a new stage to use.
+     */
     public MainScreen(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainScreen.fxml"));
         loader.setController(this);
@@ -72,42 +73,36 @@ public class MainScreen {
             e.printStackTrace();
         }
         stage = new Stage();
-        stage.setScene(new Scene(getVisualComponent(), 800, 600));
+        stage.setScene(new Scene(visualComponent, 800, 600));
         stage.setResizable(false);
         stage.setTitle("Osu Background Replacer");
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.getScene().setFill(null);
 
+        listeners = new ArrayList<>();
+        initializeActionListeners();
+
         //Fade in
-        stage.getScene().getRoot().setOpacity(0);
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(325),stage.getScene().getRoot());
+        visualComponent.setOpacity(0);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(325),visualComponent);
         fadeIn.setToValue(1);
         stage.show();
         fadeIn.play();
-
-        listeners = new ArrayList<>();
-        initializeActionListeners();
     }
     /**
      * Initializes all listeners in the object.
      */
     private void initializeActionListeners(){
         //Screen window movement
-        topSection.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Window stage = topSection.getScene().getWindow();
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
+        topSection.setOnMousePressed(event -> {
+            Window stage = topSection.getScene().getWindow();
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
         });
-        topSection.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Window stage = topSection.getScene().getWindow();
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
+        topSection.setOnMouseDragged(event -> {
+            Window stage = topSection.getScene().getWindow();
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
         });
 
         //Exit button pressed
@@ -143,18 +138,36 @@ public class MainScreen {
         about.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::about));
     }
 
+    /**
+     * Sets the text of the osuFolderLocation textfield.
+     * @param text text that will be displayed.
+     */
+    public void setOsuPathText(String text){
+        osuFolderLocation.setText(text.replace("/","\\"));
+    }
+    /**
+     * Sets the text of the imageLocation textfield.
+     * @param text text that will be displayed.
+     */
+    public void setSavePathText(String text){
+        savePath.setText(text);
+    }
+    /**
+     * Sets the text of the savePath textfield.
+     * @param text text that will be displayed.
+     */
+    public void setImageLocationText(String text) {
+        imageLocation.setText(text);
+    }
 
-    public void setOsuPathText(String path){
-        osuFolderLocation.setText(path.replace("/","\\"));
-    }
-    public void setSavePathText(String path){
-        savePath.setText(path);
-    }
-    public void setImageLocationText(String path) {
-        imageLocation.setText(path);
-    }
-
+    /**
+     * Progress info fade time constant.
+     */
     private final int fadeLength = 500;
+
+    /**
+     * Starts to fade in the spinning circle
+     */
     public void workStarted(){
         //Progressbar fade in animation
         FadeTransition progressFade = new FadeTransition(Duration.millis(fadeLength),progressBar);
@@ -169,7 +182,9 @@ public class MainScreen {
         textFade.setToValue(0);
         textFade.play();
     }
-
+    /**
+     * Fades out the spinning circle and displays the text "Finished" for a breif moment.
+     */
     public void workFinished(){
         //Progressbar fade out animation
         FadeTransition ftProgressBar = new FadeTransition(Duration.millis(fadeLength),progressBar);
@@ -201,9 +216,6 @@ public class MainScreen {
     }
 
 
-    public Parent getVisualComponent() {
-        return visualComponent;
-    }
     /**
      * Adds the listener to the object.
      * @param listener the specified listener.
