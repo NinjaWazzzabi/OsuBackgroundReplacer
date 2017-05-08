@@ -3,7 +3,6 @@ package frontend.mainscreen;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
-import frontend.util.VisualComponent;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
@@ -24,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainScreen implements VisualComponent {
+public class MainScreen {
     @FXML
     private AnchorPane topSection;
     @FXML
@@ -202,7 +201,6 @@ public class MainScreen implements VisualComponent {
     }
 
 
-    @Override
     public Parent getVisualComponent() {
         return visualComponent;
     }
