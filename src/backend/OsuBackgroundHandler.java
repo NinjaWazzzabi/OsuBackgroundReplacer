@@ -48,6 +48,9 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     }
     @Override
     public synchronized void saveAll(String directory) throws IOException {
+        if (!new File(directory).exists()){
+            throw new IOException("Save location not found");
+        }
         directory = directory+ "/OsuBackgrounds";
         if (!new File(directory).exists()) {
             new File(directory).mkdir();

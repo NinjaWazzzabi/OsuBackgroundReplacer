@@ -44,4 +44,19 @@ public interface MainScreenListener {
      * Called when About has been pressed.
      */
     void about();
+
+    /**
+     * Called when osuFolderLocation has been changed.
+     */
+    void osuFolderLocationChange(String path);
+
+    /**
+     * Called when imageLocation has been changed.
+     */
+    void imageLocationChange(String path);
+
+    /**
+     * Called when savePath has been changed.
+     */
+    void savePathChange(String path);
 }

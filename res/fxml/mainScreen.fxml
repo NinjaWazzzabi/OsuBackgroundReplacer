@@ -32,21 +32,21 @@
       </JFXButton>
       <AnchorPane layoutY="50.0" prefHeight="367.0" prefWidth="466.0" styleClass="darkBackground" stylesheets="@/css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <JFXTextField fx:id="osuFolderLocation" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="74.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No osu installation found" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXTextField fx:id="osuFolderLocation" focusColor="#a4a4a4" layoutX="37.0" layoutY="74.0" prefHeight="34.0" prefWidth="618.0" promptText="No osu installation found" styleClass="darkButton" stylesheets="@/css/styles.css" />
             <JFXButton fx:id="browseInstallation" buttonType="RAISED" layoutX="663.0" layoutY="74.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
                <font>
                   <Font size="23.0" />
                </font>
             </JFXButton>
             <Text layoutX="37.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
-            <JFXTextField fx:id="imageLocation" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="178.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No image chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXTextField fx:id="imageLocation" focusColor="#a4a4a4" layoutX="37.0" layoutY="178.0" prefHeight="34.0" prefWidth="618.0" promptText="No image chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
             <JFXButton fx:id="browseImage" buttonType="RAISED" layoutX="663.0" layoutY="178.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
                <font>
                   <Font size="23.0" />
                </font>
             </JFXButton>
             <Text layoutX="37.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Replacing image" />
-            <JFXTextField fx:id="savePath" editable="false" focusColor="#a4a4a4" focusTraversable="false" layoutX="37.0" layoutY="288.0" mouseTransparent="true" prefHeight="34.0" prefWidth="618.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+            <JFXTextField fx:id="savePath" focusColor="#a4a4a4" layoutX="37.0" layoutY="288.0" prefHeight="34.0" prefWidth="618.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
             <JFXButton fx:id="browseSave" buttonType="RAISED" layoutX="663.0" layoutY="288.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
                <font>
                   <Font size="23.0" />

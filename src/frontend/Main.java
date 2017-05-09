@@ -153,6 +153,35 @@ public class Main extends Application implements MainScreenListener, WorkListene
             new About();
     }
 
+    @Override
+    public void osuFolderLocationChange(String path) {
+        boolean isValid = false;
+
+        try {
+            obh.setOsuFile(path);
+            isValid = true;
+        } catch (IOException ignored) {
+        }
+
+        try {
+            obh.setOsuDirectory(path);
+            isValid = true;
+        } catch (IOException ignored) {
+        }
+
+        if (!isValid){
+            mainScreen.promptErrorText("Not a valid osu installation");
+        }
+    }
+    @Override
+    public void imageLocationChange(String path) {
+        imageFile = path;
+    }
+    @Override
+    public void savePathChange(String path) {
+        saveFolder = path;
+    }
+
 
     private String lastFolder = null;
     /**

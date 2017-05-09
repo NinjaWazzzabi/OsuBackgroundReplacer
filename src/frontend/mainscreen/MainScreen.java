@@ -7,10 +7,15 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -108,6 +113,35 @@ public class MainScreen {
             stage.setY(event.getScreenY() + yOffset);
         });
 
+        initializeBrowses();
+        initializeButtons();
+        initializeTextField();
+
+    }
+
+    private void initializeTextField(){
+        osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue){
+                listeners.forEach(listener -> listener.osuFolderLocationChange(osuFolderLocation.getText()));
+            }
+        });
+        osuFolderLocation.setOnAction(event -> listeners.forEach(
+                listener -> listener.osuFolderLocationChange(osuFolderLocation.getText())
+        ));
+
+        imageLocation.setOnKeyTyped(event -> listeners.forEach(
+                listener -> listener.imageLocationChange(imageLocation.getText())
+        ));
+
+
+        savePath.setOnKeyTyped(event -> listeners.forEach(
+                listener -> listener.savePathChange(savePath.getText())
+        ));
+    }
+    /**
+     * Initializes all button listeners in the object.
+     */
+    private void initializeButtons(){
         //Exit button pressed
         exit.setOnMouseClicked(event -> {
             FadeTransition ft = new FadeTransition(Duration.millis(250),stage.getScene().getRoot());
@@ -128,6 +162,13 @@ public class MainScreen {
         //RemoveAll button pressed
         removeAll.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::removeAll));
 
+        //About clicked
+        about.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::about));
+    }
+    /**
+     * Initializes all browse listeners in the object.
+     */
+    private void initializeBrowses(){
         //BrowseInstallation button clicked
         browseInstallation.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::installationBrowse));
 
@@ -136,10 +177,8 @@ public class MainScreen {
 
         //BrowseSave clicked
         browseSave.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::saveBrowse));
-
-        //About clicked
-        about.setOnMouseClicked(event -> listeners.forEach(MainScreenListener::about));
     }
+
 
     /**
      * Sets the text of the osuFolderLocation textfield.
