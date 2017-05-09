@@ -61,7 +61,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
     }
     @Override
     public void saveAll() {
-        if (saveFolder != null) {
+        if (saveFolder != null && saveFolder.length() > 1) {
             try {
                 obh.saveAll(saveFolder);
             } catch (IOException e) {
@@ -69,22 +69,28 @@ public class Main extends Application implements MainScreenListener, WorkListene
                 e.printStackTrace();
             }
         } else {
-            mainScreen.setSavePathText("No save folder specified");
+            mainScreen.promptErrorText("No save folder specified");
         }
     }
     @Override
     public void replaceAll() {
-        //String imageName, String imagePath
-        File file = new File(imageFile);
 
-        try {
-            obh.replaceAll(
-                    file.getName(),
-                    file.getParent()
-            );
-        } catch (IOException e) {
-            mainScreen.promptErrorText(e.getMessage());
+        if (imageFile != null && imageFile.length() > 1){
+            //String imageName, String imagePath
+            File file = new File(imageFile);
+
+            try {
+                obh.replaceAll(
+                        file.getName(),
+                        file.getParent()
+                );
+            } catch (IOException e) {
+                mainScreen.promptErrorText(e.getMessage());
+            }
+        } else {
+            mainScreen.promptErrorText("No image specified");
         }
+
     }
     @Override
     public void removeAll() {
