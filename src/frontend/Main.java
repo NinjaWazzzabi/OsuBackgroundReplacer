@@ -69,7 +69,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
                 e.printStackTrace();
             }
         } else {
-            mainScreen.promptErrorText("No save folder specified");
+            mainScreen.setSavePathText("No save folder specified");
         }
     }
     @Override
@@ -88,7 +88,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
                 mainScreen.promptErrorText(e.getMessage());
             }
         } else {
-            mainScreen.promptErrorText("No image specified");
+            mainScreen.promptErrorText("No image chosen");
         }
 
     }
