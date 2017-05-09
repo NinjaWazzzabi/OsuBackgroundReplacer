@@ -32,7 +32,14 @@ public interface OsuBackgroundHandlers {
      * @param path The path to the directory.
      * @throws IOException if directory doesn't contain osu installation.
      */
-    void setDirectory(String path) throws IOException;
+    void setOsuDirectory(String path) throws IOException;
+
+    /**
+     * Assigns where the Osu! file is.
+     * @param path The path to the file.
+     * @throws IOException if file isn't an osu.exe file.
+     */
+    void setOsuFile(String path) throws IOException;
     /**
      *
      * @return Current osu installation directory.

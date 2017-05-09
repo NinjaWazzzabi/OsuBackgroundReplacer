@@ -104,7 +104,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
         boolean directoryChosen = false;
         String path = "";
         try {
-            path = folderBrowseExplorer();
+            path = exeBrowseExplorer();
             directoryChosen = true;
         } catch (NullPointerException n){
             //User exited browser without choosing folder
@@ -113,17 +113,17 @@ public class Main extends Application implements MainScreenListener, WorkListene
         //Updates both backend and frontend about new path only if it's a valid path.
         if (directoryChosen){
             try {
-                obh.setDirectory(path);
+                obh.setOsuFile(path);
                 mainScreen.setOsuPathText(path);
             } catch (IOException e) {
-                mainScreen.promptErrorText("Not a valid osu installation folder");
+                mainScreen.promptErrorText("Not a valid osu installation");
             }
         }
     }
     @Override
     public void imageBrowse() {
         try {
-            imageFile = fileBrowseExplorer();
+            imageFile = imageFileBrowseExplorer();
         } catch (NullPointerException n){
             //User exited browser without choosing file
         }
@@ -160,10 +160,15 @@ public class Main extends Application implements MainScreenListener, WorkListene
      * @return path to file chosen.
      * @throws NullPointerException if user doesn't choose a file.
      */
-    private String fileBrowseExplorer() throws NullPointerException{
+    private String imageFileBrowseExplorer() throws NullPointerException{
         //Create directory chooser
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose file");
+
+        FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+        chooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+
+        chooser.setTitle("Choose image file");
         String dir;
 
         //If there's an already selected osu directory start from there, otherwise at user home.
@@ -186,16 +191,48 @@ public class Main extends Application implements MainScreenListener, WorkListene
             return filePath;
         }
 
-        throw new NullPointerException("No folder chosen");
+        throw new NullPointerException("No file chosen");
     }
     /**
      * Opens a folder browser.
      * @return String to the chosen path.
      */
-    private String folderBrowseExplorer() throws NullPointerException{
+    private String exeBrowseExplorer() throws NullPointerException{
+        //Create directory chooser
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Choose .exe file");
+        String dir;
+
+        FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("exe files (*.exe)", "*.exe");
+        chooser.getExtensionFilters().addAll(extFilterJPG);
+
+        //If there's an already last folderstart from there, otherwise at user home.
+        if (lastFolder != null){
+            dir = lastFolder;
+        } else {
+            dir = System.getProperty("user.home");
+        }
+
+        //Sets initial directory and shows directory chooser
+        File defaultDirectory = new File(dir);
+        chooser.setInitialDirectory(defaultDirectory);
+        File selectedDirectory = chooser.showOpenDialog(new Stage());
+
+        //Saves only if the user selected a folder and didn't just close down the window.
+        String folderPath = null;
+        if (selectedDirectory != null) {
+            folderPath = selectedDirectory.getAbsolutePath().replace("\\","/");
+            lastFolder = new File(folderPath).getParent();
+            return folderPath;
+        }
+
+        throw new NullPointerException("No file chosen");
+    }
+
+    private String folderBrowseExplorer(){
         //Create directory chooser
         DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Choose folder");
+        chooser.setTitle("Choose .exe file");
         String dir;
 
         //If there's an already last folderstart from there, otherwise at user home.

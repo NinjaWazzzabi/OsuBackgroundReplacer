@@ -1,6 +1,5 @@
 package backend;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -100,7 +99,7 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     }
 
     @Override
-    public void setDirectory(String path) throws IOException {
+    public void setOsuDirectory(String path) throws IOException {
         if (isOsuDirectory(path)){
             directory = new File(path);
             songDirectory = new File(path+"/Songs");
@@ -109,6 +108,15 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
             throw new IOException("Not a valid osu installation folder");
         }
     }
+    @Override
+    public void setOsuFile(String path) throws IOException {
+        if (isOsuExe(path)){
+            directory = new File(path).getParentFile();
+        } else {
+            throw new IOException("Not a osu executable");
+        }
+    }
+
     @Override
     public String getOsuAbsolutePath() throws ClassNotFoundException {
         if (directory == null) throw new ClassNotFoundException("NO DIRECTORY YET SPECIFIED");
@@ -132,35 +140,25 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
      */
     @Override
     public String findOsuDirectory() throws FileNotFoundException {
+
+        //Combines the three default installation locations to an array
         String homeDir = System.getProperty("user.home");
         homeDir = homeDir.replace("\\", "/");
         String defDirOne = homeDir + "/AppData/Local/osu!";
         String defDirTwo = "C:/Program Files/osu!";
         String defDirThree = "C:/Program Files(x86)/osu!";
+        String[] defaultDirectories = {defDirOne,defDirTwo,defDirThree};
 
-        if (isOsuDirectory(defDirOne)) {
-            try {
-                setDirectory(defDirOne);
-            } catch (IOException e) {
-                e.printStackTrace();
+        //Checks every element if it contains an osu installation.
+        for (String defaultDirectory : defaultDirectories) {
+            if (isOsuDirectory(defaultDirectory)){
+                try {
+                    setOsuDirectory(defaultDirectory);
+                    return defaultDirectory;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            return defDirOne;
-        }
-        if (isOsuDirectory(defDirTwo)) {
-            try {
-                setDirectory(defDirTwo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return defDirTwo;
-        }
-        if (isOsuDirectory(defDirThree)) {
-            try {
-                setDirectory(defDirThree);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return defDirThree;
         }
 
         throw new FileNotFoundException("Osu directory not found");
@@ -192,10 +190,19 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
         if (!osuFolder.exists()) return false;
 
         for (File file : osuFolder.listFiles()) {
-            if (file.getName().contains("osu!.exe")) return true;
+            if (isOsuExe(file.getAbsolutePath())) return true;
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the string contains "osu!.exe"
+     * @param path total path to the exe, or just the exe name itself.
+     * @return true if string contains "osu!.exe".
+     */
+    private boolean isOsuExe(String path){
+        return new File(path).getName().contains("osu!.exe");
     }
 
 
