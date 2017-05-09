@@ -80,6 +80,7 @@
                   <AnchorPane prefHeight="45.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
+            <Text fx:id="errorText" layoutX="84.0" layoutY="37.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorText" text="Here be error message" wrappingWidth="630.341796875" />
          </children>
       </AnchorPane>
    </children>

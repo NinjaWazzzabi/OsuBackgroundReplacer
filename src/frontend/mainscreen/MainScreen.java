@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,6 +54,8 @@ public class MainScreen {
     private JFXSpinner progressBar;
     @FXML
     private Text workDone;
+    @FXML
+    private Text errorText;
 
     private Stage stage;
     private Parent visualComponent;
@@ -215,6 +218,24 @@ public class MainScreen {
         ftProgressBar.play();
     }
 
+    private Transition lastAnimation = null;
+    public void promptErrorText(String text){
+        if (lastAnimation != null){
+            lastAnimation.stop();
+        }
+        errorText.setText(text);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(fadeLength),errorText);
+        fadeIn.setToValue(1);
+
+        PauseTransition delay = new PauseTransition(Duration.millis(fadeLength*4));
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(fadeLength),errorText);
+        fadeOut.setToValue(0);
+
+        SequentialTransition combine = new SequentialTransition(fadeIn,delay,fadeOut);
+        combine.play();
+    }
 
     /**
      * Adds the listener to the object.

@@ -45,7 +45,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
             mainScreen.setOsuPathText(path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            //TODO Alert user to manually find osu directory
+            mainScreen.promptErrorText("No osu found, find it manually below");
         }
 
         //Closes loading screen
@@ -83,7 +83,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
                     file.getParent()
             );
         } catch (IOException e) {
-            //TODO alert couldn't replace all
+            mainScreen.promptErrorText(e.getMessage());
         }
     }
     @Override
@@ -110,7 +110,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
                 obh.setDirectory(path);
                 mainScreen.setOsuPathText(path);
             } catch (IOException e) {
-                //TODO Handle if new path is invalid.
+                mainScreen.promptErrorText("Not a valid osu installation folder");
             }
         }
     }

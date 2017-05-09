@@ -67,6 +67,12 @@
     -fx-fill: #7f40ff;
 }
 
+.errorText{
+    -fx-font-size: 30;
+    -fx-fill: #ee3024;
+    -fx-text-alignment: center;
+}
+
 
 /*  BACKGROUNDS  */
 

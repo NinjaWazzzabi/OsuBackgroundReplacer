@@ -1,5 +1,6 @@
 package backend;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,8 +29,12 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     @Override
     public synchronized void replaceAll(String imageName, String imageDirectory) throws IOException {
         //TODO Make sure the path is pointed at a picture, and not something else.
-        if (!new File(imageDirectory + "/" + imageName).exists()) {
+        File file = new File(imageDirectory + "/" + imageName);
+
+        if (!file.exists()) {
             throw new IOException("Image not found");
+        } else if (!isPicture(file)) {
+            throw new IOException("File is not a png or jpg");
         } else {
             //Run in new thread to not delay other processes.
             startedWorking();
@@ -75,6 +80,23 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
             finishedWorking();
         });
         thread.start();
+    }
+
+    /**
+     * Checks if the file is a png or jpg file type.
+     * @param file to be checked.
+     * @return true if file type is jpg or png.
+     */
+    private boolean isPicture(File file){
+        String extension = "";
+
+        int i = file.getAbsolutePath().lastIndexOf('.');
+        if (i > 0) {
+            extension = file.getAbsolutePath().substring(i+1);
+        }
+        extension = extension.toLowerCase();
+
+        return extension.equals("jpg") || extension.equals("png");
     }
 
     @Override
