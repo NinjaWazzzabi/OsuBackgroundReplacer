@@ -1,7 +1,7 @@
 package frontend;
 
 import backend.OsuBackgroundHandlerFactory;
-import backend.OsuBackgroundHandlers;
+import backend.IOsuBackgroundHandler;
 import backend.WorkListener;
 import frontend.about.About;
 import frontend.loadingScreen.Loading;
@@ -20,13 +20,13 @@ import java.io.IOException;
 public class Main extends Application implements MainScreenListener, WorkListener{
 
     private MainScreen mainScreen;
-    private OsuBackgroundHandlers obh;
+    private IOsuBackgroundHandler obh;
 
     private String saveFolder;
     private String imageFile;
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) {
         //Creates loading screen
         Loading loading = new Loading();
 
@@ -34,17 +34,10 @@ public class Main extends Application implements MainScreenListener, WorkListene
         mainScreen = new MainScreen();
         mainScreen.addListener(this);
 
-        //Creates backend and adds this as listener.
-        obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
-        obh.addWorkListener(this);
-
-        //Auto searches after osu install directory.
         try {
-            obh.findOsuDirectory();
-            String path = obh.getOsuAbsolutePath();
-            mainScreen.setOsuPathText(path);
+            initializeBackend();
+            mainScreen.setOsuPathText(obh.getOsuAbsolutePath());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             mainScreen.promptErrorText("No osu found, find it manually below");
         }
 
@@ -52,7 +45,18 @@ public class Main extends Application implements MainScreenListener, WorkListene
         loading.close();
     }
 
+    /**
+     * Starts up the backend.
+     * @throws FileNotFoundException if osu installation wasn't found.
+     */
+    void initializeBackend() throws FileNotFoundException {
+        //Creates backend and adds this as listener.
+        obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
+        obh.addWorkListener(this);
 
+        //Auto searches after osu install directory.
+        obh.findOsuDirectory();
+    }
 
 
     @Override

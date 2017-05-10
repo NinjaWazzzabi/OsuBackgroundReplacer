@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A class than controls all of the {@link OsuSongFolder} in the osu! song folder.
  */
-class OsuBackgroundHandler implements OsuBackgroundHandlers {
+class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
     private File directory;
     private ArrayList<OsuSongFolder> songFolders;
@@ -121,8 +121,8 @@ class OsuBackgroundHandler implements OsuBackgroundHandlers {
     }
 
     @Override
-    public String getOsuAbsolutePath() throws ClassNotFoundException {
-        if (directory == null) throw new ClassNotFoundException("NO DIRECTORY YET SPECIFIED");
+    public String getOsuAbsolutePath() {
+        if (directory == null) return null;
         return directory.getAbsolutePath();
     }
     @Override

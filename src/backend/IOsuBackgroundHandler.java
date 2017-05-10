@@ -1,5 +1,7 @@
 package backend;
 
+import com.sun.istack.internal.Nullable;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.util.List;
 /**
  * Created by Anthony on 09/02/2017.
  */
-public interface OsuBackgroundHandlers {
+public interface IOsuBackgroundHandler {
 
     /**
      * Used to replace all of the osu backgrounds with the image from the method argument.
@@ -45,7 +47,8 @@ public interface OsuBackgroundHandlers {
      * @return Current osu installation directory.
      * @throws IllegalStateException If no directory yet specified.
      */
-    String getOsuAbsolutePath() throws ClassNotFoundException;
+    @Nullable
+    String getOsuAbsolutePath();
     /**
      * @return All of the osu song folders names.
      */
