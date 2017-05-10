@@ -1,4 +1,4 @@
-package frontend.loadingScreen;
+package frontend.loadingscreen;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;

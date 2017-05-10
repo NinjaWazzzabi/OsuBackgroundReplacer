@@ -1,4 +1,4 @@
-package backend;
+package backend.osubackgroundhandler;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -47,10 +47,12 @@ class OsuSongFolder {
         File[] listOfFiles = new File(folderPath).listFiles();
 
         //Adds every file that has the file ending ".osu" to the ArrayList
-        for (File file : listOfFiles) {
-            String fileName = file.getName();
-            if (fileName.contains(".osu")) {
-                tempOsuNames.add(fileName);
+        if (listOfFiles != null){
+            for (File file : listOfFiles) {
+                String fileName = file.getName();
+                if (fileName.contains(".osu")) {
+                    tempOsuNames.add(fileName);
+                }
             }
         }
 
@@ -122,7 +124,7 @@ class OsuSongFolder {
                 //If a picture is not found on this line, we read in the next one and repeat the while loop.
                 line = reader.readLine();
             }
-
+            reader.close();
         }
 
         // Returns the list with the image names.
@@ -206,7 +208,10 @@ class OsuSongFolder {
 
                 //If save directory doesn't exist, create it.
                 if (!new File(saveDirectory + "/" + getDirectoryName()).exists()){
-                    new File(saveDirectory + "/" + getDirectoryName()).mkdir();
+                    boolean successful = new File(saveDirectory + "/" + getDirectoryName()).mkdir();
+                    if (!successful){
+                        throw new IOException("Couldn't create folder: " + saveDirectory + "/" +getDirectoryName());
+                    }
                 }
 
                 Files.copy(source, target, REPLACE_EXISTING);
@@ -214,7 +219,7 @@ class OsuSongFolder {
                 //TODO Can't save the image if it contains characters outside of the ANSI Range.
                 //Image names currently only supports ANSI standard.
                 //If you use characters not in ANSI then you won't be able to copy it using the copy to method below.
-                System.out.println("COULDN'T SAVE IMAGE: " + bg.getFileName());
+                System.out.println("Couldn't save image: " + bg.getFileName());
             }
         }
     }

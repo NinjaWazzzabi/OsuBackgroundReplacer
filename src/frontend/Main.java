@@ -1,12 +1,13 @@
 package frontend;
 
-import backend.OsuBackgroundHandlerFactory;
-import backend.IOsuBackgroundHandler;
-import backend.WorkListener;
+import backend.osubackgroundhandler.OsuBackgroundHandlerFactory;
+import backend.osubackgroundhandler.IOsuBackgroundHandler;
+import backend.osubackgroundhandler.WorkListener;
+import com.sun.istack.internal.Nullable;
 import frontend.about.About;
 import frontend.backupprompt.BackupPrompt;
 import frontend.backupprompt.BackupPromptListener;
-import frontend.loadingScreen.Loading;
+import frontend.loadingscreen.Loading;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
 import javafx.application.Application;
@@ -25,7 +26,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
     private IOsuBackgroundHandler obh;
 
     private String saveFolder;
-    private String imageFile;
+    private String imagePath;
 
     @Override
     public void start(Stage stage) {
@@ -74,7 +75,6 @@ public class Main extends Application implements MainScreenListener, WorkListene
                 obh.saveAll(saveFolder);
             } catch (IOException e) {
                 //Alert path invalid
-                e.printStackTrace();
             }
         } else {
             mainScreen.setSavePathText("No save folder specified");
@@ -83,9 +83,9 @@ public class Main extends Application implements MainScreenListener, WorkListene
     @Override
     public void replaceAll() {
 
-        if (imageFile != null && imageFile.length() > 1){
+        if (imagePath != null && imagePath.length() > 1){
             //String imageName, String imagePath
-            File file = new File(imageFile);
+            File file = new File(imagePath);
 
             try {
                 obh.replaceAll(
@@ -109,20 +109,13 @@ public class Main extends Application implements MainScreenListener, WorkListene
     @Override
     public void installationBrowse() {
         //Tries to get path from user
-        boolean directoryChosen = false;
-        String path = "";
-        try {
-            path = exeBrowseExplorer();
-            directoryChosen = true;
-        } catch (NullPointerException n){
-            //User exited browser without choosing folder
-        }
+        String tempPath = exeBrowseExplorer();
 
         //Updates both backend and frontend about new path only if it's a valid path.
-        if (directoryChosen){
+        if (tempPath != null){
             try {
-                obh.setOsuFile(path);
-                mainScreen.setOsuPathText(path);
+                obh.setOsuFile(tempPath);
+                mainScreen.setOsuPathText(tempPath);
             } catch (IOException e) {
                 mainScreen.promptErrorText("Not a valid osu installation");
             }
@@ -130,29 +123,25 @@ public class Main extends Application implements MainScreenListener, WorkListene
     }
     @Override
     public void imageBrowse() {
-        try {
-            imageFile = imageFileBrowseExplorer();
-        } catch (NullPointerException n){
-            //User exited browser without choosing file
-        }
+        String tempImagePath = imageFileBrowseExplorer();
 
-        if (imageFile != null){
-            mainScreen.setImageLocationText(imageFile);
-        } else {
+        if (tempImagePath != null){
+            imagePath = tempImagePath;
+            mainScreen.setImageLocationText(imagePath);
+        } else if (imagePath == null) {
             mainScreen.setImageLocationText("No image specified");
         }
 
     }
     @Override
     public void saveBrowse() {
-        try {
-            saveFolder = folderBrowseExplorer();
-        } catch (NullPointerException n){
-            //User exited browser without choosing folder
-        }
-        if (saveFolder != null){
+        String tempSaveFolder = folderBrowseExplorer();
+
+
+        if (tempSaveFolder != null){
+            saveFolder = tempSaveFolder;
             mainScreen.setSavePathText(saveFolder);
-        } else {
+        } else if (saveFolder == null){
             mainScreen.setSavePathText("No folder specified");
         }
     }
@@ -183,7 +172,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
     }
     @Override
     public void imageLocationChange(String path) {
-        imageFile = path;
+        imagePath = path;
     }
     @Override
     public void savePathChange(String path) {
@@ -197,7 +186,8 @@ public class Main extends Application implements MainScreenListener, WorkListene
      * @return path to file chosen.
      * @throws NullPointerException if user doesn't choose a file.
      */
-    private String imageFileBrowseExplorer() throws NullPointerException{
+    @Nullable
+    private String imageFileBrowseExplorer() {
         //Create directory chooser
         FileChooser chooser = new FileChooser();
 
@@ -225,16 +215,16 @@ public class Main extends Application implements MainScreenListener, WorkListene
         if (selectedDirectory != null) {
             filePath = selectedDirectory.getAbsolutePath().replace("\\","/");
             lastFolder = new File(filePath).getParent();
-            return filePath;
         }
 
-        throw new NullPointerException("No file chosen");
+        return filePath;
     }
     /**
      * Opens a folder browser.
      * @return String to the chosen path.
      */
-    private String exeBrowseExplorer() throws NullPointerException{
+    @Nullable
+    private String exeBrowseExplorer() {
         //Create directory chooser
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose .exe file");
@@ -260,10 +250,8 @@ public class Main extends Application implements MainScreenListener, WorkListene
         if (selectedDirectory != null) {
             folderPath = selectedDirectory.getAbsolutePath().replace("\\","/");
             lastFolder = new File(folderPath).getParent();
-            return folderPath;
         }
-
-        throw new NullPointerException("No file chosen");
+        return folderPath;
     }
 
     private String folderBrowseExplorer(){
@@ -289,10 +277,8 @@ public class Main extends Application implements MainScreenListener, WorkListene
         if (selectedDirectory != null) {
             folderPath = selectedDirectory.getAbsolutePath().replace("\\","/");
             lastFolder = folderPath;
-            return folderPath;
         }
-
-        throw new NullPointerException("No folder chosen");
+        return folderPath;
     }
 
 

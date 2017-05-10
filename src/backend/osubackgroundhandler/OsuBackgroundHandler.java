@@ -1,4 +1,4 @@
-package backend;
+package backend.osubackgroundhandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,11 +15,13 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     private ArrayList<OsuSongFolder> songFolders;
     private File songDirectory;
 
+    private boolean allBackgroundsLoaded;
     private boolean isWorking;
     private List<WorkListener> workListeners;
 
     OsuBackgroundHandler() {
         isWorking = false;
+        allBackgroundsLoaded = false;
         directory = null;
         workListeners = new ArrayList<>();
         songFolders = new ArrayList<>(0);
@@ -32,11 +34,14 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
         if (!file.exists()) {
             throw new IOException("Image not found");
-        } else if (!isPicture(file)) {
+        } else if (!isImageFile(file)) {
             throw new IOException("File is not a png or jpg");
         } else {
             //Run in new thread to not delay other processes.
             startedWorking();
+            if (!allBackgroundsLoaded){
+                loadAllSongFolders();
+            }
             Thread thread = new Thread(() -> {
                 for (OsuSongFolder obg : songFolders) {
                     obg.replaceBackgrounds(imageName, imageDirectory);
@@ -51,17 +56,22 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
         if (!new File(directory).exists()){
             throw new IOException("Save location not found");
         }
-        directory = directory+ "/OsuBackgrounds";
-        if (!new File(directory).exists()) {
-            new File(directory).mkdir();
+        String saveDirectory = directory + "/OsuBackgrounds";
+        if (!new File(saveDirectory).exists()) {
+            boolean successful = new File(saveDirectory).mkdir();
+            if (!successful) {
+                throw new IOException("Couldn't create folder: " + saveDirectory);
+            }
         } else {
-            String finalDirectory = directory;
             //Run in new thread to not delay other processes.
             startedWorking();
+            if (!allBackgroundsLoaded){
+                loadAllSongFolders();
+            }
             Thread thread = new Thread(() -> {
                 for (OsuSongFolder background : songFolders) {
                     try {
-                        background.copyBackgrounds(finalDirectory);
+                        background.copyBackgrounds(saveDirectory);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -75,6 +85,9 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     public synchronized void removeAll() {
         //Run in new thread to not delay other processes.
         startedWorking();
+        if (!allBackgroundsLoaded){
+            loadAllSongFolders();
+        }
         Thread thread = new Thread(() -> {
             for (OsuSongFolder songFolder : songFolders) {
                 songFolder.removeAllBackgrounds();
@@ -84,29 +97,13 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
         thread.start();
     }
 
-    /**
-     * Checks if the file is a png or jpg file type.
-     * @param file to be checked.
-     * @return true if file type is jpg or png.
-     */
-    private boolean isPicture(File file){
-        String extension = "";
-
-        int i = file.getAbsolutePath().lastIndexOf('.');
-        if (i > 0) {
-            extension = file.getAbsolutePath().substring(i+1);
-        }
-        extension = extension.toLowerCase();
-
-        return extension.equals("jpg") || extension.equals("png");
-    }
 
     @Override
     public void setOsuDirectory(String path) throws IOException {
         if (isOsuDirectory(path)){
             directory = new File(path);
             songDirectory = new File(path+"/Songs");
-            songFolders = getAllSongFolders();
+            allBackgroundsLoaded = false;
         } else {
             throw new IOException("Not a valid osu installation folder");
         }
@@ -115,14 +112,19 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     public void setOsuFile(String path) throws IOException {
         if (isOsuExe(path)){
             directory = new File(path).getParentFile();
+            songDirectory = new File(path+"/Songs");
+            allBackgroundsLoaded = false;
         } else {
             throw new IOException("Not a osu executable");
         }
     }
 
+
     @Override
     public String getOsuAbsolutePath() {
-        if (directory == null) return null;
+        if (directory == null) {
+            return null;
+        }
         return directory.getAbsolutePath();
     }
     @Override
@@ -135,12 +137,6 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
         return allOsuSongFolderNames;
     }
-    /**
-     * Goes through the three default osu installation locations and find the one with the osu installation.
-     *
-     * @return directory path with osu installation.
-     * @throws FileNotFoundException if no osu installation is found.
-     */
     @Override
     public String findOsuDirectory() throws FileNotFoundException {
 
@@ -168,19 +164,21 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     }
 
 
-    private ArrayList<OsuSongFolder> getAllSongFolders() {
+    private void loadAllSongFolders() {
         File[] listOfFolders = songDirectory.listFiles();
         ArrayList<OsuSongFolder> tempOsuSongsBackgrounds = new ArrayList<>(0);
 
-        for (File folder : listOfFolders) {
-            try {
-                tempOsuSongsBackgrounds.add(new OsuSongFolder(folder.getAbsolutePath()));
-            } catch (IOException io) {
-                System.out.println(io.toString());
+        if (listOfFolders != null){
+            for (File folder : listOfFolders) {
+                try {
+                    tempOsuSongsBackgrounds.add(new OsuSongFolder(folder.getAbsolutePath()));
+                } catch (IOException io) {
+                    System.out.println(io.toString());
+                }
             }
         }
-
-        return tempOsuSongsBackgrounds;
+        songFolders = tempOsuSongsBackgrounds;
+        allBackgroundsLoaded = true;
     }
     /**
      * Checks if the directory contains a osu!.exe
@@ -190,7 +188,9 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
      */
     private boolean isOsuDirectory(String directory) {
         File osuFolder = new File(directory);
-        if (!osuFolder.exists()) return false;
+        if (!osuFolder.exists()) {
+            return false;
+        }
 
         for (File file : osuFolder.listFiles()) {
             if (isOsuExe(file.getAbsolutePath())) return true;
@@ -198,7 +198,6 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
         return false;
     }
-
     /**
      * Checks if the string contains "osu!.exe"
      * @param path total path to the exe, or just the exe name itself.
@@ -207,12 +206,34 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     private boolean isOsuExe(String path){
         return new File(path).getName().contains("osu!.exe");
     }
+    /**
+     * Checks if the file is a png or jpg file type.
+     * @param file to be checked.
+     * @return true if file type is jpg or png.
+     */
+    private boolean isImageFile(File file){
+        String extension = "";
+
+        int i = file.getAbsolutePath().lastIndexOf('.');
+        if (i > 0) {
+            extension = file.getAbsolutePath().substring(i+1);
+        }
+        extension = extension.toLowerCase();
+
+        return extension.equals("jpg") || extension.equals("png");
+    }
 
 
+    /**
+     * Alerts all listeners that this object has started working.
+     */
     private synchronized void startedWorking(){
         isWorking = true;
         workListeners.forEach(WorkListener::alertWorkStarted);
     }
+    /**
+     * Alerts all listeners that this object has finished working.
+     */
     private synchronized void finishedWorking(){
         isWorking = false;
         workListeners.forEach(WorkListener::alertWorkFinished);

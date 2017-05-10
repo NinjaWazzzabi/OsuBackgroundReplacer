@@ -1,4 +1,4 @@
-package backend;
+package backend.osubackgroundhandler;
 
 /**
  * Listener to OsuBackgroundHandlers that will respond to when work is done or started.

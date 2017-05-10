@@ -205,7 +205,7 @@ public class MainScreen {
     /**
      * Progress info fade time constant.
      */
-    private final int fadeLength = 500;
+    private static final int fadeLength = 500;
 
     /**
      * Starts to fade in the spinning circle
@@ -274,6 +274,7 @@ public class MainScreen {
 
         SequentialTransition combine = new SequentialTransition(fadeIn,delay,fadeOut);
         combine.play();
+        lastAnimation = combine;
     }
 
     /**

@@ -1,14 +1,13 @@
-package backend;
+package backend.osubackgroundhandler;
 
 import com.sun.istack.internal.Nullable;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Anthony on 09/02/2017.
+ * Interface for osu background handlers
  */
 public interface IOsuBackgroundHandler {
 
@@ -35,13 +34,14 @@ public interface IOsuBackgroundHandler {
      * @throws IOException if directory doesn't contain osu installation.
      */
     void setOsuDirectory(String path) throws IOException;
-
     /**
      * Assigns where the Osu! file is.
      * @param path The path to the file.
      * @throws IOException if file isn't an osu.exe file.
      */
     void setOsuFile(String path) throws IOException;
+
+
     /**
      *
      * @return Current osu installation directory.
@@ -54,19 +54,18 @@ public interface IOsuBackgroundHandler {
      */
     List<String> getSongDirectoryNames();
     /**
-     * Autosearches the common osu install directories for an osu installation and returns the path if found.
-     * @return absolute path to osu directory.
-     * @throws FileNotFoundException Osu installation directory not found.
+     * Goes through the three default osu installation locations and finds the one with the osu installation.
+     *
+     * @return directory path with osu installation.
+     * @throws FileNotFoundException if no osu installation is found.
      */
     String findOsuDirectory() throws FileNotFoundException;
+
 
     /**
      * @return true if the object is changing background images.
      */
     boolean isWorking();
-
-
     void addWorkListener(WorkListener listener);
-
     void removeWorkListener(WorkListener listener);
 }

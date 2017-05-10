@@ -1,9 +1,9 @@
-package backend;
+package backend.osubackgroundhandler;
 
 /**
- * Created by Anthony on 11/02/2017.
+ * Factory class for osu background handlers
  */
-public class OsuBackgroundHandlerFactory {
+public final class OsuBackgroundHandlerFactory {
 
     private OsuBackgroundHandlerFactory(){
 
