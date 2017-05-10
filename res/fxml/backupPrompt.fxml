@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="450.0" style="-fx-border-color: #222222; -fx-border-width: 3;" stylesheets="@/css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane fx:id="topSection" layoutX="476.0" layoutY="5.0" prefHeight="50.0" prefWidth="324.0" styleClass="mediumBackground" stylesheets="@/css/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text fill="WHITE" layoutX="3.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="No backup detected" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="2.0">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="280.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightSmallText" text="Alpha!" />
+            <JFXButton fx:id="exit" layoutX="758.0" layoutY="10.0" prefHeight="28.0" prefWidth="28.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="⨉" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font size="20.0" />
+               </font></JFXButton>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="50.0" prefHeight="367.0" prefWidth="466.0" styleClass="darkBackground" stylesheets="@/css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Text layoutX="4.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Couldn't detect a backup of background images." wrappingWidth="436.453125" />
+            <JFXButton fx:id="yes" layoutX="14.0" layoutY="85.0" prefHeight="45.0" prefWidth="150.0" styleClass="darkButton" text="Yes" />
+            <JFXButton fx:id="no" layoutX="280.0" layoutY="85.0" prefHeight="45.0" prefWidth="150.0" styleClass="darkButton" text="No" />
+            <Text layoutX="69.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Would you like to create one now?" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

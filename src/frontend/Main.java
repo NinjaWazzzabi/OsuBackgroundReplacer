@@ -4,6 +4,8 @@ import backend.OsuBackgroundHandlerFactory;
 import backend.IOsuBackgroundHandler;
 import backend.WorkListener;
 import frontend.about.About;
+import frontend.backupprompt.BackupPrompt;
+import frontend.backupprompt.BackupPromptListener;
 import frontend.loadingScreen.Loading;
 import frontend.mainscreen.MainScreen;
 import frontend.mainscreen.MainScreenListener;
@@ -17,7 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Main extends Application implements MainScreenListener, WorkListener{
+public class Main extends Application implements MainScreenListener, WorkListener, BackupPromptListener{
 
     private MainScreen mainScreen;
     private IOsuBackgroundHandler obh;
@@ -43,13 +45,15 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
         //Closes loading screen
         loading.close();
+
+        new BackupPrompt(this);
     }
 
     /**
      * Starts up the backend.
      * @throws FileNotFoundException if osu installation wasn't found.
      */
-    void initializeBackend() throws FileNotFoundException {
+    private void initializeBackend() throws FileNotFoundException {
         //Creates backend and adds this as listener.
         obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
         obh.addWorkListener(this);
@@ -304,5 +308,15 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void backupYes() {
+        System.out.println("yes");
+    }
+
+    @Override
+    public void backupNo() {
+        System.out.println("no");
     }
 }
