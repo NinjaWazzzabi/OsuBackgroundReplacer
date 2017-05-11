@@ -7,21 +7,19 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,8 @@ public class MainScreen {
     private JFXButton browseImage;
     @FXML
     private JFXTextField imageLocation;
+    @FXML
+    private ImageView imageView;
     @FXML
     private JFXButton browseSave;
     @FXML
@@ -198,8 +198,10 @@ public class MainScreen {
      * Sets the text of the savePath textfield.
      * @param text text that will be displayed.
      */
-    public void setImageLocationText(String text) {
+    public void setImageLocation(String text) {
         imageLocation.setText(text);
+        Image image = new Image("file:///" + text);
+        imageView.setImage(image);
     }
 
     /**

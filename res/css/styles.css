@@ -19,11 +19,26 @@
     -jfx-button-type: RAISED;
     -fx-background-color: #cccccc;
     -fx-padding: 0;
+    -fx-fill: #1a1a1a;
     -fx-text-fill: #1a1a1a;
     -fx-cursor: hand;
 }
 
 .lightSmallButton:hover {
+    -fx-background-color: #efefef;
+}
+
+.lightButton {
+    -fx-font-size: 23;
+    -jfx-button-type: RAISED;
+    -fx-background-color: #cccccc;
+    -fx-padding: 0;
+    -fx-fill: #1a1a1a;
+    -fx-text-fill: #1a1a1a;
+    -fx-cursor: hand;
+}
+
+.lightButton:hover {
     -fx-background-color: #efefef;
 }
 
@@ -84,12 +99,48 @@
     -fx-border-color: #1a1a1a;
 }
 
+.customLightBackground {
+    -fx-background-color: #222229;
+    -fx-background-radius: 5;
+    -fx-border-width: 1.5 0 1.5 0;
+    -fx-border-color: #55555f;
+    /*-fx-border-color: #1a1a1a;*/
+}
+
 .darkBackground {
-    -fx-background-color:  #33333f;
+    /*-fx-background-color:  #33333f;*/
+
+    -fx-background-color: #30303c;
 }
 
 .mediumBackground {
     -fx-background-color:  #44444f;
+}
+
+.lightBackground {
+    -fx-background-color:  #55555f;
+}
+
+/* TABS */
+.tabBar:top > .depth-container .text{
+    -fx-fill: #eeeeee;
+}
+
+.tabBar:top > .depth-container .tab-header-background {
+    -fx-background-color: #3f4f69;
+    -fx-border-width: 2 0 0 0;
+    -fx-border-color: #22222f;
+    -fx-padding: 0;
+}
+
+.tabBar:top > .depth-container .jfx-rippler {
+    -jfx-rippler-fill: #eeeeee;
+    -fx-fill: #eeeeee;
+}
+
+.tabBar > .depth-container .tab-selected-line {
+    -fx-background-color: #eeeeee;
+    -fx-stroke: #eeeeee;
 }
 
 

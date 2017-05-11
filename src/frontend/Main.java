@@ -127,9 +127,9 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
         if (tempImagePath != null){
             imagePath = tempImagePath;
-            mainScreen.setImageLocationText(imagePath);
+            mainScreen.setImageLocation(imagePath);
         } else if (imagePath == null) {
-            mainScreen.setImageLocationText("No image specified");
+            mainScreen.setImageLocation("No image specified");
         }
 
     }
