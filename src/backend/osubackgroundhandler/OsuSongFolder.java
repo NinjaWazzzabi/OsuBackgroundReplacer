@@ -84,12 +84,10 @@ class OsuSongFolder {
             while (line != null && !line.contains("[TimingPoints]")) {
 
                 // Checks if this line contains an image.
-                if (line.contains(".png")
-                        || line.contains(".PNG")
-                        || line.contains(".jpg")
-                        || line.contains(".JPG")
-                        || line.contains(".Jpg")
-                        || line.contains(".Png")) {
+                if (    line.toLowerCase().contains(".png") ||
+                        line.toLowerCase().contains(".jpg") ||
+                        line.toLowerCase().contains(".jpeg")
+                    ) {
 
                     // The line that contains the image name has it surrounded by quotes, so we split the string to
                     // get the image name and ignore the coordinates. The image name will always be in index one.
