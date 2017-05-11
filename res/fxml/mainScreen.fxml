@@ -55,12 +55,6 @@
                                     <Font size="23.0" />
                                  </font>
                               </JFXButton>
-                              <AnchorPane layoutX="648.0" layoutY="356.0">
-                                 <children>
-                                    <JFXSpinner fx:id="progressBar" opacity="0.0" radius="60.0" startingAngle="0.0" />
-                                    <Text fx:id="workDone" layoutX="9.0" layoutY="74.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Finished" />
-                                 </children>
-                              </AnchorPane>
                               <AnchorPane layoutX="52.0" layoutY="105.0" prefHeight="320.0" prefWidth="570.0" styleClass="customLightBackground">
                                  <children>
                                     <Text layoutX="165.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="No image selected" />
@@ -133,6 +127,12 @@
                   </Tab>
                </tabs>
             </JFXTabPane>
+            <AnchorPane layoutX="660.0" layoutY="411.0">
+               <children>
+                  <JFXSpinner fx:id="progressBar" opacity="0.0" radius="60.0" startingAngle="0.0" />
+                  <Text fx:id="workDone" layoutX="9.0" layoutY="74.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Finished" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
