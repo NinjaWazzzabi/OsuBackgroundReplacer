@@ -39,10 +39,10 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
         } else {
             //Run in new thread to not delay other processes.
             startedWorking();
-            if (!allBackgroundsLoaded){
-                loadAllSongFolders();
-            }
             Thread thread = new Thread(() -> {
+                if (!allBackgroundsLoaded){
+                    loadAllSongFolders();
+                }
                 for (OsuSongFolder obg : songFolders) {
                     obg.replaceBackgrounds(imageName, imageDirectory);
                 }
@@ -65,10 +65,10 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
         } else {
             //Run in new thread to not delay other processes.
             startedWorking();
-            if (!allBackgroundsLoaded){
-                loadAllSongFolders();
-            }
             Thread thread = new Thread(() -> {
+                if (!allBackgroundsLoaded){
+                    loadAllSongFolders();
+                }
                 for (OsuSongFolder background : songFolders) {
                     try {
                         background.copyBackgrounds(saveDirectory);
@@ -85,10 +85,10 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     public synchronized void removeAll() {
         //Run in new thread to not delay other processes.
         startedWorking();
-        if (!allBackgroundsLoaded){
-            loadAllSongFolders();
-        }
         Thread thread = new Thread(() -> {
+            if (!allBackgroundsLoaded){
+                loadAllSongFolders();
+            }
             for (OsuSongFolder songFolder : songFolders) {
                 songFolder.removeAllBackgrounds();
             }
