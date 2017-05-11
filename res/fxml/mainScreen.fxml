@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.String?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.ImageView?>
@@ -38,7 +37,7 @@
       </JFXButton>
       <AnchorPane layoutY="50.0" prefHeight="367.0" prefWidth="466.0" stylesheets="@/css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <JFXTabPane prefHeight="257.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <JFXTabPane prefHeight="257.0" prefWidth="800.0" styleClass="darkBackground" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <tabs>
                   <Tab closable="false" text="Image replace">
                      <content>
@@ -133,10 +132,6 @@
                      </content>
                   </Tab>
                </tabs>
-               <styleClass>
-                  <String fx:value="darkBackground" />
-                  <String fx:value="tabBar" />
-               </styleClass>
             </JFXTabPane>
          </children>
       </AnchorPane>

@@ -122,23 +122,23 @@
 }
 
 /* TABS */
-.tabBar:top > .depth-container .text{
+.tab-header-area > .headers-region > .tab > .jfx-rippler > .tab-container > .tab-label > .text {
     -fx-fill: #eeeeee;
 }
 
-.tabBar:top > .depth-container .tab-header-background {
+.tab-header-area > .tab-header-background {
     -fx-background-color: #3f4f69;
     -fx-border-width: 2 0 0 0;
     -fx-border-color: #22222f;
     -fx-padding: 0;
 }
 
-.tabBar:top > .depth-container .jfx-rippler {
+.tab-header-area > .headers-region > .tab > .jfx-rippler {
     -jfx-rippler-fill: #eeeeee;
     -fx-fill: #eeeeee;
 }
 
-.tabBar > .depth-container .tab-selected-line {
+.tab-header-area > .headers-region > .tab-selected-line {
     -fx-background-color: #eeeeee;
     -fx-stroke: #eeeeee;
 }
