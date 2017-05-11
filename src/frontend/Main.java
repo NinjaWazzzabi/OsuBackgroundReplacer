@@ -74,10 +74,10 @@ public class Main extends Application implements MainScreenListener, WorkListene
             try {
                 obh.saveAll(saveFolder);
             } catch (IOException e) {
-                //Alert path invalid
+                mainScreen.promptErrorText(e.getMessage());
             }
         } else {
-            mainScreen.setSavePathText("No save folder specified");
+            mainScreen.promptErrorText("No save folder specified");
         }
     }
     @Override

@@ -62,7 +62,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
             if (!successful) {
                 throw new IOException("Couldn't create folder: " + saveDirectory);
             }
-        } else {
+        }
             //Run in new thread to not delay other processes.
             startedWorking();
             Thread thread = new Thread(() -> {
@@ -79,7 +79,6 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
                 finishedWorking();
             });
             thread.start();
-        }
     }
     @Override
     public synchronized void removeAll() {
