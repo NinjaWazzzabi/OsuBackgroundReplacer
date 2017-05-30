@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class than controls all of the {@link OsuSongFolder} in the osu! song folder.
+ * A class than controls all of the {@link Beatmap} in the osu! song folder.
  */
 class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
     private File directory;
-    private ArrayList<OsuSongFolder> songFolders;
+    private ArrayList<Beatmap> songFolders;
     private File songDirectory;
 
     private boolean allBackgroundsLoaded;
@@ -45,7 +45,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
                 if (!allBackgroundsLoaded){
                     loadAllSongFolders();
                 }
-                for (OsuSongFolder obg : songFolders) {
+                for (Beatmap obg : songFolders) {
                     obg.replaceBackgrounds(imageName, imageDirectory);
                 }
                 finishedWorking();
@@ -71,7 +71,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
                 if (!allBackgroundsLoaded){
                     loadAllSongFolders();
                 }
-                for (OsuSongFolder background : songFolders) {
+                for (Beatmap background : songFolders) {
                     try {
                         background.copyBackgrounds(saveDirectory);
                     } catch (IOException e) {
@@ -90,7 +90,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
             if (!allBackgroundsLoaded){
                 loadAllSongFolders();
             }
-            for (OsuSongFolder songFolder : songFolders) {
+            for (Beatmap songFolder : songFolders) {
                 songFolder.removeAllBackgrounds();
             }
             finishedWorking();
@@ -132,8 +132,8 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     public List<String> getSongDirectoryNames() {
         ArrayList<String> allOsuSongFolderNames = new ArrayList<>();
 
-        for (OsuSongFolder osuSongFolder : songFolders) {
-            allOsuSongFolderNames.add(osuSongFolder.getDirectoryName());
+        for (Beatmap beatmap : songFolders) {
+            allOsuSongFolderNames.add(beatmap.getBeatmapName());
         }
 
         return allOsuSongFolderNames;
@@ -167,12 +167,12 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
     private void loadAllSongFolders() {
         File[] listOfFolders = songDirectory.listFiles();
-        ArrayList<OsuSongFolder> tempOsuSongsBackgrounds = new ArrayList<>(0);
+        ArrayList<Beatmap> tempOsuSongsBackgrounds = new ArrayList<>(0);
 
         if (listOfFolders != null){
             for (File folder : listOfFolders) {
                 try {
-                    tempOsuSongsBackgrounds.add(new OsuSongFolder(folder.getAbsolutePath()));
+                    tempOsuSongsBackgrounds.add(new Beatmap(folder.getAbsolutePath()));
                 } catch (IOException io) {
                     System.out.println(io.toString());
                 }

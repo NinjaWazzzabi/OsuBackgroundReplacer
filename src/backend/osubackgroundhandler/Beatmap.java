@@ -7,24 +7,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
- * A class that can handle all background images in a osu song folder.
+ * Handles all background images in a beatmap folder.
  */
-class OsuSongFolder {
-
-    // The list that holds all of the background images in the directory.
-    private final ArrayList<OsuBackground> osuBackgrounds;
-    // The File that indicates which directory this class will operate in.
+class Beatmap {
+    @Getter private final List<Image> images;
     @Getter private final String folderPath;
 
     /**
      * @param path The path to the directory this object will bind itself to.
      * @throws IOException Throws the exception if the directory is not found, or if there is no osu file present.
      */
-    OsuSongFolder(String path) throws IOException {
+    Beatmap(String path) throws IOException {
         //Assigns the directory that this class will work with.
         this.folderPath = path;
 
@@ -36,7 +34,7 @@ class OsuSongFolder {
         if (osuFiles.size() == 0) throw new IOException("No .osu file in directory: " + folderPath);
 
         // Adds all of the image names to a list.
-        osuBackgrounds = findAllImageNames(osuFiles);
+        images = findAllImageNames(osuFiles);
     }
 
     /**
@@ -67,9 +65,9 @@ class OsuSongFolder {
      * @return Returns an ArrayList with the names of the images in the song folder.
      * @throws IOException No osu background images found.
      */
-    private ArrayList<OsuBackground> findAllImageNames(ArrayList<String> osuFileNames) throws IOException {
+    private ArrayList<Image> findAllImageNames(ArrayList<String> osuFileNames) throws IOException {
         //List that will hold all of the found image names.
-        ArrayList<OsuBackground> foundOsuBackgrounds = new ArrayList<>(0);
+        ArrayList<Image> foundImages = new ArrayList<>(0);
 
         //Goes through every osu file and searches after an image.
         for (String osuFileName : osuFileNames) {
@@ -101,10 +99,10 @@ class OsuSongFolder {
                         System.out.println("Image file \"" + imageName +"\" doesn't exist in the directory \"" + folderPath +"\"");
                     }
 
-                    OsuBackground foundOsuBackground = new OsuBackground(imageName,folderPath);
+                    Image foundImage = new Image(imageName,folderPath);
                     boolean isDuplicate = false;
-                    for (OsuBackground osuBackgrounds : foundOsuBackgrounds){
-                        if (isSameOsuBackgrounds(osuBackgrounds,foundOsuBackground)){
+                    for (Image osuBackgrounds : foundImages){
+                        if (isSameOsuBackground(osuBackgrounds, foundImage)){
                             isDuplicate = true;
                             break;
                         }
@@ -113,7 +111,7 @@ class OsuSongFolder {
                     if (isDuplicate){
 //                            System.out.println("Duplicate found and discarded");
                     } else {
-                        foundOsuBackgrounds.add(foundOsuBackground);
+                        foundImages.add(foundImage);
                     }
 
 
@@ -128,15 +126,15 @@ class OsuSongFolder {
         }
 
         // Returns the list with the image names.
-        return foundOsuBackgrounds;
+        return foundImages;
     }
     /**
      * Compares two osu backgrounds and determines if they're the same.
-     * @param first OsuBackground to compare.
-     * @param second OsuBackground to compare.
+     * @param first Image to compare.
+     * @param second Image to compare.
      * @return true if first equals second.
      */
-    private boolean isSameOsuBackgrounds(OsuBackground first, OsuBackground second){
+    private boolean isSameOsuBackground(Image first, Image second){
         if (first.hashCode() == second.hashCode()){
             if (first.equals(second)){
                 return true;
@@ -145,26 +143,6 @@ class OsuSongFolder {
         return false;
     }
 
-
-    /**
-     * @return Returns the path of all of the images in the directory separately in a list.
-     */
-    ArrayList<String> getAllOsuBackgroundFilePaths() {
-        ArrayList<String> pathsToImages = new ArrayList<>(0);
-
-        // For every image in the folder, adds the file path and file name to the list.
-        for (OsuBackground bg : osuBackgrounds) {
-            pathsToImages.add(bg.getFilePath()+"/"+bg.getFileName());
-        }
-        return pathsToImages;
-    }
-    /**
-     * @return the name of the folder.
-     */
-    String getDirectoryName() {
-        File path = new File(folderPath);
-        return path.getName();
-    }
 
     /**
      * @param filePath Path to the folder containing the background image.
@@ -176,9 +154,9 @@ class OsuSongFolder {
         //Todo fix this problem ^
 
         // Goes through every background image in the directory and replaces the image with the one in the arguments.
-        for (OsuBackground bg : osuBackgrounds) {
+        for (Image bg : images) {
             Path source = Paths.get(filePath + "/" + fileName);
-            Path target = Paths.get(bg.getFilePath(), bg.getFileName());
+            Path target = Paths.get(bg.getImagePath(), bg.getImageName());
             try {
                 Files.copy(source, target, REPLACE_EXISTING);
             } catch (IOException e) {
@@ -193,16 +171,16 @@ class OsuSongFolder {
      * @throws IOException If directory is not found.
      */
     void copyBackgrounds(String saveDirectory) throws IOException {
-        for (OsuBackground bg: osuBackgrounds) {
-            if (bg.getFileName().chars().allMatch(c -> c < 128)) {
-                Path source = Paths.get(bg.getFilePath() + "/" + bg.getFileName());
-                Path target = Paths.get(saveDirectory + "/" + getDirectoryName() + "/" + bg.getFileName());
+        for (Image bg: images) {
+            if (bg.getImageName().chars().allMatch(c -> c < 128)) {
+                Path source = Paths.get(bg.getImagePath() + "/" + bg.getImageName());
+                Path target = Paths.get(saveDirectory + "/" + getBeatmapName() + "/" + bg.getImageName());
 
                 //If save directory doesn't exist, create it.
-                if (!new File(saveDirectory + "/" + getDirectoryName()).exists()){
-                    boolean successful = new File(saveDirectory + "/" + getDirectoryName()).mkdir();
+                if (!new File(saveDirectory + "/" + getBeatmapName()).exists()){
+                    boolean successful = new File(saveDirectory + "/" + getBeatmapName()).mkdir();
                     if (!successful){
-                        throw new IOException("Couldn't create folder: " + saveDirectory + "/" +getDirectoryName());
+                        throw new IOException("Couldn't create folder: " + saveDirectory + "/" + getBeatmapName());
                     }
                 }
 
@@ -211,7 +189,7 @@ class OsuSongFolder {
                 //TODO Can't save the image if it contains characters outside of the ANSI Range.
                 //Image names currently only supports ANSI standard.
                 //If you use characters not in ANSI then you won't be able to copy it using the copy to method below.
-                System.out.println("Couldn't save image: " + bg.getFileName());
+                System.out.println("Couldn't save image: " + bg.getImageName());
             }
         }
     }
@@ -219,8 +197,8 @@ class OsuSongFolder {
      * Removes all the background images in the folder.
      */
     void removeAllBackgrounds() {
-        for (OsuBackground bg : osuBackgrounds) {
-            Path target = Paths.get(bg.getFilePath() + "/" + bg.getFileName());
+        for (Image bg : images) {
+            Path target = Paths.get(bg.getImagePath() + "/" + bg.getImageName());
 
             //By now the files should have been verified to exist so no need to add exception to method.
             //Only problem is if the user would manually remove or change files, then there's problems.
@@ -231,5 +209,14 @@ class OsuSongFolder {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * @return the name of the folder.
+     */
+    String getBeatmapName() {
+        File path = new File(folderPath);
+        return path.getName();
     }
 }
