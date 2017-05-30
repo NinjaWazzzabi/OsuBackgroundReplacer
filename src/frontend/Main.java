@@ -1,6 +1,6 @@
 package frontend;
 
-import backend.osubackgroundhandler.OsuBackgroundHandlerFactory;
+import backend.osubackgroundhandler.OsuBackgroundHandler;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
 import com.sun.istack.internal.Nullable;
@@ -56,7 +56,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
      */
     private void initializeBackend() throws FileNotFoundException {
         //Creates backend and adds this as listener.
-        obh = OsuBackgroundHandlerFactory.getOsuBackgroundHandler();
+        obh = new OsuBackgroundHandler();
         obh.addWorkListener(this);
 
         //Auto searches after osu install directory.

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * A class than controls all of the {@link Beatmap} in the osu! song folder.
  */
-class OsuBackgroundHandler implements IOsuBackgroundHandler {
+public class OsuBackgroundHandler implements IOsuBackgroundHandler {
 
     private File directory;
     private ArrayList<Beatmap> songFolders;
@@ -21,7 +21,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     @Getter private boolean isWorking;
     private List<WorkListener> workListeners;
 
-    OsuBackgroundHandler() {
+    public OsuBackgroundHandler() {
         isWorking = false;
         allBackgroundsLoaded = false;
         directory = null;
