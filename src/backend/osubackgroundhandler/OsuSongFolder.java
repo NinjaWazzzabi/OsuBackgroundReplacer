@@ -1,5 +1,7 @@
 package backend.osubackgroundhandler;
 
+import lombok.Getter;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +18,7 @@ class OsuSongFolder {
     // The list that holds all of the background images in the directory.
     private final ArrayList<OsuBackground> osuBackgrounds;
     // The File that indicates which directory this class will operate in.
-    private final String folderPath;
+    @Getter private final String folderPath;
 
     /**
      * @param path The path to the directory this object will bind itself to.
@@ -163,14 +165,6 @@ class OsuSongFolder {
         File path = new File(folderPath);
         return path.getName();
     }
-    /**
-     *
-     * @return the path to the osu installation directory
-     */
-    String getDirectoryPath(){
-        return folderPath;
-    }
-
 
     /**
      * @param filePath Path to the folder containing the background image.

@@ -1,5 +1,7 @@
 package backend.osubackgroundhandler;
 
+import lombok.Getter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +18,7 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     private File songDirectory;
 
     private boolean allBackgroundsLoaded;
-    private boolean isWorking;
+    @Getter private boolean isWorking;
     private List<WorkListener> workListeners;
 
     OsuBackgroundHandler() {
@@ -239,10 +241,6 @@ class OsuBackgroundHandler implements IOsuBackgroundHandler {
     }
 
 
-    @Override
-    public boolean isWorking() {
-        return isWorking;
-    }
     @Override
     public void addWorkListener(WorkListener listener) {
         workListeners.add(listener);

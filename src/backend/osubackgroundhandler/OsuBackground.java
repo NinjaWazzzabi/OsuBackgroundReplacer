@@ -1,23 +1,18 @@
 package backend.osubackgroundhandler;
 
+import lombok.Getter;
+
 /**
  * Created by Anthony on 06/05/2017.
  */
 public class OsuBackground {
 
-    private final String fileName;
-    private final String filePath;
+    @Getter private final String fileName;
+    @Getter private final String filePath;
 
     OsuBackground(String fileName, String filePath) {
         this.fileName = fileName;
         this.filePath = filePath;
-    }
-
-    final String getFileName() {
-        return fileName;
-    }
-    final String getFilePath() {
-        return filePath;
     }
 
     @Override
