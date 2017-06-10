@@ -13,10 +13,9 @@ public interface IOsuBackgroundHandler {
 
     /**
      * Used to replace all of the osu backgrounds with the image from the method argument.
-     * @param imageName Name of image that will replace all background images.
-     * @param imageDirectory Folder containing the image.
+     * @param imagePath Path to an image that will replace all background images.
      */
-    void replaceAll(String imageName, String imageDirectory) throws IOException;
+    void replaceAll(String imagePath) throws IOException;
     /**
      * Saves all of the osu background images to the directory specified.
      * @param directory of the images that will be saved to.
@@ -49,10 +48,7 @@ public interface IOsuBackgroundHandler {
      */
     @Nullable
     String getOsuAbsolutePath();
-    /**
-     * @return All of the osu song folders names.
-     */
-    List<String> getSongDirectoryNames();
+
     /**
      * Goes through the three default osu installation locations and finds the one with the osu installation.
      *

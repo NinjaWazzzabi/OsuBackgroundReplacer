@@ -1,6 +1,6 @@
 package frontend;
 
-import backend.osubackgroundhandler.OsuBackgroundHandler;
+import backend.osubackgroundhandler.BackgroundManager;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
 import com.sun.istack.internal.Nullable;
@@ -30,37 +30,25 @@ public class Main extends Application implements MainScreenListener, WorkListene
 
     @Override
     public void start(Stage stage) {
-        //Creates loading screen
-        Loading loading = new Loading();
-
         //Creates main screen
         mainScreen = new MainScreen();
         mainScreen.addListener(this);
 
-        try {
-            initializeBackend();
-            mainScreen.setOsuPathText(obh.getOsuAbsolutePath());
-        } catch (FileNotFoundException e) {
-            mainScreen.promptErrorText("No osu found, find it manually below");
+        initializeBackend();
+
+        mainScreen.setOsuPathText(obh.getOsuAbsolutePath());
+        if (obh.getOsuAbsolutePath().equals("C:/")) {
+//            mainScreen.promptErrorText("No osu found, find it manually below");
         }
-
-        //Closes loading screen
-        loading.close();
-
-        new BackupPrompt(this);
     }
 
     /**
      * Starts up the backend.
      * @throws FileNotFoundException if osu installation wasn't found.
      */
-    private void initializeBackend() throws FileNotFoundException {
-        //Creates backend and adds this as listener.
-        obh = new OsuBackgroundHandler();
+    private void initializeBackend() {
+        obh = new BackgroundManager();
         obh.addWorkListener(this);
-
-        //Auto searches after osu install directory.
-        obh.findOsuDirectory();
     }
 
 
@@ -88,10 +76,7 @@ public class Main extends Application implements MainScreenListener, WorkListene
             File file = new File(imagePath);
 
             try {
-                obh.replaceAll(
-                        file.getName(),
-                        file.getParent()
-                );
+                obh.replaceAll(imagePath);
             } catch (IOException e) {
                 mainScreen.promptErrorText(e.getMessage());
             }
@@ -290,7 +275,6 @@ public class Main extends Application implements MainScreenListener, WorkListene
     public void alertWorkFinished() {
         mainScreen.workFinished();
     }
-
 
     public static void main(String[] args) {
         launch(args);
