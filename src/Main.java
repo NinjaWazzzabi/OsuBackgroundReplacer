@@ -1,5 +1,3 @@
-package frontend;
-
 import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
@@ -10,7 +8,6 @@ import frontend.windows.MainWindow;
 import frontend.windows.MainWindowListener;
 import frontend.windows.ReplaceWindow;
 import frontend.windows.SettingsWindow;
-import frontend.windows.SettingsWindowListener;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,7 +18,7 @@ import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
 
-public class Main extends Application implements WorkListener, MainWindowListener, SettingsWindowListener {
+public class Main extends Application implements WorkListener, MainWindowListener {
 
     private MainWindow mainWindow;
     private ReplaceWindow replaceWindow;
@@ -43,7 +40,6 @@ public class Main extends Application implements WorkListener, MainWindowListene
         replaceWindow = new ReplaceWindow(obh);
 
         settingsWindow = new SettingsWindow(obh);
-        settingsWindow.addListener(this);
 
         backupWindow = new BackupWindow(obh);
 
@@ -63,7 +59,6 @@ public class Main extends Application implements WorkListener, MainWindowListene
         stage.getScene().setFill(null);
         stage.show();
     }
-
     /**
      * Starts up the backend.
      * @throws FileNotFoundException if osu installation wasn't found.
@@ -71,6 +66,11 @@ public class Main extends Application implements WorkListener, MainWindowListene
     private void initializeBackend() {
         obh = new BackgroundManagerFrontendTester();
         obh.addWorkListener(this);
+    }
+
+    @Override
+    public void exit() {
+        Platform.exit();
     }
 
     @Override
@@ -97,15 +97,5 @@ public class Main extends Application implements WorkListener, MainWindowListene
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void exit() {
-        Platform.exit();
-    }
-
-    @Override
-    public void errorOccurred(String errorMessage) {
-        mainWindow.promtError(errorMessage);
     }
 }

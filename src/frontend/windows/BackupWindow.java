@@ -1,43 +1,31 @@
 package frontend.windows;
 
-
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import com.jfoenix.controls.JFXTextField;
 import frontend.screens.BackupPrompt;
 import frontend.screens.BackupPromptListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import lombok.Getter;
-
 
 import java.io.File;
 import java.io.IOException;
 
-public class BackupWindow implements BackupPromptListener {
+public class BackupWindow extends WindowBase implements BackupPromptListener {
 
-    private final IOsuBackgroundHandler obh;
-    @Getter
-    private Parent visualComponent;
-    @FXML
-    private JFXTextField savePath;
-    @FXML
-    private Text errorMessage;
+    private static String FXML_LOCATION = "/fxml/save.fxml";
+
+    @FXML private JFXTextField savePath;
+    @FXML private Text errorMessage;
+
     private String saveFolder;
     private String lastFolder;
+    private final IOsuBackgroundHandler obh;
 
     public BackupWindow(IOsuBackgroundHandler obh) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/save.fxml"));
-        loader.setController(this);
-        try {
-            this.visualComponent = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(FXML_LOCATION);
 
         errorMessage.setOpacity(0);
 
@@ -48,9 +36,23 @@ public class BackupWindow implements BackupPromptListener {
 
 
         //TODO Check if backup folder is found
-
         //If no backup is found
         new BackupPrompt(this);
+    }
+
+    @FXML
+    void saveAll(ActionEvent event) {
+        if (saveFolder != null && saveFolder.length() > 1) {
+            try {
+                obh.saveAll(saveFolder);
+            } catch (IOException e) {
+                errorMessage.setText(e.getMessage());
+                flashRevealVisualComponent(errorMessage,FADE_LENGTH_MEDIUM);
+            }
+        } else {
+            errorMessage.setText("No folder specified");
+            flashRevealVisualComponent(errorMessage,FADE_LENGTH_MEDIUM);
+        }
     }
 
     @FXML
@@ -65,7 +67,6 @@ public class BackupWindow implements BackupPromptListener {
             savePath.setText("No folder specified");
         }
     }
-
     private String folderBrowseExplorer() {
         //Create directory chooser
         DirectoryChooser chooser = new DirectoryChooser();
@@ -92,20 +93,6 @@ public class BackupWindow implements BackupPromptListener {
         }
         return folderPath;
     }
-
-    @FXML
-    void saveAll(ActionEvent event) {
-        if (saveFolder != null && saveFolder.length() > 1) {
-            try {
-                obh.saveAll(saveFolder);
-            } catch (IOException e) {
-                //TODO Handle error message
-            }
-        } else {
-            //TODO Handle no save folder specified
-        }
-    }
-
     @FXML
     void savePathAction(ActionEvent event) {
         saveFolder = savePath.getText();
@@ -115,7 +102,6 @@ public class BackupWindow implements BackupPromptListener {
     public void backupYes() {
         //TODO implement
     }
-
     @Override
     public void backupNo() {
         //TODO Implement

@@ -20,5 +20,6 @@
             <Font size="23.0" />
          </font>
       </JFXButton>
+      <Text fx:id="errorMessage" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorText" text="ErrorMessage" textAlignment="CENTER" wrappingWidth="800.0" />
    </children>
 </AnchorPane>

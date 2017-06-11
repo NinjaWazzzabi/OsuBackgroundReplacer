@@ -5,40 +5,33 @@ import com.jfoenix.controls.JFXTextField;
 import com.sun.istack.internal.Nullable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class SettingsWindow {
+public class SettingsWindow extends WindowBase{
 
-    @Getter
-    private Parent visualComponent;
-    private String lastFolder = null;
+    private static final String FXML_LOCATION = "/fxml/settings.fxml";
+
     private final IOsuBackgroundHandler obh;
-    private List<SettingsWindowListener> listeners;
+    private String lastFolder = null;
 
-    @FXML
-    private JFXTextField osuFolderLocation;
+    @FXML private JFXTextField osuFolderLocation;
+    @FXML private Text errorMessage;
 
     public SettingsWindow(IOsuBackgroundHandler obh) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/settings.fxml"));
-        loader.setController(this);
-        try {
-            this.visualComponent = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(FXML_LOCATION);
 
         this.obh = obh;
-        this.listeners = new ArrayList<>();
         osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(osuFolderLocation.getText()));
+    }
+
+    @FXML
+    void removeAll(ActionEvent event) {
+        obh.removeAll();
     }
 
     @FXML
@@ -46,14 +39,9 @@ public class SettingsWindow {
         String tempPath = exeBrowseExplorer();
 
         if (tempPath != null) {
-            try {
-                obh.setOsuFile(tempPath);
-            } catch (IOException e) {
-                listeners.forEach(listener -> listener.errorOccurred("Not a valid osu installation"));
-            }
+            setOsuInstallation(tempPath);
         }
     }
-
     /**
      * Opens a folder browser.
      *
@@ -94,38 +82,22 @@ public class SettingsWindow {
     void osuFolderLocationAction(ActionEvent event) {
         setOsuInstallation(osuFolderLocation.getText());
     }
-
     private void setOsuInstallation(String path) {
         boolean isValid = false;
 
         try {
             obh.setOsuFile(path);
             isValid = true;
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
 
         try {
             obh.setOsuDirectory(path);
             isValid = true;
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
 
         if (!isValid) {
-            listeners.forEach(listener -> listener.errorOccurred("Not a valid osu installation"));
+            errorMessage.setText("Not a valid osu installation");
+            super.flashRevealVisualComponent(errorMessage,FADE_LENGTH_MEDIUM);
         }
-    }
-
-    @FXML
-    void removeAll(ActionEvent event) {
-        obh.removeAll();
-    }
-
-
-    public void addListener(SettingsWindowListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeListener(SettingsWindowListener listener) {
-        listeners.remove(listener);
     }
 }
