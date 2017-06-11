@@ -1,4 +1,4 @@
-package frontend.backupprompt;
+package frontend.screens;
 
 /**
  * Interface for {@link BackupPrompt} listeners

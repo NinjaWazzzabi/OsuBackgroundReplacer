@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="800.0" styleClass="darkBackground" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXTextField fx:id="osuFolderLocation" focusColor="#a4a4a4" layoutX="14.0" layoutY="43.0" onAction="#osuFolderLocationAction" prefHeight="34.0" prefWidth="570.0" promptText="No osu installation found" styleClass="darkButton" stylesheets="@/css/styles.css" />
+      <JFXButton buttonType="RAISED" layoutX="610.0" layoutY="43.0" onAction="#browseInstallation" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
+      <JFXButton buttonType="RAISED" layoutX="300.0" layoutY="451.0" onAction="#removeAll" prefHeight="50.0" prefWidth="200.0" ripplerFill="#c91a1a" styleClass="lightButton" stylesheets="@/css/styles.css" text="Remove all" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

@@ -1,7 +1,6 @@
-package frontend.about;
+package frontend.screens;
 
 import com.jfoenix.controls.JFXButton;
-import com.oracle.jrockit.jfr.DurationEvent;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

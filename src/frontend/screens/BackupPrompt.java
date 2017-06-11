@@ -1,4 +1,4 @@
-package frontend.backupprompt;
+package frontend.screens;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.FadeTransition;
@@ -59,6 +59,7 @@ public class BackupPrompt {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.getScene().setFill(null);
         stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
 
         visualComponent.setOpacity(0);
         FadeTransition fadeIn = new FadeTransition(Duration.millis(250),visualComponent);

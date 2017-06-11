@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="800.0" styleClass="darkBackground" stylesheets="@/css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXTextField fx:id="imageLocationText" focusColor="#a4a4a4" layoutX="52.0" layoutY="57.0" onAction="#imageLocationChange" prefHeight="34.0" prefWidth="570.0" promptText="No image selected" styleClass="darkButton" stylesheets="@/css/styles.css" />
+      <JFXButton buttonType="RAISED" layoutX="648.0" layoutY="57.0" onAction="#browseImage" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <Text layoutX="52.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Replacing image" />
+      <JFXButton buttonType="RAISED" layoutX="230.0" layoutY="446.0" onAction="#replaceAll" prefHeight="50.0" prefWidth="341.0" styleClass="lightButton" stylesheets="@/css/styles.css" text="Replace all" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <AnchorPane layoutX="52.0" layoutY="105.0" prefHeight="320.0" prefWidth="570.0" styleClass="customLightBackground">
+         <children>
+            <Text layoutX="165.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="No image selected" />
+            <VBox layoutX="3.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <AnchorPane VBox.vgrow="ALWAYS" />
+                  <HBox>
+                     <children>
+                        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="0.0" HBox.hgrow="ALWAYS" />
+                        <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
+                        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="0.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <AnchorPane VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <Text fx:id="inlineErrorMessage" layoutX="222.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorText" text="No image selected" />
+   </children>
+</AnchorPane>
