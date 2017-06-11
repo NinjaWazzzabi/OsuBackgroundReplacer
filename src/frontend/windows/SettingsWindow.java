@@ -25,6 +25,7 @@ public class SettingsWindow extends WindowBase{
     public SettingsWindow(IOsuBackgroundHandler obh) {
         super(FXML_LOCATION);
 
+        this.errorMessage.setOpacity(0);
         this.obh = obh;
         osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(osuFolderLocation.getText()));
     }
