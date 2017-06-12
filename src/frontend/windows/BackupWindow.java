@@ -37,7 +37,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
         //TODO Check if backup folder is found
         //If no backup is found
-        new BackupPrompt(this);
+//        new BackupPrompt(this);
     }
 
     @FXML

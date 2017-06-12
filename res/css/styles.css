@@ -136,15 +136,29 @@
 .tab-header-area > .headers-region > .tab > .jfx-rippler {
     -jfx-rippler-fill: #eeeeee;
     -fx-fill: #eeeeee;
+    -fx-cursor: hand;
 }
 
 .tab-header-area > .headers-region > .tab-selected-line {
     -fx-background-color: #eeeeee;
     -fx-stroke: #eeeeee;
+    -fx-cursor: hand;
 }
 
 
 /*  EXTRAS  */
+
+.redSlider .thumb {
+    -fx-background-color: red;
+}
+
+.greenSlider .thumb {
+    -fx-background-color: #00a000;
+}
+
+.blueSlider .thumb {
+    -fx-background-color: blue;
+}
 
 .handCursor {
     -fx-cursor: hand;

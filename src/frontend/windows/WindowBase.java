@@ -54,4 +54,19 @@ public abstract class WindowBase {
             fadeOutLong.play();
         }
     }
+
+    void enlarge(Node visualComponent) {
+        visualComponent.setScaleX(1.5);
+        visualComponent.setScaleY(1.5);
+    }
+
+    void shrink(Node visualComponent) {
+        visualComponent.setScaleX(0.5);
+        visualComponent.setScaleY(0.5);
+    }
+
+    void normalSize(Node visualComponent) {
+        visualComponent.setScaleX(1);
+        visualComponent.setScaleY(1);
+    }
 }

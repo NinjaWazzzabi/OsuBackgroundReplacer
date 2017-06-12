@@ -1,13 +1,9 @@
 import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
-import frontend.windows.BackupWindow;
+import frontend.windows.*;
 import frontend.customfadeeffects.BlurFade;
 import frontend.screens.Loading;
-import frontend.windows.MainWindow;
-import frontend.windows.MainWindowListener;
-import frontend.windows.ReplaceWindow;
-import frontend.windows.SettingsWindow;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -22,6 +18,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
 
     private MainWindow mainWindow;
     private ReplaceWindow replaceWindow;
+    private SingleColourWindow singleColourWindow;
     private SettingsWindow settingsWindow;
     private BackupWindow backupWindow;
 
@@ -39,11 +36,14 @@ public class Main extends Application implements WorkListener, MainWindowListene
 
         replaceWindow = new ReplaceWindow(obh);
 
+        singleColourWindow = new SingleColourWindow(obh);
+
         settingsWindow = new SettingsWindow(obh);
 
         backupWindow = new BackupWindow(obh);
 
         mainWindow.addNewTab("Replace Image", replaceWindow.getVisualComponent());
+        mainWindow.addNewTab("Single Colour",singleColourWindow.getVisualComponent());
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
 
