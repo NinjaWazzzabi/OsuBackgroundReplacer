@@ -39,8 +39,8 @@ public class ImagePathType implements Image{
     }
     @Override
     public boolean replace(String pathToImage) {
-        Path source = Paths.get(pathToImage);
-        Path target = Paths.get(this.fullPath);
+        Path source = Paths.get(this.fullPath);
+        Path target = Paths.get(pathToImage);
 
         if (Files.exists(source) && Files.exists(target)){
             try {
