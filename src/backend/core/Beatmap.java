@@ -128,7 +128,7 @@ public class Beatmap {
      * @param replacingImage Full path to the background image that will replace the ones in this song directory.
      * @return List of images that we're not replaced.
      */
-    List<Image> replaceBackgrounds(Image replacingImage) {
+    public List<Image> replaceBackgrounds(Image replacingImage) {
         ArrayList<Image> nonReplacedImages = new ArrayList<>();
 
         for (Image image : this.images) {
@@ -147,7 +147,7 @@ public class Beatmap {
      * @param saveDirectory The directory that the images from the song directory will be copied to.
      * @return Returns a list of the images that couldn't be copied.
      */
-    List<Image> copyBackgrounds(String saveDirectory) {
+    public List<Image> copyBackgrounds(String saveDirectory) {
         List<Image> nonCopiedImages = new ArrayList<>();
         String copyDirectory = saveDirectory + "/" + folderName;
 
@@ -173,7 +173,7 @@ public class Beatmap {
      * Removes all the background images in the folder.
      * @return List of images that failed to remove.
      */
-    List<Image> removeAllBackgrounds() {
+    public List<Image> removeAllBackgrounds() {
         ArrayList<Image> nonRemovedImages = new ArrayList<>();
 
         for (Image image : this.images) {
@@ -186,12 +186,21 @@ public class Beatmap {
         return nonRemovedImages;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Beatmap)) return false;
 
-    /**
-     * @return the name of the folder.
-     */
-    String getBeatmapName() {
-        File path = new File(folderPath);
-        return path.getName();
+        Beatmap beatmap = (Beatmap) o;
+
+        if (!images.equals(beatmap.images)) return false;
+        return folderName.equals(beatmap.folderName);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = images.hashCode();
+        result = 31 * result + folderName.hashCode();
+        return result;
     }
 }

@@ -54,8 +54,6 @@ public class Main extends Application implements WorkListener, MainWindowListene
             mainWindow.goToTab("Settings");
         }
 
-        System.out.println(obh.getOsuAbsolutePath());
-
         stage.setScene(new Scene(mainWindow.getVisualComponent(), 800, 600));
         stage.setResizable(false);
         stage.setTitle("Osu Background Replacer");

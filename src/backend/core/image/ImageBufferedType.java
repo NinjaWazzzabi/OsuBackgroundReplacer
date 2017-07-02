@@ -65,4 +65,22 @@ public class ImageBufferedType implements Image {
     public boolean isVirtualImage() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ImageBufferedType)) return false;
+
+        ImageBufferedType that = (ImageBufferedType) o;
+
+        if (!imageName.equals(that.imageName)) return false;
+        return image.equals(that.image);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = imageName.hashCode();
+        result = 31 * result + image.hashCode();
+        return result;
+    }
 }

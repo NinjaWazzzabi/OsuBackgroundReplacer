@@ -113,7 +113,12 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     @Override
     public String getOsuAbsolutePath() {
-        return songFolder.getPath();
+        return new File(songFolder.getPath()).getParent();
+    }
+
+    @Override
+    public MainSongFolder getMainSongFolder() {
+        return songFolder;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package backend.osubackgroundhandler;
 
+import backend.core.MainSongFolder;
 import backend.core.image.Image;
 import com.sun.istack.internal.Nullable;
 
@@ -50,6 +51,12 @@ public interface IOsuBackgroundHandler {
      */
     @Nullable
     String getOsuAbsolutePath();
+
+    /**
+     * Used to access all of the beatmaps that the background manager handles.
+     * @return the main song folder.
+     */
+    MainSongFolder getMainSongFolder();
 
     /**
      * Goes through the three default osu installation locations and finds the one with the osu installation.

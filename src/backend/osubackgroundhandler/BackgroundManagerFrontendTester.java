@@ -1,5 +1,6 @@
 package backend.osubackgroundhandler;
 
+import backend.core.MainSongFolder;
 import backend.core.image.Image;
 
 import java.io.FileNotFoundException;
@@ -69,6 +70,11 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
     @Override
     public String getOsuAbsolutePath() {
         return "C:/Users/Anthony/AppData/Local/osu!";
+    }
+
+    @Override
+    public MainSongFolder getMainSongFolder() {
+        return null;
     }
 
     @Override
