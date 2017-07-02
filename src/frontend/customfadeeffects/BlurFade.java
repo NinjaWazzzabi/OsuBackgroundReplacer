@@ -9,6 +9,7 @@ import java.util.TimerTask;
 public class BlurFade extends BoxBlur {
 
     private int FADE_SIZE = 10;
+    private Timer lastTimer;
 
     public BlurFade(){
         super();
@@ -29,7 +30,14 @@ public class BlurFade extends BoxBlur {
                 }
             }
         };
+        lastTimer = timer;
         timer.scheduleAtFixedRate(timerTask,0,1);
+    }
+
+    public void stop(){
+        if (lastTimer != null) {
+            lastTimer.cancel();
+        }
     }
 
     public void fadeOut(){
@@ -44,6 +52,7 @@ public class BlurFade extends BoxBlur {
                 }
             }
         };
+        lastTimer = timer;
         timer.scheduleAtFixedRate(timerTask,0,1);
     }
 

@@ -43,7 +43,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
             installationFound = false;
         }
 
-        mainWindow.addNewTab("Replace ImagePathType", replaceWindow.getVisualComponent());
+        mainWindow.addNewTab("Replace Image", replaceWindow.getVisualComponent());
         mainWindow.addNewTab("Single Colour",singleColourWindow.getVisualComponent());
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
@@ -93,6 +93,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
         Effect effect = mainWindow.getVisualComponent().getEffect();
         if (effect instanceof BlurFade) {
             BlurFade blurEffect = (BlurFade) effect;
+            blurEffect.stop();
             blurEffect.fadeOut();
         } else {
             mainWindow.getVisualComponent().setEffect(null);
