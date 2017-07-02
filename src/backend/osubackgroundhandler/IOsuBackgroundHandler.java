@@ -1,5 +1,6 @@
 package backend.osubackgroundhandler;
 
+import backend.core.image.Image;
 import com.sun.istack.internal.Nullable;
 
 import java.io.FileNotFoundException;
@@ -16,6 +17,7 @@ public interface IOsuBackgroundHandler {
      * @param imagePath Path to an image that will replace all background images.
      */
     void replaceAll(String imagePath) throws IOException;
+    void replaceAll(Image image);
     /**
      * Saves all of the osu background images to the directory specified.
      * @param directory of the images that will be saved to.

@@ -1,5 +1,6 @@
 package frontend.windows;
 
+import backend.core.image.ImageHelper;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.SingleColour;
 import com.jfoenix.controls.JFXSlider;
@@ -86,7 +87,12 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
 
     @FXML
     void setSingleColour(ActionEvent event) {
-        //TODO Implement.
+        obh.replaceAll(
+                new ImageHelper(selectedColour.getImage(),
+     String.valueOf(selectedColour.getR())+ "_" +
+                String.valueOf(selectedColour.getG())+ "_" +
+                String.valueOf(selectedColour.getB())
+        ));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package backend.osubackgroundhandler;
 
+import backend.core.image.Image;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +22,11 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
 
     @Override
     public void replaceAll(String imagePath) throws IOException {
+        startFakeWork(4000);
+    }
+
+    @Override
+    public void replaceAll(Image image) {
         startFakeWork(4000);
     }
 

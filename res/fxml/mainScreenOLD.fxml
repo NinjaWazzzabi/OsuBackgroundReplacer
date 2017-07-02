@@ -89,7 +89,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <JFXTextField fx:id="savePath" focusColor="#a4a4a4" layoutX="14.0" layoutY="45.0" prefHeight="34.0" prefWidth="570.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+                              <JFXTextField fx:id="savePath" focusColor="#a4a4a4" layoutX="14.0" layoutY="45.0" prefHeight="34.0" prefWidth="570.0" promptText="No save fullPath chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
                               <JFXButton fx:id="browseSave" buttonType="RAISED" layoutX="610.0" layoutY="45.0" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
                                  <font>
                                     <Font size="23.0" />

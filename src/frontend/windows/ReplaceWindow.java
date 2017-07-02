@@ -57,7 +57,7 @@ public class ReplaceWindow extends WindowBase{
             inlineErrorMessage.setText("No image selected");
             showInlineErrorMessage();
         } else if (!new File(imagePath).exists()) {
-            inlineErrorMessage.setText("Image does not exist");
+            inlineErrorMessage.setText("ImagePathType does not exist");
             showInlineErrorMessage();
         } else {
             try {

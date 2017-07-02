@@ -8,7 +8,7 @@
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="800.0" styleClass="darkBackground" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXTextField fx:id="savePath" focusColor="#a4a4a4" layoutX="14.0" layoutY="45.0" onAction="#savePathAction" prefHeight="34.0" prefWidth="570.0" promptText="No save path chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
+      <JFXTextField fx:id="savePath" focusColor="#a4a4a4" layoutX="14.0" layoutY="45.0" onAction="#savePathAction" prefHeight="34.0" prefWidth="570.0" promptText="No save fullPath chosen" styleClass="darkButton" stylesheets="@/css/styles.css" />
       <JFXButton buttonType="RAISED" layoutX="610.0" layoutY="45.0" onAction="#browseSave" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Browse" textFill="#d0d0d0">
          <font>
             <Font size="23.0" />

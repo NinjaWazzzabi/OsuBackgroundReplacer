@@ -1,6 +1,8 @@
 package backend.osubackgroundhandler;
 
 import backend.core.MainSongFolder;
+import backend.core.image.Image;
+import backend.core.image.ImageHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,22 +34,38 @@ public class BackgroundManager implements IOsuBackgroundHandler{
     @Override
     public void replaceAll(String imagePath) {
         if (!isWorking && isImageFile(new File(imagePath))){
+            Image image = new ImageHelper(imagePath);
+            replaceAll(image);
+        }
+    }
+    @Override
+    public void replaceAll(Image image) {
+        if (!isWorking) {
             startedWorking();
             Thread thread = new Thread(() -> {
                 updateSongFolder();
-                songFolder.replaceAllImages(imagePath);
+                songFolder.replaceAllImages(image);
                 finishedWorking();
             });
             thread.start();
         }
     }
+
     @Override
     public void saveAll(String directory) {
-        if (!isWorking) {
+        System.out.println(directory);
+        final String subDirectory = directory + "/savedOsuBeatmapImages";
+
+        boolean success = false;
+        if (!new File(subDirectory).exists()) {
+            success = new File(subDirectory).mkdir();
+        }
+
+        if (!isWorking && success) {
             startedWorking();
             Thread thread = new Thread(() -> {
                     updateSongFolder();
-                    songFolder.copyAll(directory);
+                    songFolder.copyAll(subDirectory);
                     finishedWorking();
                 });
             thread.start();
@@ -155,15 +173,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
      * @return true if file type is jpg or png.
      */
     private boolean isImageFile(File file){
-        String extension = "";
-
-        int i = file.getAbsolutePath().lastIndexOf('.');
-        if (i > 0) {
-            extension = file.getAbsolutePath().substring(i+1);
-        }
-        extension = extension.toLowerCase();
-
-        return extension.equals("jpg") || extension.equals("png");
+        return Image.validImagePath(file.getAbsolutePath());
     }
 
 

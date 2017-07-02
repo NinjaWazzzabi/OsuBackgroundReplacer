@@ -1,3 +1,4 @@
+import backend.osubackgroundhandler.BackgroundManager;
 import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
@@ -29,28 +30,31 @@ public class Main extends Application implements WorkListener, MainWindowListene
     public void start(Stage stage) {
         initializeBackend();
 
-
         mainWindow = new MainWindow();
         mainWindow.addListener(this);
 
-
         replaceWindow = new ReplaceWindow(obh);
-
         singleColourWindow = new SingleColourWindow(obh);
-
         settingsWindow = new SettingsWindow(obh);
-
         backupWindow = new BackupWindow(obh);
 
-        mainWindow.addNewTab("Replace Image", replaceWindow.getVisualComponent());
+        boolean installationFound = true;
+        if (obh.getOsuAbsolutePath().equals("C:/")) {
+            installationFound = false;
+        }
+
+        mainWindow.addNewTab("Replace ImagePathType", replaceWindow.getVisualComponent());
         mainWindow.addNewTab("Single Colour",singleColourWindow.getVisualComponent());
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
 
-        if (obh.getOsuAbsolutePath().equals("C:/")) {
+
+        if (!installationFound) {
             mainWindow.promtError("No osu found, find it manually below");
             mainWindow.goToTab("Settings");
         }
+
+        System.out.println(obh.getOsuAbsolutePath());
 
         stage.setScene(new Scene(mainWindow.getVisualComponent(), 800, 600));
         stage.setResizable(false);
@@ -64,7 +68,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
      * @throws FileNotFoundException if osu installation wasn't found.
      */
     private void initializeBackend() {
-        obh = new BackgroundManagerFrontendTester();
+        obh = new BackgroundManager();
         obh.addWorkListener(this);
     }
 

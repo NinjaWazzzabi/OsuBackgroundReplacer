@@ -1,11 +1,13 @@
 package backend.core;
 
+import backend.core.image.Image;
+import backend.core.image.ImageHelper;
 import lombok.Getter;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Handles all background images in a beatmap folder.
@@ -65,13 +67,13 @@ public class Beatmap {
     private Image findImage(String osuFileName) {
         String imageName = null;
         try {
-            imageName = getImageName(folderPath + "/" + osuFileName);
+            imageName = getImageNameFromBeatmap(folderPath + "/" + osuFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (imageName != null) {
-            return new Image(imageName, folderPath + "/" + imageName);
+            return new ImageHelper(folderPath + "/" + imageName);
         } else {
             return null;
         }
@@ -82,7 +84,7 @@ public class Beatmap {
      * @return the name of the main image used in an osu beatmap difficulty.
      * @throws IOException if file is not found.
      */
-    private String getImageName(String pathToOsuBeatmapFile) throws IOException {
+    private String getImageNameFromBeatmap(String pathToOsuBeatmapFile) throws IOException {
         InputStream osuFile = new FileInputStream(pathToOsuBeatmapFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(osuFile));
 
@@ -93,7 +95,7 @@ public class Beatmap {
         }
 
         while (line != null && !line.contains("[TimingPoints]")) {
-            if (Image.isValidImage(line)) {
+            if (stringContainsImageFileEnding(line)) {
                 // The line that contains the image name has it surrounded by quotes, so we split the string to
                 // get the image name and ignore the coordinates. The image name will always be in index one.
                 String[] splittedSentence = line.split("\"");
@@ -117,19 +119,22 @@ public class Beatmap {
 
         return isDuplicate;
     }
-
+    private boolean stringContainsImageFileEnding(String s){
+        String string = s.toLowerCase(Locale.ENGLISH);
+        return string.contains("jpg") || string.contains("png") || string.contains("jpeg");
+    }
 
     /**
-     * @param imagePath Full path to the background image that will replace the ones in this song directory.
+     * @param replacingImage Full path to the background image that will replace the ones in this song directory.
      * @return List of images that we're not replaced.
      */
-    List<Image> replaceBackgrounds(String imagePath) {
+    List<Image> replaceBackgrounds(Image replacingImage) {
         ArrayList<Image> nonReplacedImages = new ArrayList<>();
 
         for (Image image : this.images) {
-            try {
-                image.replace(imagePath);
-            } catch (IOException e) {
+            boolean success = replacingImage.replace(image);
+
+            if (!success) {
                 nonReplacedImages.add(image);
             }
         }
@@ -155,9 +160,9 @@ public class Beatmap {
         }
 
         for (Image image: images) {
-            try {
-                image.copyTo(copyDirectory);
-            } catch (IOException e) {
+            boolean success = image.copyTo(copyDirectory);
+
+            if (!success) {
                 nonCopiedImages.add(image);
             }
         }
@@ -172,9 +177,9 @@ public class Beatmap {
         ArrayList<Image> nonRemovedImages = new ArrayList<>();
 
         for (Image image : this.images) {
-            try {
-                image.remove();
-            } catch (IOException e) {
+            boolean success = image.remove();
+
+            if (!success) {
                 nonRemovedImages.add(image);
             }
         }

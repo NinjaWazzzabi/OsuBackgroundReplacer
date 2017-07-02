@@ -1,5 +1,6 @@
 package backend.core;
 
+import backend.core.image.Image;
 import lombok.Getter;
 
 import java.io.File;
@@ -23,17 +24,19 @@ public class MainSongFolder {
         List<Beatmap> foundBeatmaps = new ArrayList<>();
         File[] folders = new File(this.path).listFiles();
 
-        for (File folder : folders) {
-            Beatmap beatmap = new Beatmap(folder.getAbsolutePath());
-            foundBeatmaps.add(beatmap);
+        if (folders != null) {
+            for (File folder : folders) {
+                Beatmap beatmap = new Beatmap(folder.getAbsolutePath());
+                foundBeatmaps.add(beatmap);
+            }
         }
         return foundBeatmaps;
     }
 
-    public synchronized void replaceAllImages(String imagePath){
+    public synchronized void replaceAllImages(Image image){
         synchronized (this) {
             for (Beatmap beatmap : beatmaps) {
-                beatmap.replaceBackgrounds(imagePath);
+                beatmap.replaceBackgrounds(image);
             }
         }
     }
