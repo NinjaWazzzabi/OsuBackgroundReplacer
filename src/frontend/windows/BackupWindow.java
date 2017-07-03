@@ -55,6 +55,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
         for (File folder : folders) {
             backedUpNames.add(folder.getName());
         }
+        backedUpNames.add("");
 
         setList(backedUp, backedUpNames);
     }
@@ -64,6 +65,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
         for (Beatmap beatmap : beatmaps) {
             texts.add(beatmap.getFolderName());
         }
+        texts.add("");
 
         setList(notBackedUp, texts);
     }
