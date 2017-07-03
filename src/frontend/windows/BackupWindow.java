@@ -20,9 +20,9 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     private static String FXML_LOCATION = "/fxml/save.fxml";
 
     @FXML
-    private ListView<Text> notBackedUp;
+    private ListView<String> notBackedUp;
     @FXML
-    private ListView<Text> backedUp;
+    private ListView<String> backedUp;
 
     @FXML private JFXTextField savePath;
     @FXML private Text errorMessage;
@@ -56,14 +56,8 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
             backedUpNames.add(folder.getName());
         }
 
-        backedUp.getItems().clear();
-        for (String text : backedUpNames) {
-            Text textToAdd = new Text(text);
-            textToAdd.setStyle("-fx-fill: #eeeeee;");
-            backedUp.getItems().add(textToAdd);
-        }
+        setList(backedUp, backedUpNames);
     }
-
     private void setNonBackedUpVisualList(List<Beatmap> beatmaps) {
         ArrayList<String> texts = new ArrayList<>();
 
@@ -71,11 +65,12 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
             texts.add(beatmap.getFolderName());
         }
 
-        notBackedUp.getItems().clear();
-        for (String text : texts) {
-            Text textToAdd = new Text(text);
-            textToAdd.setStyle("-fx-fill: #eeeeee;");
-            notBackedUp.getItems().add(textToAdd);
+        setList(notBackedUp, texts);
+    }
+    private <T> void setList(ListView<T> listView,List<T> list){
+        listView.getItems().clear();
+        for (T item : list) {
+            listView.getItems().add(item);
         }
     }
 
