@@ -53,16 +53,7 @@ public class About{
         stage.setTitle("About section");
         stage.setScene(new Scene(visualComponent, 600, 300));
 
-        /*
-        There's currently a bug in the code that's creating
-        a white glow when closing or opening the about tab.
-        This bug is now a feature, because I like it.
-
-        If by any means you would want to fade it to transparent
-        instead of white, then change the "StageStyle.UNDECORATED"
-        to "StageStyle.TRANSPARENT".
-         */
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.getScene().setFill(null);
         stage.setResizable(false);
 
