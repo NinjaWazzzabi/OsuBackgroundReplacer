@@ -81,6 +81,11 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
         backupManager.runBackup();
     }
 
+    @FXML
+    void restore(ActionEvent event){
+        backupManager.restoreImages();
+    }
+
     @Override
     public void backupYes() {
         backupManager.runBackup();
