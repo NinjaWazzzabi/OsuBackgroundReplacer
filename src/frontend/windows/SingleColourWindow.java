@@ -68,6 +68,8 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
 
 
         updateSelectedColourRGB();
+        updateHSVSlider();
+        updateRGBSlider();
         updatePreview();
 
         colourGrid = new ColourGrid(colourTiles, 10);
