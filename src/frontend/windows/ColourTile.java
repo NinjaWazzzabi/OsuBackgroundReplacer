@@ -19,12 +19,15 @@ public class ColourTile extends WindowBase {
     @FXML
     private ImageView image;
 
-    public ColourTile(SingleColour colour) {
+    public ColourTile(SingleColour colour, int tileSize) {
         super(FXML_LOCATION);
         this.colour = colour;
         image.setImage(SwingFXUtils.toFXImage(this.colour.getImage(), null));
 
         observers = new ArrayList<>();
+    }
+    public ColourTile(SingleColour colour) {
+        this(colour,10);
     }
 
     @FXML
@@ -36,21 +39,20 @@ public class ColourTile extends WindowBase {
 
     @FXML
     void enterHover(MouseEvent event) {
-        super.visualComponent.setTranslateZ(1);
         super.enlarge(super.visualComponent);
-    }
+        super.getVisualComponent().toFront();
 
+    }
     @FXML
     void exitHover(MouseEvent event) {
-        super.visualComponent.setTranslateZ(0);
         super.normalSize(super.visualComponent);
+        super.getVisualComponent().toBack();
     }
 
     @FXML
     void mousePressed(MouseEvent event) {
 
     }
-
     @FXML
     void mouseReleased(MouseEvent event) {
 

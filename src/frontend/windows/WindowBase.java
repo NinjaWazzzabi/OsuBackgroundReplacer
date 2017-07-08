@@ -69,4 +69,15 @@ public abstract class WindowBase {
         visualComponent.setScaleX(1);
         visualComponent.setScaleY(1);
     }
+
+    void raise(Node visualComponent) {
+        visualComponent.setTranslateZ(
+                visualComponent.getTranslateZ()+1
+        );
+    }
+    void lower(Node visualComponent) {
+        visualComponent.setTranslateZ(
+                visualComponent.getTranslateZ()-1
+        );
+    }
 }

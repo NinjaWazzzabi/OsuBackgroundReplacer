@@ -9,9 +9,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-
-import java.util.Random;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * Let's the user pick one colour to be used as a background.
@@ -26,44 +24,80 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
     @FXML private JFXSlider red;
     @FXML private JFXSlider green;
     @FXML private JFXSlider blue;
-    @FXML private FlowPane colorSquaresPane;
+
+    @FXML private JFXSlider hue;
+    @FXML private JFXSlider saturation;
+    @FXML private JFXSlider value;
+
+    @FXML private AnchorPane colourTiles;
     @FXML private ImageView preview;
 
-    private boolean colourSlidersChangeListenerActive;
+    private boolean slidersChangeListenerActive;
     private SingleColour selectedColour;
+
+    private ColourGrid colourGrid;
 
     public SingleColourWindow(IOsuBackgroundHandler osuBackgroundHandler) {
         super(FXML_LOCATION);
 
         this.obh = osuBackgroundHandler;
 
-        colourSlidersChangeListenerActive = true;
-        ChangeListener<Number> sliderValueChangeListener = (observable, oldValue, newValue) -> {
-            if (colourSlidersChangeListenerActive) {
-                updateSelectedColour();
+        slidersChangeListenerActive = true;
+        ChangeListener<Number> rgbSliderChangeListener = (observable, oldValue, newValue) -> {
+            if (slidersChangeListenerActive) {
+                updateSelectedColourRGB();
                 updatePreview();
+                updateHSVSlider();
+            }
+        };
+        ChangeListener<Number> hueSliderChangeListener = (observable, oldValue, newValue) -> {
+            if (slidersChangeListenerActive) {
+                updateSelectedColourHSV();
+                updatePreview();
+                updateRGBSlider();
             }
         };
 
-        red.valueProperty().addListener(sliderValueChangeListener);
-        green.valueProperty().addListener(sliderValueChangeListener);
-        blue.valueProperty().addListener(sliderValueChangeListener);
+        red.valueProperty().addListener(rgbSliderChangeListener);
+        green.valueProperty().addListener(rgbSliderChangeListener);
+        blue.valueProperty().addListener(rgbSliderChangeListener);
 
-        colorSquaresPane.setHgap(1);
-        colorSquaresPane.setVgap(1);
+        hue.valueProperty().addListener(hueSliderChangeListener);
+        saturation.valueProperty().addListener(hueSliderChangeListener);
+        value.valueProperty().addListener(hueSliderChangeListener);
 
-        updateSelectedColour();
+
+        updateSelectedColourRGB();
         updatePreview();
-        spawnColourTiles();
+
+        colourGrid = new ColourGrid(colourTiles, 10);
+        colourGrid.addObserver(this);
     }
 
-    private void updateSliders() {
+    private void updateSelectedColourHSV() {
+        selectedColour = new SingleColour(
+                (float) hue.getValue()/255,
+                (float) saturation.getValue()/255,
+                (float) value.getValue()/255
+        );
+    }
+
+    private void updateRGBSlider() {
+        slidersChangeListenerActive = false;
         this.red.setValue(this.selectedColour.getR());
         this.green.setValue(this.selectedColour.getG());
         this.blue.setValue(this.selectedColour.getB());
+        slidersChangeListenerActive = true;
+    }
+    private void updateHSVSlider() {
+        slidersChangeListenerActive = false;
+        this.hue.setValue(this.selectedColour.getHue()*255);
+        this.saturation.setValue(this.selectedColour.getSaturation()*255);
+        this.value.setValue(this.selectedColour.getValue()*255);
+        slidersChangeListenerActive = true;
     }
 
-    private void updateSelectedColour() {
+    private void updateSelectedColourRGB() {
         selectedColour = new SingleColour(
                 (int) red.getValue(),
                 (int) green.getValue(),
@@ -72,17 +106,6 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
     }
     private void updatePreview() {
         preview.setImage(SwingFXUtils.toFXImage(selectedColour.getImage(), null));
-    }
-
-    private void spawnColourTiles() {
-        Random r = new Random();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 20; j++) {
-                ColourTile tile = new ColourTile(new SingleColour(r.nextInt(255),r.nextInt(255),r.nextInt(255)));
-                tile.addObserver(this);
-                colorSquaresPane.getChildren().add(tile.getVisualComponent());
-            }
-        }
     }
 
     @FXML
@@ -98,9 +121,8 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
     @Override
     public void tileClicked(SingleColour colour) {
         this.selectedColour = colour;
-        this.colourSlidersChangeListenerActive = false;
-        updateSliders();
-        this.colourSlidersChangeListenerActive = true;
+        updateRGBSlider();
+        updateHSVSlider();
         updatePreview();
     }
 }
