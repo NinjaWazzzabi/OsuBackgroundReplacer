@@ -149,15 +149,29 @@
 /*  EXTRAS  */
 
 .redSlider .thumb {
-    -fx-background-color: red;
+    -fx-background-color: #ff3333;
 }
 
 .greenSlider .thumb {
-    -fx-background-color: #00a000;
+    -fx-background-color: #33ff33;
 }
 
 .blueSlider .thumb {
-    -fx-background-color: blue;
+    -fx-background-color: #3333ff;
+}
+
+.hueSlider .thumb {
+    -fx-background-color: #3f4f69;
+}
+.saturationSlider .thumb {
+    -fx-background-color: #3f4f69;
+}
+.valueSlider .thumb{
+    -fx-background-color: #3f4f69;
+}
+
+.valueSlider .track {
+    /*-fx-background-color: linear-gradient(from 0% 50% to 150% 50%, #000000, #ffffff);*/
 }
 
 .handCursor {

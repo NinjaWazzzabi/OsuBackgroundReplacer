@@ -43,14 +43,26 @@ public class ColourGrid {
 
         for (int i = 0; i < yAmount; i++) {
             for (int j = 0; j < xAmount; j++) {
-                ColourTile tile = new ColourTile(
-                        new SingleColour(
-                                (float) j / (float) xAmount,
-                                1.0f,
-                                (float) i / (float) yAmount
-                        ),
-                        this.tileSize
-                );
+                ColourTile tile;
+                //First row is only back and white
+                if (i == 0) {
+                    tile = new ColourTile(
+                            new SingleColour(
+                                    0,
+                                    0,
+                                    1 - (float) j / (float) xAmount
+                            )
+                    );
+                } else {
+                    tile = new ColourTile(
+                            new SingleColour(
+                                    (float) j / (float) xAmount,
+                                    1.0f,
+                                    (float) i / (float) yAmount
+                            ),
+                            this.tileSize
+                    );
+                }
 
                 addObserversToTile(tile);
                 colourTiles.add(tile);

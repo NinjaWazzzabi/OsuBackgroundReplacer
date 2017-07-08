@@ -29,9 +29,9 @@
       <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="HSV" />
       <VBox layoutX="15.0" layoutY="42.0" spacing="10.0">
          <children>
-            <JFXSlider fx:id="hue" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="redSlider" stylesheets="@../css/styles.css" value="125.0" />
-            <JFXSlider fx:id="saturation" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="greenSlider" value="125.0" />
-            <JFXSlider fx:id="value" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="blueSlider" value="125.0" />
+            <JFXSlider fx:id="hue" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="hueSlider" stylesheets="@../css/styles.css" value="125.0" />
+            <JFXSlider fx:id="saturation" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="saturationSlider" value="125.0" />
+            <JFXSlider fx:id="value" indicatorPosition="RIGHT" max="255.0" prefWidth="285.0" showTickLabels="true" showTickMarks="true" styleClass="valueSlider" value="125.0" />
          </children>
       </VBox>
    </children>
