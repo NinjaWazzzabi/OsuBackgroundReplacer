@@ -30,27 +30,25 @@ public class Main extends Application implements WorkListener, MainWindowListene
     public void start(Stage stage) {
         initializeBackend();
 
-        mainWindow = new MainWindow();
-        mainWindow.addListener(this);
+        boolean installationFound = true;
+        if (obh.getOsuAbsolutePath().equals("C:\\")) {
+            installationFound = false;
+        }
 
         replaceWindow = new ReplaceWindow(obh);
         singleColourWindow = new SingleColourWindow(obh);
         settingsWindow = new SettingsWindow(obh);
         backupWindow = new BackupWindow(obh);
 
-        boolean installationFound = true;
-        if (obh.getOsuAbsolutePath().equals("C:/")) {
-            installationFound = false;
-        }
+        mainWindow = new MainWindow();
+        mainWindow.addListener(this);
 
         mainWindow.addNewTab("Replace Image", replaceWindow.getVisualComponent());
         mainWindow.addNewTab("Single Colour",singleColourWindow.getVisualComponent());
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
 
-
         if (!installationFound) {
-            mainWindow.promtError("No osu found, find it manually below");
             mainWindow.goToTab("Settings");
         }
 

@@ -111,4 +111,9 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
     public void removeWorkListener(WorkListener listener) {
         listeners.add(listener);
     }
+
+    @Override
+    public boolean installationFound() {
+        return false;
+    }
 }

@@ -28,11 +28,16 @@ public class SettingsWindow extends WindowBase{
         this.errorMessage.setOpacity(0);
         this.obh = obh;
         osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(osuFolderLocation.getText()));
+        osuFolderLocation.setText(obh.getOsuAbsolutePath());
+
+        if (!obh.installationFound()) {
+            promtError("No osu installation found");
+        }
     }
 
-    @FXML
-    void removeAll(ActionEvent event) {
-        obh.removeAll();
+    private void promtError(String text) {
+        errorMessage.setText(text);
+        errorMessage.setOpacity(1);
     }
 
     @FXML

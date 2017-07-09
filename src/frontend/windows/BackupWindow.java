@@ -28,7 +28,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     @FXML private Text errorMessage;
 
     private final IOsuBackgroundHandler obh;
-    private final BackupManager backupManager;
+    private BackupManager backupManager;
 
     public BackupWindow(IOsuBackgroundHandler obh) {
         super(FXML_LOCATION);
@@ -78,12 +78,21 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
     @FXML
     void backup(ActionEvent event) {
-        backupManager.runBackup();
+        if (obh.installationFound()) {
+            backupManager.runBackup();
+        }
     }
 
     @FXML
     void restore(ActionEvent event){
-        backupManager.restoreImages();
+        if (obh.installationFound()) {
+            backupManager.restoreImages();
+        }
+    }
+
+    @FXML
+    void refresh(ActionEvent event){
+        backupManager = new BackupManager(obh);
     }
 
     @Override

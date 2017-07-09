@@ -16,6 +16,7 @@ import java.util.List;
 public class BackgroundManager implements IOsuBackgroundHandler{
 
     private String currentSongFolder;
+    private String osuDirectoryPath;
     private boolean isWorking;
     private List<WorkListener> workListeners;
     private MainSongFolder songFolder;
@@ -23,9 +24,9 @@ public class BackgroundManager implements IOsuBackgroundHandler{
     public BackgroundManager(){
         this.isWorking = false;
         try {
-            this.currentSongFolder = findOsuDirectory();
+            this.osuDirectoryPath = findOsuDirectory();
         } catch (FileNotFoundException e) {
-            this.currentSongFolder = "C:/";
+            this.osuDirectoryPath = "";
         }
         updateSongFolder();
         this.workListeners = new ArrayList<>();
@@ -86,7 +87,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     private void updateSongFolder(){
         if (!isSongFolderUpdated()){
-            songFolder = new MainSongFolder(currentSongFolder + "/" + "Songs");
+            songFolder = new MainSongFolder(osuDirectoryPath + "/" + "Songs");
         }
     }
     private boolean isSongFolderUpdated(){
@@ -113,7 +114,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     @Override
     public String getOsuAbsolutePath() {
-        return new File(songFolder.getPath()).getParent();
+        return osuDirectoryPath;
     }
 
     @Override
@@ -123,28 +124,14 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     @Override
     public String findOsuDirectory() throws FileNotFoundException {
+        OsuInstallationFinder oif = new OsuInstallationFinder();
+        String installationPath = oif.getInstallationPath();
 
-        //Default osu locations
-        String homeDir = System.getProperty("user.home");
-        homeDir = homeDir.replace("\\", "/");
-        String defDirOne = homeDir + "/AppData/Local/osu!";
-        String defDirTwo = "C:/Program Files/osu!";
-        String defDirThree = "C:/Program Files(x86)/osu!";
-        String[] defaultDirectories = {defDirOne,defDirTwo,defDirThree};
-
-
-        for (String defaultDirectory : defaultDirectories) {
-            if (isOsuDirectory(defaultDirectory)){
-                try {
-                    setOsuDirectory(defaultDirectory);
-                    return defaultDirectory;
-                } catch (IOException ignored) {
-                    //Osu installation not found on a location, no need to catch exception.
-                }
-            }
+        if (installationPath == null) {
+            throw new FileNotFoundException("Osu installation not found");
         }
 
-        throw new FileNotFoundException("Osu directory not found");
+        return installationPath;
     }
     /**
      * Checks if the directory contains a osu!.exe
@@ -154,7 +141,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
      */
     private boolean isOsuDirectory(String directory) {
         File osuFolder = new File(directory);
-        if (!osuFolder.exists()) {
+        if (!osuFolder.exists() || !osuFolder.isDirectory()) {
             return false;
         }
 
@@ -206,5 +193,10 @@ public class BackgroundManager implements IOsuBackgroundHandler{
     @Override
     public void removeWorkListener(WorkListener listener) {
         workListeners.remove(listener);
+    }
+
+    @Override
+    public boolean installationFound() {
+        return isOsuDirectory(getOsuAbsolutePath());
     }
 }

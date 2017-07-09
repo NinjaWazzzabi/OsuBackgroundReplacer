@@ -10,7 +10,7 @@
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="800.0" styleClass="darkBackground" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXButton buttonType="RAISED" layoutX="88.0" layoutY="442.0" onAction="#backup" prefHeight="50.0" prefWidth="233.0" ripplerFill="#1ac737" styleClass="lightButton" stylesheets="@/css/styles.css" text="Backup missing" textFill="#d0d0d0">
+      <JFXButton buttonType="RAISED" layoutX="40.0" layoutY="442.0" onAction="#backup" prefHeight="50.0" prefWidth="233.0" ripplerFill="#1ac737" styleClass="lightButton" stylesheets="@/css/styles.css" text="Backup missing" textFill="#d0d0d0">
          <font>
             <Font size="23.0" />
          </font>
@@ -42,7 +42,12 @@
       </SplitPane>
       <Text layoutX="139.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Not backed up" />
       <Text layoutX="537.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Backed up" />
-      <JFXButton buttonType="RAISED" layoutX="466.0" layoutY="442.0" onAction="#restore" prefHeight="50.0" prefWidth="233.0" ripplerFill="#1ac737" styleClass="lightButton" stylesheets="@/css/styles.css" text="Restore osu images" textFill="#d0d0d0">
+      <JFXButton buttonType="RAISED" layoutX="527.0" layoutY="442.0" onAction="#restore" prefHeight="50.0" prefWidth="233.0" ripplerFill="#1ac737" styleClass="lightButton" stylesheets="@/css/styles.css" text="Restore osu images" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="326.0" layoutY="442.0" onAction="#refresh" prefHeight="50.0" prefWidth="149.0" ripplerFill="#1ac737" styleClass="lightButton" stylesheets="@/css/styles.css" text="Refresh lists" textFill="#d0d0d0">
          <font>
             <Font size="23.0" />
          </font>

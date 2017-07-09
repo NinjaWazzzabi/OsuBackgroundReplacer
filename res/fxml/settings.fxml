@@ -15,11 +15,6 @@
          </font>
       </JFXButton>
       <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
-      <JFXButton buttonType="RAISED" layoutX="300.0" layoutY="451.0" onAction="#removeAll" prefHeight="50.0" prefWidth="200.0" ripplerFill="#c91a1a" styleClass="lightButton" stylesheets="@/css/styles.css" text="Remove all" textFill="#d0d0d0">
-         <font>
-            <Font size="23.0" />
-         </font>
-      </JFXButton>
       <Text fx:id="errorMessage" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorText" text="ErrorMessage" textAlignment="CENTER" wrappingWidth="800.0" />
    </children>
 </AnchorPane>

@@ -73,4 +73,6 @@ public interface IOsuBackgroundHandler {
     boolean isWorking();
     void addWorkListener(WorkListener listener);
     void removeWorkListener(WorkListener listener);
+
+    boolean installationFound();
 }
