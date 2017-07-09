@@ -1,5 +1,4 @@
 import backend.osubackgroundhandler.BackgroundManager;
-import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
 import frontend.windows.*;
@@ -25,16 +24,34 @@ public class Main extends Application implements WorkListener, MainWindowListene
 
     private IOsuBackgroundHandler obh;
     private Loading loading;
+    private boolean startupComplete;
 
     @Override
     public void start(Stage stage) {
+        startupComplete = false;
         initializeBackend();
+        initializeFrontend(stage);
+        startupComplete = true;
+    }
+    /**
+     * Starts up the backend.
+     * @throws FileNotFoundException if osu installation wasn't found.
+     */
+    private void initializeBackend() {
+        Thread backendStartup = new Thread(() -> {
+            obh = new BackgroundManager();
+            obh.getWorkListeners().addListener(this);
+        });
 
-        boolean installationFound = true;
-        if (obh.getOsuAbsolutePath().equals("C:\\")) {
-            installationFound = false;
-        }
+        Loading startUpLoading = new Loading();
+        backendStartup.start();
+        try {
+            backendStartup.join();
+        } catch (InterruptedException ignored) {}
+        startUpLoading.close();
+    }
 
+    private void initializeFrontend(Stage stage){
         replaceWindow = new ReplaceWindow(obh);
         singleColourWindow = new SingleColourWindow(obh);
         settingsWindow = new SettingsWindow(obh);
@@ -49,7 +66,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
 
-        if (!installationFound) {
+        if (!obh.installationFound()) {
             mainWindow.goToTab("Settings");
         }
 
@@ -60,14 +77,6 @@ public class Main extends Application implements WorkListener, MainWindowListene
         stage.getScene().setFill(null);
         stage.show();
     }
-    /**
-     * Starts up the backend.
-     * @throws FileNotFoundException if osu installation wasn't found.
-     */
-    private void initializeBackend() {
-        obh = new BackgroundManager();
-        obh.getWorkListeners().addListener(this);
-    }
 
     @Override
     public void exit() {
@@ -76,24 +85,30 @@ public class Main extends Application implements WorkListener, MainWindowListene
 
     @Override
     public void alertWorkStarted() {
-        loading = new Loading();
-        BlurFade darkening = new BlurFade();
-        darkening.fadeIn();
-        mainWindow.getVisualComponent().setDisable(true);
-        mainWindow.getVisualComponent().setEffect(darkening);
+        if (startupComplete) {
+            loading = new Loading();
+            BlurFade darkening = new BlurFade();
+            darkening.fadeIn();
+            mainWindow.getVisualComponent().setDisable(true);
+            mainWindow.getVisualComponent().setEffect(darkening);
+        }
     }
     @Override
     public void alertWorkFinished() {
-        loading.close();
-        mainWindow.getVisualComponent().setDisable(false);
+        if (startupComplete) {
+            if (loading != null) {
+                loading.close();
+            }
+            mainWindow.getVisualComponent().setDisable(false);
 
-        Effect effect = mainWindow.getVisualComponent().getEffect();
-        if (effect instanceof BlurFade) {
-            BlurFade blurEffect = (BlurFade) effect;
-            blurEffect.stop();
-            blurEffect.fadeOut();
-        } else {
-            mainWindow.getVisualComponent().setEffect(null);
+            Effect effect = mainWindow.getVisualComponent().getEffect();
+            if (effect instanceof BlurFade) {
+                BlurFade blurEffect = (BlurFade) effect;
+                blurEffect.stop();
+                blurEffect.fadeOut();
+            } else {
+                mainWindow.getVisualComponent().setEffect(null);
+            }
         }
     }
 

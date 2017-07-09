@@ -22,13 +22,13 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     public BackgroundManager(){
         this.isWorking = false;
+        this.workListeners = new WorkListeners();
         try {
             this.osuAbsolutePath = findOsuDirectory();
         } catch (FileNotFoundException e) {
             this.osuAbsolutePath = "";
         }
         updateSongFolder();
-        this.workListeners = new WorkListeners();
     }
 
     @Override
@@ -88,7 +88,12 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     private void updateSongFolder(){
         if (!isSongFolderUpdated()){
-            songFolder = new MainSongFolder(osuAbsolutePath + "/" + "Songs");
+            workListeners.alertListenersWorkStarted();
+            Thread updateSongFolder = new Thread(() -> {
+                songFolder = new MainSongFolder(osuAbsolutePath + "/" + "Songs");
+                workListeners.alertListenersWorkFinished();
+            });
+            updateSongFolder.start();
         }
     }
     private boolean isSongFolderUpdated(){
@@ -104,6 +109,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         if (OsuInstallationFinder.isOsuDirectory(path)){
             osuAbsolutePath = path;
             currentSongFolderPath = osuAbsolutePath + "/" + "Songs";
+            updateSongFolder();
         } else {
             throw new IOException("Not an osu directory");
         }
