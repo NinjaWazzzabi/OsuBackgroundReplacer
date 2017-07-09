@@ -82,6 +82,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     void backup(ActionEvent event) {
         if (obh.installationFound()) {
             backupManager.runBackup();
+            refreshAll();
         }
     }
 
@@ -89,15 +90,19 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     void restore(ActionEvent event){
         if (obh.installationFound()) {
             backupManager.restoreImages();
+            refreshAll();
         }
     }
 
     @FXML
     void refresh(ActionEvent event){
+        refreshAll();
+    }
+
+    private void refreshAll(){
         backupManager.refresh();
         autoUpdateLists();
     }
-
 
 
     @Override
