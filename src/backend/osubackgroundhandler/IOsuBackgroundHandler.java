@@ -24,6 +24,7 @@ public interface IOsuBackgroundHandler {
      * @param directory of the images that will be saved to.
      */
     void saveAll(String directory) throws IOException;
+    void saveAll(String directory, String folderName) throws IOException;
     /**
      * Removes all the osu background images.
      */

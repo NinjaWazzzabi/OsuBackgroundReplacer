@@ -4,7 +4,9 @@ import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.istack.internal.Nullable;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,16 +30,23 @@ public class SettingsWindow extends WindowBase{
         this.errorMessage.setOpacity(0);
         this.obh = obh;
         osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(osuFolderLocation.getText()));
+        osuFolderLocation.setOnKeyTyped(event -> {
+          setOsuInstallation(osuFolderLocation.getText() + event.getText());
+        });
         osuFolderLocation.setText(obh.getOsuAbsolutePath());
-
+        osuFolderLocation.setDisable(true);
         if (!obh.installationFound()) {
-            promtError("No osu installation found");
+            showError("No osu installation found");
         }
     }
 
-    private void promtError(String text) {
+    private void showError(String text) {
         errorMessage.setText(text);
         errorMessage.setOpacity(1);
+    }
+
+    private void hideError(){
+        errorMessage.setOpacity(0);
     }
 
     @FXML
@@ -91,19 +100,25 @@ public class SettingsWindow extends WindowBase{
     private void setOsuInstallation(String path) {
         boolean isValid = false;
 
-        try {
-            obh.setOsuFile(path);
-            isValid = true;
-        } catch (IOException ignored) {}
+        if (path != null) {
+            try {
+                obh.setOsuFile(path);
+                isValid = true;
+            } catch (IOException ignored) {}
 
-        try {
-            obh.setOsuDirectory(path);
-            isValid = true;
-        } catch (IOException ignored) {}
+            if (!isValid) {
+                try {
+                    obh.setOsuDirectory(path);
+                    isValid = true;
+                } catch (IOException ignored) {}
+            }
 
-        if (!isValid) {
-            errorMessage.setText("Not a valid osu installation");
-            super.flashRevealVisualComponent(errorMessage,FADE_LENGTH_MEDIUM);
+        }
+
+        if (isValid) {
+            osuFolderLocation.setText(obh.getOsuAbsolutePath());
+        } else {
+            showError("Not a valid osu installation");
         }
     }
 }

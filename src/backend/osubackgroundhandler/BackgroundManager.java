@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BackgroundManager implements IOsuBackgroundHandler{
 
-    private String currentSongFolder;
+    private String currentSongFolderPath;
     private String osuDirectoryPath;
     private boolean isWorking;
     private List<WorkListener> workListeners;
@@ -54,8 +54,11 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     @Override
     public void saveAll(String directory) {
-        System.out.println(directory);
-        final String subDirectory = directory + "/savedOsuBeatmapImages";
+        saveAll(directory,"/savedOsuBeatmapImages");
+    }
+    @Override
+    public void saveAll(String directory, String folderName) {
+        final String subDirectory = directory + folderName;
 
         boolean success = false;
         if (!new File(subDirectory).exists()) {
@@ -65,10 +68,10 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         if (!isWorking && success) {
             startedWorking();
             Thread thread = new Thread(() -> {
-                    updateSongFolder();
-                    songFolder.copyAll(subDirectory);
-                    finishedWorking();
-                });
+                updateSongFolder();
+                songFolder.copyAll(subDirectory);
+                finishedWorking();
+            });
             thread.start();
         }
     }
@@ -94,14 +97,15 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         if (this.songFolder == null) {
             return false;
         } else {
-            return songFolder.getPath().equals(currentSongFolder);
+            return songFolder.getPath().equals(currentSongFolderPath);
         }
     }
 
     @Override
     public void setOsuDirectory(String path) throws IOException {
         if (isOsuDirectory(path)){
-            currentSongFolder = path;
+            osuDirectoryPath = path;
+            currentSongFolderPath = osuDirectoryPath + "/" + "Songs";
         } else {
             throw new IOException("Not an osu directory");
         }

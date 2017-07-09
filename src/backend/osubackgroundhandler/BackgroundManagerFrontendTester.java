@@ -37,6 +37,11 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
     }
 
     @Override
+    public void saveAll(String directory, String folderName) throws IOException {
+        startFakeWork(2000);
+    }
+
+    @Override
     public void removeAll() {
         startFakeWork(1000);
     }
