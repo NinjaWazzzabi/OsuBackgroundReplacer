@@ -3,6 +3,8 @@ package frontend.windows;
 import backend.BackupManager.BackupManager;
 import backend.core.Beatmap;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
+import backend.osubackgroundhandler.WorkListener;
+import backend.osubackgroundhandler.WorkListeners;
 import com.jfoenix.controls.JFXTextField;
 import frontend.screens.BackupPrompt;
 import frontend.screens.BackupPromptListener;
@@ -104,6 +106,9 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
         autoUpdateLists();
     }
 
+    public WorkListeners getWorkListeners(){
+        return backupManager.getWorkListeners();
+    }
 
     @Override
     public void backupYes() {

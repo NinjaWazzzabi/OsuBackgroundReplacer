@@ -6,7 +6,6 @@ import com.sun.istack.internal.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Interface for osu background handlers
@@ -67,13 +66,7 @@ public interface IOsuBackgroundHandler {
      */
     String findOsuDirectory() throws FileNotFoundException;
 
-
-    /**
-     * @return true if the object is changing background images.
-     */
-    boolean isWorking();
-    void addWorkListener(WorkListener listener);
-    void removeWorkListener(WorkListener listener);
+    WorkListeners getWorkListeners();
 
     boolean installationFound();
 }

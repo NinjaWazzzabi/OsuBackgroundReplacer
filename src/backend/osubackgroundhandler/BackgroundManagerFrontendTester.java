@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
 
-    private List<WorkListener> listeners;
+    private WorkListeners listeners;
     private boolean isWorking;
 
     public BackgroundManagerFrontendTester() {
         isWorking = false;
-        listeners = new ArrayList<>();
+        listeners = new WorkListeners();
     }
 
     @Override
@@ -49,12 +49,12 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
 
     private void startFakeWork(int sleepTime){
         if (!isWorking){
-            startedWorking();
+            listeners.alertListenersWorkStarted();
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException ignored) {}
-                finishedWorking();
+                listeners.alertListenersWorkFinished();
             });
             thread.start();
         }
@@ -88,34 +88,10 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
     }
 
     @Override
-    public boolean isWorking() {
-        return isWorking;
+    public WorkListeners getWorkListeners() {
+        return listeners;
     }
 
-
-    private void startedWorking() {
-        isWorking = true;
-        for (WorkListener workListener : listeners) {
-            workListener.alertWorkStarted();
-        }
-    }
-
-    private void finishedWorking() {
-        isWorking = false;
-        for (WorkListener workListener : listeners) {
-            workListener.alertWorkFinished();
-        }
-    }
-
-    @Override
-    public void addWorkListener(WorkListener listener) {
-        listeners.add(listener);
-    }
-
-    @Override
-    public void removeWorkListener(WorkListener listener) {
-        listeners.add(listener);
-    }
 
     @Override
     public boolean installationFound() {

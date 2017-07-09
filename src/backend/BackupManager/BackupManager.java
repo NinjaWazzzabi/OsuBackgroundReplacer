@@ -3,6 +3,7 @@ package backend.BackupManager;
 import backend.core.Beatmap;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
+import backend.osubackgroundhandler.WorkListeners;
 import lombok.Getter;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class BackupManager {
 
     @Getter
     private List<File> backedUpFolders;
-    private List<WorkListener> workListeners;
+    private WorkListeners workListeners;
     @Getter
     private List<Beatmap> missingBackups;
 
@@ -33,7 +34,7 @@ public class BackupManager {
 
     public BackupManager(IOsuBackgroundHandler obh) {
         backedUpFolders = new ArrayList<>();
-        workListeners = new ArrayList<>();
+        workListeners = new WorkListeners();
         this.obh = obh;
         searchForBackup();
         missingBackups = findMissingBackups();
@@ -80,23 +81,28 @@ public class BackupManager {
     }
 
     public void runBackup() {
+        workListeners.alertListenersWorkStarted();
 
-        File backupFolder = new File(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
-        if (!backupFolder.exists()) {
-            backupFolder.mkdir();
-        }
+        Thread backup = new Thread(() -> {
+            synchronized (this) {
+                File backupFolder = new File(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
+                if (!backupFolder.exists()) {
+                    backupFolder.mkdir();
+                }
 
-        for (Beatmap missingBackup : missingBackups) {
-            missingBackup.copyBackgrounds(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
-        }
+                for (Beatmap missingBackup : missingBackups) {
+                    missingBackup.copyBackgrounds(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
+                }
+
+                workListeners.alertListenersWorkFinished();
+            }
+        });
+
+        backup.run();
     }
 
-    public void addWorkListener(WorkListener listener) {
-        workListeners.add(listener);
-    }
-
-    public void removeWorkListener(WorkListener listener) {
-        workListeners.remove(listener);
+    public WorkListeners getWorkListeners(){
+        return workListeners;
     }
 
     public void refresh() {
@@ -107,11 +113,18 @@ public class BackupManager {
     }
 
     public void restoreImages() {
-        String path = obh.getMainSongFolder().getPath();
+        workListeners.alertListenersWorkStarted();
+        Thread restore = new Thread(() -> {
+            synchronized (this) {
+                String path = obh.getMainSongFolder().getPath();
 
-        for (File backedUpFolder : backedUpFolders) {
-            copyFolder(backedUpFolder, new File(path));
-        }
+                for (File backedUpFolder : backedUpFolders) {
+                    copyFolder(backedUpFolder, new File(path));
+                }
+                workListeners.alertListenersWorkFinished();
+            }
+        });
+        restore.run();
 
     }
 

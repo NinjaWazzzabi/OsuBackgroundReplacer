@@ -39,6 +39,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
         singleColourWindow = new SingleColourWindow(obh);
         settingsWindow = new SettingsWindow(obh);
         backupWindow = new BackupWindow(obh);
+        backupWindow.getWorkListeners().addListener(this);
 
         mainWindow = new MainWindow();
         mainWindow.addListener(this);
@@ -65,7 +66,7 @@ public class Main extends Application implements WorkListener, MainWindowListene
      */
     private void initializeBackend() {
         obh = new BackgroundManager();
-        obh.addWorkListener(this);
+        obh.getWorkListeners().addListener(this);
     }
 
     @Override

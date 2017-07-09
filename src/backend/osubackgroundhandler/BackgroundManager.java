@@ -15,10 +15,11 @@ import java.util.List;
  */
 public class BackgroundManager implements IOsuBackgroundHandler{
 
+    //TODO implement project lombok here
     private String currentSongFolderPath;
     private String osuDirectoryPath;
     private boolean isWorking;
-    private List<WorkListener> workListeners;
+    private WorkListeners workListeners;
     private MainSongFolder songFolder;
 
     public BackgroundManager(){
@@ -29,7 +30,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
             this.osuDirectoryPath = "";
         }
         updateSongFolder();
-        this.workListeners = new ArrayList<>();
+        this.workListeners = new WorkListeners();
     }
 
     @Override
@@ -42,11 +43,11 @@ public class BackgroundManager implements IOsuBackgroundHandler{
     @Override
     public void replaceAll(Image image) {
         if (!isWorking) {
-            startedWorking();
+            workListeners.alertListenersWorkStarted();
             Thread thread = new Thread(() -> {
                 updateSongFolder();
                 songFolder.replaceAllImages(image);
-                finishedWorking();
+                workListeners.alertListenersWorkFinished();
             });
             thread.start();
         }
@@ -66,11 +67,11 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         }
 
         if (!isWorking && success) {
-            startedWorking();
+            workListeners.alertListenersWorkStarted();
             Thread thread = new Thread(() -> {
                 updateSongFolder();
                 songFolder.copyAll(subDirectory);
-                finishedWorking();
+                workListeners.alertListenersWorkFinished();
             });
             thread.start();
         }
@@ -78,11 +79,11 @@ public class BackgroundManager implements IOsuBackgroundHandler{
     @Override
     public void removeAll() {
         if (!isWorking){
-            startedWorking();
+            workListeners.alertListenersWorkStarted();
             Thread thread = new Thread(() -> {
                     updateSongFolder();
                     songFolder.removeAll();
-                    finishedWorking();
+                    workListeners.alertListenersWorkFinished();
             });
             thread.start();
         }
@@ -137,6 +138,9 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
         return installationPath;
     }
+
+
+    //TODO Move to OsuInstallationFinder
     /**
      * Checks if the directory contains a osu!.exe
      *
@@ -155,6 +159,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
         return false;
     }
+    //TODO Move to OsuInstallationFinder
     /**
      * Checks if the string contains "osu!.exe"
      * @param path total path to the exe, or just the exe name itself.
@@ -172,32 +177,10 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         return Image.validImagePath(file.getAbsolutePath());
     }
 
-
-    private void startedWorking(){
-        isWorking = true;
-        for (WorkListener workListener : workListeners) {
-            workListener.alertWorkStarted();
-        }
-    }
-    private void finishedWorking(){
-        isWorking = false;
-        for (WorkListener workListener : workListeners) {
-            workListener.alertWorkFinished();
-        }
+    public WorkListeners getWorkListeners(){
+        return workListeners;
     }
 
-    @Override
-    public boolean isWorking() {
-        return isWorking;
-    }
-    @Override
-    public void addWorkListener(WorkListener listener) {
-        workListeners.add(listener);
-    }
-    @Override
-    public void removeWorkListener(WorkListener listener) {
-        workListeners.remove(listener);
-    }
 
     @Override
     public boolean installationFound() {
