@@ -88,12 +88,7 @@ public class BackgroundManager implements IOsuBackgroundHandler{
 
     private void updateSongFolder(){
         if (!isSongFolderUpdated()){
-            workListeners.alertListenersWorkStarted();
-            Thread updateSongFolder = new Thread(() -> {
                 songFolder = new MainSongFolder(osuAbsolutePath + "/" + "Songs");
-                workListeners.alertListenersWorkFinished();
-            });
-            updateSongFolder.start();
         }
     }
     private boolean isSongFolderUpdated(){
@@ -109,7 +104,13 @@ public class BackgroundManager implements IOsuBackgroundHandler{
         if (OsuInstallationFinder.isOsuDirectory(path)){
             osuAbsolutePath = path;
             currentSongFolderPath = osuAbsolutePath + "/" + "Songs";
-            updateSongFolder();
+            workListeners.alertListenersWorkStarted();
+            Thread songFolderUpdate = new Thread(() -> {
+                updateSongFolder();
+                workListeners.alertListenersWorkFinished();
+            });
+            songFolderUpdate.start();
+
         } else {
             throw new IOException("Not an osu directory");
         }
