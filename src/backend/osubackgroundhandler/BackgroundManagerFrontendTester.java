@@ -78,13 +78,8 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
     }
 
     @Override
-    public MainSongFolder getMainSongFolder() {
+    public MainSongFolder getSongFolder() {
         return null;
-    }
-
-    @Override
-    public String findOsuDirectory() throws FileNotFoundException {
-        return "C:/Users/Anthony/AppData/Local/osu!";
     }
 
     @Override

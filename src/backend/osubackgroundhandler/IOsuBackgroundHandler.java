@@ -56,15 +56,7 @@ public interface IOsuBackgroundHandler {
      * Used to access all of the beatmaps that the background manager handles.
      * @return the main song folder.
      */
-    MainSongFolder getMainSongFolder();
-
-    /**
-     * Goes through the three default osu installation locations and finds the one with the osu installation.
-     *
-     * @return directory path with osu installation.
-     * @throws FileNotFoundException if no osu installation is found.
-     */
-    String findOsuDirectory() throws FileNotFoundException;
+    MainSongFolder getSongFolder();
 
     WorkListeners getWorkListeners();
 

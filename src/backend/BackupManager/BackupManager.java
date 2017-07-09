@@ -2,7 +2,6 @@ package backend.BackupManager;
 
 import backend.core.Beatmap;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
-import backend.osubackgroundhandler.WorkListener;
 import backend.osubackgroundhandler.WorkListeners;
 import lombok.Getter;
 
@@ -58,7 +57,7 @@ public class BackupManager {
 
     private List<Beatmap> findMissingBackups() {
         List<Beatmap> missingBackups = new ArrayList<>();
-        List<Beatmap> beatmaps = obh.getMainSongFolder().getBeatmaps();
+        List<Beatmap> beatmaps = obh.getSongFolder().getBeatmaps();
 
         for (Beatmap beatmap : beatmaps) {
             boolean beatmapBackedUp = false;
@@ -116,7 +115,7 @@ public class BackupManager {
         workListeners.alertListenersWorkStarted();
         Thread restore = new Thread(() -> {
             synchronized (this) {
-                String path = obh.getMainSongFolder().getPath();
+                String path = obh.getSongFolder().getPath();
 
                 for (File backedUpFolder : backedUpFolders) {
                     copyFolder(backedUpFolder, new File(path));

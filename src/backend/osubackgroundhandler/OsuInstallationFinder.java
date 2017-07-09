@@ -71,4 +71,31 @@ public class OsuInstallationFinder {
         return null;
     }
 
+    /**
+     * Checks if the directory contains a osu!.exe
+     *
+     * @param directory to be checked.
+     * @return true if osu!.exe is found.
+     */
+    static boolean isOsuDirectory(String directory) {
+        File osuFolder = new File(directory);
+        if (!osuFolder.exists() || !osuFolder.isDirectory()) {
+            return false;
+        }
+
+        for (File file : osuFolder.listFiles()) {
+            if (isOsuExe(file.getAbsolutePath())) return true;
+        }
+
+        return false;
+    }
+    /**
+     * Checks if the string contains "osu!.exe"
+     * @param path total path to the exe, or just the exe name itself.
+     * @return true if string contains "osu!.exe".
+     */
+    static boolean isOsuExe(String path){
+        return new File(path).getName().contains("osu!.exe");
+    }
+
 }
