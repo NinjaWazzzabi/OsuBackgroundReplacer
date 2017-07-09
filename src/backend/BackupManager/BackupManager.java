@@ -99,6 +99,13 @@ public class BackupManager {
         workListeners.remove(listener);
     }
 
+    public void refresh() {
+        backedUpFolders = new ArrayList<>();
+        missingBackups = new ArrayList<>();
+        searchForBackup();
+        missingBackups = findMissingBackups();
+    }
+
     public void restoreImages() {
         String path = obh.getMainSongFolder().getPath();
 

@@ -45,10 +45,12 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
 
 
+        autoUpdateLists();
+    }
+    private void autoUpdateLists(){
         setBackedUpVisualList(backupManager.getBackedUpFolders());
         setNonBackedUpVisualList(backupManager.getMissingBackups());
     }
-
     private void setBackedUpVisualList(List<File> folders) {
         List<String> backedUpNames = new ArrayList<>();
 
@@ -92,8 +94,11 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
     @FXML
     void refresh(ActionEvent event){
-        backupManager = new BackupManager(obh);
+        backupManager.refresh();
+        autoUpdateLists();
     }
+
+
 
     @Override
     public void backupYes() {
