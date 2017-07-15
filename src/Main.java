@@ -1,3 +1,4 @@
+import backend.osubackgroundhandler.BackgroundManager;
 import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
@@ -32,13 +33,11 @@ public class Main extends Application implements WorkListener, MainWindowListene
         initializeFrontend(stage);
         startupComplete = true;
     }
-    /**
-     * Starts up the backend.
-     * @throws FileNotFoundException if osu installation wasn't found.
-     */
+
+
     private void initializeBackend() {
         Thread backendStartup = new Thread(() -> {
-            obh = new BackgroundManagerFrontendTester();
+            obh = new BackgroundManager();
             obh.getWorkListeners().addListener(this);
         });
 
