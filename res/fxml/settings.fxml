@@ -16,5 +16,10 @@
       </JFXButton>
       <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightMediumText" text="Osu folder location" />
       <Text fx:id="errorMessage" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorText" text="ErrorMessage" textAlignment="CENTER" wrappingWidth="800.0" />
+      <JFXButton buttonType="RAISED" layoutX="685.0" layoutY="467.0" onAction="#about" prefHeight="34.0" prefWidth="101.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="About" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

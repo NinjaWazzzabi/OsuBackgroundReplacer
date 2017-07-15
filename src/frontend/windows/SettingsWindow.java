@@ -3,6 +3,7 @@ package frontend.windows;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.istack.internal.Nullable;
+import frontend.screens.About;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -91,6 +92,11 @@ public class SettingsWindow extends WindowBase{
             lastFolder = new File(folderPath).getParent();
         }
         return folderPath;
+    }
+
+    @FXML
+    private void about(ActionEvent event) {
+        new About();
     }
 
     @FXML
