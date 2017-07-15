@@ -53,6 +53,14 @@
 
 .darkSmallButton:hover {
     -fx-background-color: #393940;
+
+}
+
+.exitButton {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
 }
 
 /*  TEXT  */

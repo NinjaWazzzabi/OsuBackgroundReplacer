@@ -2,7 +2,6 @@ package frontend.windows;
 
 import com.jfoenix.controls.*;
 import frontend.customfadeeffects.BlurFade;
-import frontend.screens.About;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
@@ -12,6 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -34,6 +36,12 @@ public class MainWindow extends WindowBase{
     @FXML private Text errorText;
     @FXML private JFXTabPane tabPane;
 
+
+    @FXML
+    private ImageView exitImage;
+    @FXML
+    private ImageView minimiseImage;
+
     private double xOffset;
     private double yOffset;
 
@@ -43,6 +51,9 @@ public class MainWindow extends WindowBase{
     private BlurFade customEffect;
     private Popup popup;
     private Loading loading;
+
+    private boolean exitButtonPressed = false;
+    private boolean minimiseButtonPressed = false;
 
     public MainWindow() {
         super(FXML_LOCATION);
@@ -77,23 +88,6 @@ public class MainWindow extends WindowBase{
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
-
-    @FXML
-    void exit(ActionEvent event) {
-        FadeTransition ft = new FadeTransition(Duration.millis(250), topSection.getScene().getWindow().getScene().getRoot());
-        ft.setToValue(0);
-        ft.setOnFinished(event1 -> {
-            for (MainWindowListener listener : listeners) {
-                listener.exit();
-            }
-        });
-        ft.play();
-    }
-    @FXML
-    void about(ActionEvent event) {
-        new About();
-    }
-
 
     public void promtError(String errorMessage) {
         if (lastAnimation != null){
@@ -143,7 +137,6 @@ public class MainWindow extends WindowBase{
             }
         }
     }
-
     private void showLoading(boolean value) {
         if (value) {
             loadingScreenShown = true;
@@ -155,6 +148,91 @@ public class MainWindow extends WindowBase{
         }
     }
 
+
+    /*
+    EXIT BUTTON
+     */
+    @FXML
+    private void exit(ActionEvent event) {
+        FadeTransition ft = new FadeTransition(Duration.millis(250), topSection.getScene().getWindow().getScene().getRoot());
+        ft.setToValue(0);
+        ft.setOnFinished(event1 -> {
+            for (MainWindowListener listener : listeners) {
+                listener.exit();
+            }
+        });
+        ft.play();
+    }
+    @FXML
+    private void exitHoverEnter(MouseEvent event) {
+        if (!event.isPrimaryButtonDown()) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(0.4);
+            exitImage.setEffect(colorAdjust);
+        } else if (exitButtonPressed) {
+            exitPressed(event);
+        }
+    }
+    @FXML
+    private void exitHoverExit(MouseEvent event) {
+            exitImage.setEffect(null);
+    }
+    @FXML
+    private void exitPressed(MouseEvent event) {
+        exitButtonPressed = true;
+        InnerShadow shadow = new InnerShadow();
+        shadow.setHeight(8);
+        shadow.setWidth(8);
+
+        exitImage.setEffect(shadow);
+    }
+    @FXML
+    private void exitReleased(MouseEvent event) {
+            exitImage.setEffect(null);
+            exitButtonPressed = false;
+    }
+
+    /*
+    MINIMISE BUTTON
+     */
+    @FXML
+    private void minimise(ActionEvent event) {
+        for (MainWindowListener listener : listeners) {
+            listener.minimise();
+        }
+    }
+    @FXML
+    void minimiseHoverEnter(MouseEvent event) {
+        if (!event.isPrimaryButtonDown()) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(0.4);
+            minimiseImage.setEffect(colorAdjust);
+        } else if (minimiseButtonPressed) {
+            exitPressed(event);
+        }
+    }
+    @FXML
+    void minimiseHoverExit(MouseEvent event) {
+        minimiseImage.setEffect(null);
+    }
+    @FXML
+    void minimisePressed(MouseEvent event) {
+        minimiseButtonPressed = true;
+        InnerShadow shadow = new InnerShadow();
+        shadow.setHeight(8);
+        shadow.setWidth(8);
+
+        minimiseImage.setEffect(shadow);
+    }
+    @FXML
+    void minimiseReleased(MouseEvent event) {
+        minimiseImage.setEffect(null);
+        minimiseButtonPressed = false;
+    }
+
+    /*
+    LISTENER
+     */
     public void addListener(MainWindowListener listener) {
         listeners.add(listener);
     }

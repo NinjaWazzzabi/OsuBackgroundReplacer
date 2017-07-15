@@ -20,11 +20,13 @@ public class Main extends Application implements WorkListener, MainWindowListene
     private SettingsWindow settingsWindow;
     private BackupWindow backupWindow;
 
+    private Stage stage;
     private IOsuBackgroundHandler obh;
     private boolean startupComplete;
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         startupComplete = false;
         initializeBackend();
         initializeFrontend(stage);
@@ -76,6 +78,11 @@ public class Main extends Application implements WorkListener, MainWindowListene
     @Override
     public void exit() {
         Platform.exit();
+    }
+
+    @Override
+    public void minimise() {
+        stage.setIconified(true);
     }
 
     @Override
