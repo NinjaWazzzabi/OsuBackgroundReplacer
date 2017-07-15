@@ -32,11 +32,13 @@ public class BackupManager {
     private boolean backupExists = false;
 
     public BackupManager(IOsuBackgroundHandler obh) {
+        this.obh = obh;
         backedUpFolders = new ArrayList<>();
         workListeners = new WorkListeners();
-        this.obh = obh;
-        searchForBackup();
-        missingBackups = findMissingBackups();
+        if (obh.installationFound()) {
+            searchForBackup();
+            missingBackups = findMissingBackups();
+        }
     }
 
     private void searchForBackup() {
@@ -80,6 +82,11 @@ public class BackupManager {
     }
 
     public void runBackup() {
+        if (!obh.installationFound()) {
+            return;
+        }
+
+
         workListeners.alertListenersWorkStarted();
 
         Thread backup = new Thread(() -> {
@@ -105,6 +112,9 @@ public class BackupManager {
     }
 
     public void refresh() {
+        if (!obh.installationFound()) {
+            return;
+        }
         backedUpFolders = new ArrayList<>();
         missingBackups = new ArrayList<>();
         searchForBackup();
@@ -112,6 +122,10 @@ public class BackupManager {
     }
 
     public void restoreImages() {
+        if (!obh.installationFound()) {
+            return;
+        }
+
         workListeners.alertListenersWorkStarted();
         Thread restore = new Thread(() -> {
             synchronized (this) {
