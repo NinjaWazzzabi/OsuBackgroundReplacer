@@ -79,7 +79,7 @@ public class BackgroundManagerFrontendTester implements IOsuBackgroundHandler {
 
     @Override
     public MainSongFolder getSongFolder() {
-        return null;
+        return new MainSongFolder("C:/Users/Anthony/AppData/Local/osu!");
     }
 
     @Override

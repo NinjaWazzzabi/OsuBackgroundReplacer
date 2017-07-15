@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 public class BlurFade extends BoxBlur {
 
-    private int FADE_SIZE = 10;
+    private int FADE_SIZE = 5;
     private Timer lastTimer;
 
     public BlurFade(){

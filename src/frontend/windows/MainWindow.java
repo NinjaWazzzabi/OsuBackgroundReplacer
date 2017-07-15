@@ -1,7 +1,7 @@
 package frontend.windows;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.*;
+import frontend.customfadeeffects.BlurFade;
 import frontend.screens.About;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
@@ -15,6 +15,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
@@ -37,11 +38,31 @@ public class MainWindow extends WindowBase{
     private double yOffset;
 
     private Transition lastAnimation;
+    private boolean loadingScreenShown;
+
+    private BlurFade customEffect;
+    private Popup popup;
+    private Loading loading;
 
     public MainWindow() {
         super(FXML_LOCATION);
 
+        loadingScreenShown = false;
         listeners = new ArrayList<>();
+        customEffect = new BlurFade();
+        getVisualComponent().setEffect(customEffect);
+
+        initializePopup();
+    }
+
+    private void initializePopup() {
+        loading = new Loading();
+        loading.setOnClosed(() -> popup.hide());
+
+
+        popup = new Popup();
+        popup.getContent().add(loading.getVisualComponent());
+        popup.setOpacity(0.95);
     }
 
     @FXML
@@ -109,6 +130,30 @@ public class MainWindow extends WindowBase{
         }
     }
 
+    public void loadingEnbled(boolean value){
+        if (loadingScreenShown != value) {
+            showLoading(value);
+            if (value) {
+                getVisualComponent().setDisable(true);
+                customEffect.fadeIn();
+            } else {
+                customEffect.stop();
+                customEffect.fadeOut();
+                getVisualComponent().setDisable(false);
+            }
+        }
+    }
+
+    private void showLoading(boolean value) {
+        if (value) {
+            loadingScreenShown = true;
+            loading.start();
+            popup.show(this.getVisualComponent().getScene().getWindow());
+        } else {
+            loadingScreenShown = false;
+            loading.close();
+        }
+    }
 
     public void addListener(MainWindowListener listener) {
         listeners.add(listener);

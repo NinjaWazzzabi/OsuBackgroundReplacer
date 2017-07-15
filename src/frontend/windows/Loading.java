@@ -1,4 +1,4 @@
-package frontend.screens;
+package frontend.windows;
 
 import com.jfoenix.controls.JFXSpinner;
 import javafx.animation.FadeTransition;
@@ -19,45 +19,29 @@ import java.io.IOException;
 /**
  * Simple loading screen.
  */
-public class Loading {
+public class Loading extends WindowBase {
 
     private int FADE_LENGTH = 250;
 
-    @FXML
-    private Text text;
-    @FXML
-    private JFXSpinner spinner;
-    @FXML
-    private AnchorPane anchor;
+    @FXML private Text text;
+    @FXML private JFXSpinner spinner;
+    @FXML private AnchorPane anchor;
 
-    private Parent visualComponent;
-    private Stage stage;
+    private Runnable closingAction;
 
-    public Loading(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loading.fxml"));
-        loader.setController(this);
-        try {
-            this.visualComponent = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        stage = new Stage();
-        stage.setTitle("Loading...");
-        stage.setScene(new Scene(visualComponent, 250, 250));
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.getScene().setFill(null);
-        stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
-
-        visualComponent.setOpacity(0);
-        FadeTransition ft = new FadeTransition(Duration.millis(250),visualComponent);
-        ft.setToValue(1);
-
-        stage.show();
-        ft.play();
+    public Loading() {
+        super("/fxml/loading.fxml");
     }
 
-
+    public void start(){
+        text.setText("Loading...");
+        visualComponent.setOpacity(0);
+        text.setOpacity(1);
+        spinner.setOpacity(1);
+        FadeTransition ft = new FadeTransition(Duration.millis(FADE_LENGTH_LONG),visualComponent);
+        ft.setToValue(1);
+        ft.play();
+    }
     public void close(){
 
         //Progressbar fade out animation 
@@ -89,11 +73,18 @@ public class Loading {
         textSeq.play();
         ftProgressBar.play();
     }
-
     private void exit(){
         FadeTransition closeTransition = new FadeTransition(Duration.millis(FADE_LENGTH),visualComponent);
         closeTransition.setToValue(0);
-        closeTransition.setOnFinished(event -> stage.close());
+        closeTransition.setOnFinished(event -> {
+            if (closingAction != null) {
+                closingAction.run();
+            }
+        });
         closeTransition.play();
+    }
+
+    public void setOnClosed(Runnable runnable) {
+        closingAction = runnable;
     }
 }

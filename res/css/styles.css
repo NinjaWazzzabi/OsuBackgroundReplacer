@@ -93,9 +93,7 @@
 
 .customDarkBackground {
     -fx-background-color:  #33333f;
-    -fx-border-radius: 15;
-    -fx-background-radius: 15;
-    -fx-border-width: 3;
+    -fx-border-width: 2;
     -fx-border-color: #1a1a1a;
 }
 
@@ -200,6 +198,10 @@
 
 .list-cell:filled:hover {
     -fx-text-fill: WHITE;
+}
+
+.jfx-popup {
+    -fx-background-color: transparent;
 }
 
 /*--------------------------------------------------------------------------*/

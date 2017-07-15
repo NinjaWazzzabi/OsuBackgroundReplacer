@@ -1,9 +1,7 @@
-import backend.osubackgroundhandler.BackgroundManager;
+import backend.osubackgroundhandler.BackgroundManagerFrontendTester;
 import backend.osubackgroundhandler.IOsuBackgroundHandler;
 import backend.osubackgroundhandler.WorkListener;
 import frontend.windows.*;
-import frontend.customfadeeffects.BlurFade;
-import frontend.screens.Loading;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,7 +21,6 @@ public class Main extends Application implements WorkListener, MainWindowListene
     private BackupWindow backupWindow;
 
     private IOsuBackgroundHandler obh;
-    private Loading loading;
     private boolean startupComplete;
 
     @Override
@@ -39,16 +36,14 @@ public class Main extends Application implements WorkListener, MainWindowListene
      */
     private void initializeBackend() {
         Thread backendStartup = new Thread(() -> {
-            obh = new BackgroundManager();
+            obh = new BackgroundManagerFrontendTester();
             obh.getWorkListeners().addListener(this);
         });
 
-        Loading startUpLoading = new Loading();
         backendStartup.start();
         try {
             backendStartup.join();
         } catch (InterruptedException ignored) {}
-        startUpLoading.close();
     }
 
     private void initializeFrontend(Stage stage){
@@ -86,29 +81,13 @@ public class Main extends Application implements WorkListener, MainWindowListene
     @Override
     public void alertWorkStarted() {
         if (startupComplete) {
-            loading = new Loading();
-            BlurFade darkening = new BlurFade();
-            darkening.fadeIn();
-            mainWindow.getVisualComponent().setDisable(true);
-            mainWindow.getVisualComponent().setEffect(darkening);
+            Platform.runLater(() -> mainWindow.loadingEnbled(true));
         }
     }
     @Override
     public void alertWorkFinished() {
         if (startupComplete) {
-            if (loading != null) {
-                loading.close();
-            }
-            mainWindow.getVisualComponent().setDisable(false);
-
-            Effect effect = mainWindow.getVisualComponent().getEffect();
-            if (effect instanceof BlurFade) {
-                BlurFade blurEffect = (BlurFade) effect;
-                blurEffect.stop();
-                blurEffect.fadeOut();
-            } else {
-                mainWindow.getVisualComponent().setEffect(null);
-            }
+            Platform.runLater(() -> mainWindow.loadingEnbled(false));
         }
     }
 
