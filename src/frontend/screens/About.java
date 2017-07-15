@@ -1,15 +1,13 @@
 package frontend.screens;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.animation.FadeTransition;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -23,21 +21,18 @@ import java.net.URISyntaxException;
 /**
  * Created by Anthony on 07/05/2017.
  */
-public class About{
+public class About {
+    private static final int FADE_LENGTH = 100;
     private Parent visualComponent;
 
     @FXML
-    private JFXButton exit;
-    @FXML
     private AnchorPane topSection;
-    @FXML
-    private Text linkText;
 
     private double xOffset;
     private double yOffset;
 
 
-    public About(){
+    public About() {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/about.fxml"));
         loader.setController(this);
@@ -47,7 +42,7 @@ public class About{
             e.printStackTrace();
         }
 
-        initializeActionListeners();
+        initializeWindowMovement();
 
         Stage stage = new Stage();
         stage.setTitle("About section");
@@ -58,7 +53,7 @@ public class About{
         stage.setResizable(false);
 
         visualComponent.setOpacity(0);
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(250),visualComponent);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(FADE_LENGTH), visualComponent);
         fadeIn.setToValue(1);
 
         stage.show();
@@ -66,49 +61,38 @@ public class About{
 
     }
 
-    private void initializeActionListeners() {
+    private void initializeWindowMovement() {
         //Screen window movement
-        topSection.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Window stage = topSection.getScene().getWindow();
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
+        topSection.setOnMousePressed(event -> {
+            Window stage = topSection.getScene().getWindow();
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
         });
-        topSection.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Window stage = topSection.getScene().getWindow();
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
+        topSection.setOnMouseDragged(event -> {
+            Window stage = topSection.getScene().getWindow();
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
         });
+    }
 
-        //Exit button pressed
-        exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                FadeTransition fadeOut = new FadeTransition(Duration.millis(250), visualComponent);
-                fadeOut.setToValue(0);
-                fadeOut.setOnFinished(event1 -> {
-                    Stage stage = (Stage) topSection.getScene().getWindow();
-                    stage.close();
-                });
-                fadeOut.play();
-            }
+    @FXML
+    void exit(ActionEvent event) {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(250), visualComponent);
+        fadeOut.setToValue(0);
+        fadeOut.setOnFinished(event1 -> {
+            Stage stage = (Stage) topSection.getScene().getWindow();
+            stage.close();
         });
+        fadeOut.play();
+    }
 
-
-        //linkText text pressed (They visited my github page ^^)
-        linkText.setOnMouseClicked(event -> {
-                    try {
-                        Desktop.getDesktop().browse(new URI("https://github.com/NinjaWazzzabi/OsuBackgroundReplacer"));
-                    } catch (IOException | URISyntaxException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-        );
+    @FXML
+    void linkTextClicked(MouseEvent event) {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/NinjaWazzzabi/OsuBackgroundReplacer"));
+        } catch (IOException | URISyntaxException e1) {
+            e1.printStackTrace();
+        }
     }
 
 }
