@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="800.0" styleClass="darkBackground" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="20.0" onAction="#workOne" prefHeight="34.0" prefWidth="127.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Work Test 1sec" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="159.0" layoutY="20.0" onAction="#workFive" prefHeight="34.0" prefWidth="127.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Work Test 5sec" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="313.0" layoutY="20.0" onAction="#workTen" prefHeight="34.0" prefWidth="127.0" styleClass="lightSmallButton" stylesheets="@/css/styles.css" text="Work Test 10sec" textFill="#d0d0d0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

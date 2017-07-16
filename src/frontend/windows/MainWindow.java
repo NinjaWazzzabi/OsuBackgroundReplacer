@@ -148,6 +148,10 @@ public class MainWindow extends WindowBase{
         }
     }
 
+    public void setLoadingPercentage(double percentage){
+        loading.setPercentage(percentage);
+    }
+
 
     /*
     EXIT BUTTON

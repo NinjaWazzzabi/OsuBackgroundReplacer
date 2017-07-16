@@ -56,6 +56,7 @@ public class Main extends Application implements WorkObserver, MainWindowListene
         mainWindow.addNewTab("Single Colour",singleColourWindow.getVisualComponent());
         mainWindow.addNewTab("Backup", backupWindow.getVisualComponent());
         mainWindow.addNewTab("Settings", settingsWindow.getVisualComponent());
+        mainWindow.addNewTab("Testing", new TestingWindow(osu).getVisualComponent());
 
         if (!osu.getOsuInstallation().installationFound()) {
             mainWindow.goToTab("Settings");
@@ -94,7 +95,7 @@ public class Main extends Application implements WorkObserver, MainWindowListene
 
     @Override
     public void workProgress(double percentage) {
-
+        mainWindow.setLoadingPercentage(percentage);
     }
 
     public static void main(String[] args) {

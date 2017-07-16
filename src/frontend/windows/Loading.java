@@ -34,7 +34,7 @@ public class Loading extends WindowBase {
     }
 
     public void start(){
-        text.setText("Loading...");
+        text.setText("0.00%");
         visualComponent.setOpacity(0);
         text.setOpacity(1);
         spinner.setOpacity(1);
@@ -82,6 +82,15 @@ public class Loading extends WindowBase {
             }
         });
         closeTransition.play();
+    }
+
+    public void setPercentage(double percentage){
+        String string = String.valueOf(percentage*100);
+
+        if (string.length() > 4) {
+            string = string.substring(0,4);
+        }
+        this.text.setText(string + "%");
     }
 
     public void setOnClosed(Runnable runnable) {
