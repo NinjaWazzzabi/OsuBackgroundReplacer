@@ -133,9 +133,10 @@
 }
 
 .tab-header-area > .tab-header-background {
-    -fx-background-color: #3f4f69;
-    -fx-border-width: 2 0 0 0;
-    -fx-border-color: #22222f;
+    /*-fx-background-color: #3f4f69;*/
+    -fx-background-color: #434969;
+    /*-fx-border-width: 2 0 0 0;*/
+    /*-fx-border-color: #22222f;*/
     -fx-padding: 0;
 }
 

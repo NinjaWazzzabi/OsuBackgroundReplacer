@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="topSection" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="50.0" prefWidth="800.0" styleClass="mediumBackground" stylesheets="@/css/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="topSection" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="50.0" prefWidth="800.0" style="-fx-border-width: 0 0 2 0; -fx-border-color: #222222;" styleClass="mediumBackground" stylesheets="@/css/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fill="WHITE" layoutX="10.0" layoutY="35.373046875" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Osu Background Replacer" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="3.0">
                <font>
