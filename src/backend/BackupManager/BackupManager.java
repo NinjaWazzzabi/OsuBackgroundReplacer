@@ -1,19 +1,17 @@
 package backend.BackupManager;
 
-import backend.core.Beatmap;
-import backend.osubackgroundhandler.IOsuBackgroundHandler;
-import backend.osubackgroundhandler.WorkListeners;
+import backend.beatmapcore.Beatmap;
+import backend.osucore.OsuDirectory;
+import backend.utility.FileHandler;
+import backend.utility.WorkObservers;
 import lombok.Getter;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * Handles backups of osu images.
@@ -24,27 +22,30 @@ public class BackupManager {
 
     @Getter
     private List<File> backedUpFolders;
-    private WorkListeners workListeners;
+    private WorkObservers workObservers;
     @Getter
     private List<Beatmap> missingBackups;
 
-    private final IOsuBackgroundHandler obh;
-    @Getter private boolean backupExists = false;
+    private final OsuDirectory osu;
+    @Getter
+    private boolean backupExists = false;
 
-    public BackupManager(IOsuBackgroundHandler obh) {
-        this.obh = obh;
+    public BackupManager(OsuDirectory osu) {
+        this.osu = osu;
         backedUpFolders = new ArrayList<>();
-        workListeners = new WorkListeners();
-        if (obh.installationFound()) {
-            searchForBackup();
+        workObservers = new WorkObservers();
+        searchForBackup();
+        try {
             missingBackups = findMissingBackups();
+        } catch (FileNotFoundException e) {
+            missingBackups = new ArrayList<>();
         }
     }
 
     private void searchForBackup() {
-        String osuPath = obh.getOsuAbsolutePath();
+        File osuDirectory = osu.getOsuInstallation().getDirectoryPath();
 
-        File backupFolder = new File(osuPath + "/" + BACKUPFOLDER_RELATIVE_PATH);
+        File backupFolder = new File(osuDirectory.getAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
         backupExists = backupFolder.exists();
 
         if (backupExists) {
@@ -57,9 +58,9 @@ public class BackupManager {
         }
     }
 
-    private List<Beatmap> findMissingBackups() {
+    private List<Beatmap> findMissingBackups() throws FileNotFoundException {
         List<Beatmap> missingBackups = new ArrayList<>();
-        List<Beatmap> beatmaps = obh.getSongFolder().getBeatmaps();
+        List<Beatmap> beatmaps = osu.getSongFolder().getBeatmaps();
 
         for (Beatmap beatmap : beatmaps) {
             boolean beatmapBackedUp = false;
@@ -82,112 +83,57 @@ public class BackupManager {
     }
 
     public void runBackup() {
-        if (!obh.installationFound()) {
+        if (!osu.getOsuInstallation().installationFound()) {
             return;
         }
 
 
-        workListeners.alertListenersWorkStarted();
-
-        Thread backup = new Thread(() -> {
-            synchronized (this) {
-                File backupFolder = new File(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
-                if (!backupFolder.exists()) {
-                    backupFolder.mkdir();
-                }
-
-                for (Beatmap missingBackup : missingBackups) {
-                    missingBackup.copyBackgrounds(obh.getOsuAbsolutePath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
-                }
-
-                workListeners.alertListenersWorkFinished();
-            }
-        });
-
-        backup.run();
-    }
-
-    public WorkListeners getWorkListeners(){
-        return workListeners;
-    }
-
-    public void refresh() {
-        if (!obh.installationFound()) {
-            return;
+        File backupFolder = new File(osu.getOsuInstallation().getDirectoryPath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
+        if (!backupFolder.exists()) {
+            backupFolder.mkdir();
         }
+
+        osu.getBackgroundChanger().manipulateBeatmaps(
+                missingBackups,
+                beatmap -> beatmap.copyBackgrounds(osu.getOsuInstallation().getDirectoryPath() + "/" + BACKUPFOLDER_RELATIVE_PATH)
+        );
+
+        workObservers.alertListenersWorkFinished();
+    }
+
+    public WorkObservers getWorkListeners() {
+        return workObservers;
+    }
+
+    public void refresh() throws FileNotFoundException {
+        if (!osu.getOsuInstallation().installationFound()) {
+            throw new FileNotFoundException("Osu installation not found");
+        }
+
         backedUpFolders = new ArrayList<>();
         missingBackups = new ArrayList<>();
         searchForBackup();
         missingBackups = findMissingBackups();
     }
 
-    public void restoreImages() {
-        if (!obh.installationFound()) {
+    public void restoreImages() throws FileNotFoundException {
+        if (!osu.getOsuInstallation().installationFound()) {
             return;
         }
 
-        workListeners.alertListenersWorkStarted();
+        final String path = osu.getSongFolder().getDirectory().getAbsolutePath();
+
+        workObservers.alertListenersWorkStarted();
         Thread restore = new Thread(() -> {
             synchronized (this) {
-                String path = obh.getSongFolder().getPath();
 
                 for (File backedUpFolder : backedUpFolders) {
-                    copyFolder(backedUpFolder, new File(path));
+                    FileHandler.copyFolder(backedUpFolder, new File(path));
                 }
-                workListeners.alertListenersWorkFinished();
+                workObservers.alertListenersWorkFinished();
             }
         });
-        restore.run();
+        restore.start();
 
-    }
-
-    private boolean copyFolder(File source, File target) {
-        //Checks if source exists
-        if (!source.exists() || !source.isDirectory()) {
-            return false;
-        }
-
-        //Checks if target exists
-        if (!target.exists() || !target.isDirectory()) {
-            return false;
-        }
-
-        //Creates the copied folder
-        File folderNew = new File(target.getAbsolutePath() + "//" + source.getName());
-        if (!folderNew.exists()) {
-            boolean dirCreateSuccessful = folderNew.mkdir();
-            if (!dirCreateSuccessful) {
-                return false;
-            }
-        }
-
-        //Copies all sub folders and files in folder
-        File[] filesInSource = source.listFiles();
-        if (filesInSource != null) {
-            for (File file : filesInSource) {
-                if (file.isDirectory()) {
-                    copyFolder(file, new File(folderNew + "//" + file.getName()));
-                } else {
-                    copyFile(file, folderNew);
-                }
-            }
-
-        }
-
-        return true;
-    }
-
-    private boolean copyFile(File source, File folderPath) {
-        if (source.isDirectory() || !folderPath.isDirectory()) {
-            return false;
-        }
-
-        try {
-            Files.copy(Paths.get(source.getAbsolutePath()), Paths.get(folderPath.getAbsolutePath() + "//" + source.getName()), REPLACE_EXISTING);
-        } catch (IOException e) {
-            return false;
-        }
-
-        return true;
     }
 }

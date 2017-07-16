@@ -1,4 +1,4 @@
-package backend.core.image;
+package backend.beatmapcore;
 
 import java.io.File;
 

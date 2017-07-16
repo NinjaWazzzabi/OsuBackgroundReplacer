@@ -1,6 +1,6 @@
 package frontend.windows;
 
-import backend.osubackgroundhandler.SingleColour;
+import backend.utility.SingleColour;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;

@@ -1,7 +1,5 @@
-package backend.core;
+package backend.beatmapcore;
 
-import backend.core.image.Image;
-import backend.core.image.ImageHelper;
 import lombok.Getter;
 
 import java.io.*;
@@ -13,19 +11,26 @@ import java.util.Locale;
  * Handles all background images in a beatmap folder.
  */
 public class Beatmap {
-    @Getter private final List<Image> images;
-    @Getter private final String folderPath;
+    @Getter private List<Image> images;
+    @Getter private final File folderPath;
     @Getter private final String folderName;
 
+    @Getter private boolean isLoaded;
+
     /**
-     * @param path The path to the directory this object will bind itself to.
+     * @param directory The path to the directory this object will bind itself to.
      * @throws IOException Throws the exception if the directory is not found, or if there is no osu file present.
      */
-    Beatmap(String path) {
+    public Beatmap(File directory) {
         //Assigns the directory that this class will work with.
-        this.folderPath = path;
-        this.folderName = new File(path).getName();
+        this.folderPath = directory;
+        this.folderName = directory.getName();
+        this.images = new ArrayList<>();
 
+        isLoaded = false;
+    }
+
+    public void loadImages(){
         ArrayList<String> osuFiles = findOsuFiles();
 
         images = new ArrayList<>();
@@ -35,6 +40,8 @@ public class Beatmap {
                 images.add(foundImage);
             }
         }
+
+        isLoaded = true;
     }
 
     /**
@@ -44,7 +51,7 @@ public class Beatmap {
         //Creates an ArrayList to hold all of the found .osu files,
         //and gets a list of all of the files in the song folder.
         ArrayList<String> tempOsuNames = new ArrayList<>(0);
-        File[] listOfFiles = new File(folderPath).listFiles();
+        File[] listOfFiles = folderPath.listFiles();
 
         //Adds every file that has the file ending ".osu" to the ArrayList
         if (listOfFiles != null){

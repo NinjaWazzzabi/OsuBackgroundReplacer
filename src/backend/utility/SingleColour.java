@@ -1,4 +1,4 @@
-package backend.osubackgroundhandler;
+package backend.utility;
 
 import lombok.Getter;
 

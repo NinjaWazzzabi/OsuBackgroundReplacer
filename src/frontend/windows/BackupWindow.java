@@ -1,10 +1,9 @@
 package frontend.windows;
 
 import backend.BackupManager.BackupManager;
-import backend.core.Beatmap;
-import backend.osubackgroundhandler.IOsuBackgroundHandler;
-import backend.osubackgroundhandler.WorkListener;
-import backend.osubackgroundhandler.WorkListeners;
+import backend.beatmapcore.Beatmap;
+import backend.osucore.OsuDirectory;
+import backend.utility.WorkObservers;
 import com.jfoenix.controls.JFXTextField;
 import frontend.screens.BackupPrompt;
 import frontend.screens.BackupPromptListener;
@@ -14,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +29,17 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     @FXML private JFXTextField savePath;
     @FXML private Text errorMessage;
 
-    private final IOsuBackgroundHandler obh;
+    private final OsuDirectory osu;
     private BackupManager backupManager;
 
-    public BackupWindow(IOsuBackgroundHandler obh) {
+    public BackupWindow(OsuDirectory osu) {
         super(FXML_LOCATION);
 
         errorMessage.setOpacity(0);
 
-        this.obh = obh;
+        this.osu = osu;
 
-        backupManager = new BackupManager(obh);
+        backupManager = new BackupManager(osu);
 
         if (!backupManager.isBackupExists()){
             new BackupPrompt(this);
@@ -84,7 +84,7 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
     @FXML
     void backup(ActionEvent event) {
-        if (obh.installationFound()) {
+        if (osu.getOsuInstallation().installationFound()) {
             backupManager.runBackup();
             refreshAll();
         }
@@ -92,11 +92,16 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
     @FXML
     void restore(ActionEvent event){
-        if (obh.installationFound()) {
-            backupManager.restoreImages();
+        if (osu.getOsuInstallation().installationFound()) {
+            try {
+                backupManager.restoreImages();
+            } catch (FileNotFoundException e) {
+                installationNotFound();
+            }
             refreshAll();
         }
     }
+
 
     @FXML
     void refresh(ActionEvent event){
@@ -104,11 +109,23 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
     }
 
     private void refreshAll(){
-        backupManager.refresh();
+        try {
+            backupManager.refresh();
+        } catch (FileNotFoundException e) {
+            installationNotFound();
+        }
         autoUpdateLists();
     }
 
-    public WorkListeners getWorkListeners(){
+
+    private void installationNotFound() {
+        notBackedUp.getItems().clear();
+        notBackedUp.getItems().add("OSU INSTALLATION NOT FOUND");
+        backedUp.getItems().clear();
+        backedUp.getItems().add("OSU INSTALLATION NOT FOUND");
+    }
+
+    public WorkObservers getWorkListeners(){
         return backupManager.getWorkListeners();
     }
 

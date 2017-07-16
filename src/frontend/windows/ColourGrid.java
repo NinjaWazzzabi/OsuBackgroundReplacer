@@ -1,6 +1,6 @@
 package frontend.windows;
 
-import backend.osubackgroundhandler.SingleColour;
+import backend.utility.SingleColour;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;

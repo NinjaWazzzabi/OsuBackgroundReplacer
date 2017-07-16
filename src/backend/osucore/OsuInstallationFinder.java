@@ -1,4 +1,4 @@
-package backend.osubackgroundhandler;
+package backend.osucore;
 
 import java.io.*;
 import java.util.Arrays;

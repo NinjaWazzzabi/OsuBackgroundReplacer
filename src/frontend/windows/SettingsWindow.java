@@ -1,6 +1,6 @@
 package frontend.windows;
 
-import backend.osubackgroundhandler.IOsuBackgroundHandler;
+import backend.osucore.OsuDirectory;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.istack.internal.Nullable;
 import frontend.screens.About;
@@ -19,24 +19,24 @@ public class SettingsWindow extends WindowBase{
 
     private static final String FXML_LOCATION = "/fxml/settings.fxml";
 
-    private final IOsuBackgroundHandler obh;
-    private String lastFolder = null;
+    private final OsuDirectory obh;
+    private File lastFolder = null;
 
     @FXML private JFXTextField osuFolderLocation;
     @FXML private Text errorMessage;
 
-    public SettingsWindow(IOsuBackgroundHandler obh) {
+    public SettingsWindow(OsuDirectory obh) {
         super(FXML_LOCATION);
 
         this.errorMessage.setOpacity(0);
         this.obh = obh;
-        osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(osuFolderLocation.getText()));
+        osuFolderLocation.focusedProperty().addListener((observable, oldValue, newValue) -> setOsuInstallation(new File(osuFolderLocation.getText())));
         osuFolderLocation.setOnKeyTyped(event -> {
-          setOsuInstallation(osuFolderLocation.getText() + event.getText());
+          setOsuInstallation(new File(osuFolderLocation.getText() + event.getText()));
         });
-        osuFolderLocation.setText(obh.getOsuAbsolutePath());
+        osuFolderLocation.setText(obh.getOsuInstallation().getDirectoryPath().getAbsolutePath());
         osuFolderLocation.setDisable(true);
-        if (!obh.installationFound()) {
+        if (!obh.getOsuInstallation().installationFound()) {
             showError("No osu installation found");
         }
     }
@@ -52,46 +52,45 @@ public class SettingsWindow extends WindowBase{
 
     @FXML
     void browseInstallation(ActionEvent event) {
-        String tempPath = exeBrowseExplorer();
+        File file = exeBrowseExplorer();
 
-        if (tempPath != null) {
-            setOsuInstallation(tempPath);
+        if (file != null) {
+            setOsuInstallation(file);
         }
     }
     /**
-     * Opens a folder browser.
+     * Opens a file browser.
      *
-     * @return String to the chosen path.
+     * @return {@link File} to the chosen path.
      */
     @Nullable
-    private String exeBrowseExplorer() {
+    private File exeBrowseExplorer() {
         //Create directory chooser
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose .exe file");
-        String dir;
+        chooser.setTitle("Find osu!.exe file");
 
         FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("exe files (*.exe)", "*.exe");
         chooser.getExtensionFilters().addAll(extFilterJPG);
 
+        File directory;
         //If there's an already last folderstart from there, otherwise at user home.
         if (lastFolder != null) {
-            dir = lastFolder;
+            directory = lastFolder;
         } else {
-            dir = System.getProperty("user.home");
+            directory = new File(System.getProperty("user.home"));
         }
 
         //Sets initial directory and shows directory chooser
-        File defaultDirectory = new File(dir);
+        File defaultDirectory = directory;
         chooser.setInitialDirectory(defaultDirectory);
         File selectedDirectory = chooser.showOpenDialog(new Stage());
 
         //Saves only if the user selected a folder and didn't just close down the window.
-        String folderPath = null;
         if (selectedDirectory != null) {
-            folderPath = selectedDirectory.getAbsolutePath().replace("\\", "/");
-            lastFolder = new File(folderPath).getParent();
+            lastFolder = selectedDirectory;
         }
-        return folderPath;
+
+        return selectedDirectory;
     }
 
     @FXML
@@ -101,28 +100,23 @@ public class SettingsWindow extends WindowBase{
 
     @FXML
     void osuFolderLocationAction(ActionEvent event) {
-        setOsuInstallation(osuFolderLocation.getText());
+        setOsuInstallation(new File(osuFolderLocation.getText()));
     }
-    private void setOsuInstallation(String path) {
+    private void setOsuInstallation(File file) {
         boolean isValid = false;
 
-        if (path != null) {
-            try {
-                obh.setOsuFile(path);
-                isValid = true;
-            } catch (IOException ignored) {}
+        if (file != null) {
+
+            isValid = obh.getOsuInstallation().setOsuFile(file);
 
             if (!isValid) {
-                try {
-                    obh.setOsuDirectory(path);
-                    isValid = true;
-                } catch (IOException ignored) {}
+                isValid = obh.getOsuInstallation().setOsuDirectory(file);
             }
 
         }
 
         if (isValid) {
-            osuFolderLocation.setText(obh.getOsuAbsolutePath());
+            osuFolderLocation.setText(obh.getOsuInstallation().getDirectoryPath().getAbsolutePath());
         } else {
             showError("Not a valid osu installation");
         }

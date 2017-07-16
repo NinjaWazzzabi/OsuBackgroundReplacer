@@ -1,6 +1,7 @@
-package backend.core.image;
+package backend.beatmapcore;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class ImageHelper implements Image{
 
@@ -11,6 +12,9 @@ public class ImageHelper implements Image{
     }
     public ImageHelper(String fullPathToFile) {
         this.image = new ImagePathType(fullPathToFile);
+    }
+    public ImageHelper(File file) {
+        this.image = new ImagePathType(file.getAbsolutePath());
     }
 
     @Override

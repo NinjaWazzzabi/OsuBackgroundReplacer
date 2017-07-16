@@ -1,8 +1,8 @@
 package frontend.windows;
 
-import backend.core.image.ImageHelper;
-import backend.osubackgroundhandler.IOsuBackgroundHandler;
-import backend.osubackgroundhandler.SingleColour;
+import backend.beatmapcore.ImageHelper;
+import backend.osucore.OsuDirectory;
+import backend.utility.SingleColour;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
@@ -18,7 +18,7 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
 
     private static final String FXML_LOCATION = "/fxml/singlecolour.fxml";
 
-    private IOsuBackgroundHandler obh;
+    private OsuDirectory obh;
 
 
     @FXML private JFXSlider red;
@@ -37,7 +37,7 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
 
     private ColourGrid colourGrid;
 
-    public SingleColourWindow(IOsuBackgroundHandler osuBackgroundHandler) {
+    public SingleColourWindow(OsuDirectory osuBackgroundHandler) {
         super(FXML_LOCATION);
 
         this.obh = osuBackgroundHandler;
@@ -112,7 +112,7 @@ public class SingleColourWindow extends WindowBase implements ColourTileObserver
 
     @FXML
     void setSingleColour(ActionEvent event) {
-        obh.replaceAll(
+        obh.getBackgroundChanger().replaceAll(
                 new ImageHelper(selectedColour.getImage(),
      String.valueOf(selectedColour.getR())+ "_" +
                 String.valueOf(selectedColour.getG())+ "_" +

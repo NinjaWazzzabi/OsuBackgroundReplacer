@@ -1,9 +1,7 @@
 package frontend.windows;
 
-import backend.osubackgroundhandler.IOsuBackgroundHandler;
+import backend.osucore.OsuDirectory;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.istack.internal.Nullable;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -11,35 +9,33 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 
 
 public class ReplaceWindow extends WindowBase{
 
     private static String FXML_LOCATION = "/fxml/replaceimage.fxml";
 
-    private IOsuBackgroundHandler obh;
-    private String imagePath;
-    private String lastFolder;
+    private OsuDirectory obh;
+    private File imageFile;
+    private File lastFolder;
 
     @FXML private JFXTextField imageLocationText;
     @FXML private Text inlineErrorMessage;
     @FXML private ImageView imageView;
 
-    public ReplaceWindow(IOsuBackgroundHandler backgroundHandler) {
+    public ReplaceWindow(OsuDirectory backgroundHandler) {
         super(FXML_LOCATION);
 
 
         this.inlineErrorMessage.setOpacity(0);
-        this.imagePath = "";
+        this.imageFile = new File("");
         this.obh = backgroundHandler;
 
         this.imageLocationText.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            updateImagePath(imageLocationText.getText());
+            updateImagePath(new File(imageLocationText.getText()));
         });
 
         this.imageLocationText.setOnKeyTyped(event -> {
@@ -47,35 +43,30 @@ public class ReplaceWindow extends WindowBase{
             imageLocationText.setText(imageLocationText.getText() + event.getCharacter());
             event.consume();
             imageLocationText.positionCaret(i + 1);
-            updateImagePath(imageLocationText.getText());
+            updateImagePath(new File(imageLocationText.getText()));
         });
     }
 
     @FXML
     void replaceAll(ActionEvent event) {
-        if (imagePath == null || imagePath.length() < 1) {
+        if (imageFile == null || imageFile.length() < 1) {
             inlineErrorMessage.setText("No image selected");
             showInlineErrorMessage();
-        } else if (!new File(imagePath).exists()) {
+        } else if (!imageFile.exists()) {
             inlineErrorMessage.setText("ImagePathType does not exist");
             showInlineErrorMessage();
         } else {
-            try {
-                obh.replaceAll(imagePath);
-            } catch (IOException e) {
-                inlineErrorMessage.setText(e.getMessage());
-                showInlineErrorMessage();
-            }
+            obh.getBackgroundChanger().replaceAll(imageFile);
         }
     }
 
     @FXML
     void browseImage(ActionEvent event) {
-        String tempImagePath = imageFileBrowseExplorer();
-        if (tempImagePath != null) {
-            this.imagePath = tempImagePath;
-            updateImagePath(imagePath);
-            imageLocationText.setText(imagePath);
+        File file = imageFileBrowseExplorer();
+        if (file != null) {
+            this.imageFile = file;
+            updateImagePath(imageFile);
+            imageLocationText.setText(imageFile.getAbsolutePath());
         }
     }
     /**
@@ -83,8 +74,7 @@ public class ReplaceWindow extends WindowBase{
      *
      * @return path to file chosen.
      */
-    @Nullable
-    private String imageFileBrowseExplorer() {
+    private File imageFileBrowseExplorer() {
         //Create directory chooser
         FileChooser chooser = new FileChooser();
 
@@ -93,43 +83,44 @@ public class ReplaceWindow extends WindowBase{
         chooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
 
         chooser.setTitle("Choose image file");
-        String dir;
+        File directory;
 
         //If there's an already selected osu directory start from there, otherwise at user home.
         if (lastFolder != null) {
-            dir = lastFolder;
+            directory = lastFolder;
         } else {
-            dir = System.getProperty("user.home");
+            directory = new File(System.getProperty("user.home"));
         }
 
         //Sets initial directory and shows directory chooser
-        File defaultDirectory = new File(dir);
+        File defaultDirectory = directory;
         chooser.setInitialDirectory(defaultDirectory);
         File selectedDirectory = chooser.showOpenDialog(new Stage());
 
         //Saves only if the user selected a folder and didn't just close down the window.
-        String filePath = null;
-        if (selectedDirectory != null) {
-            filePath = selectedDirectory.getAbsolutePath().replace("\\", "/");
-            lastFolder = new File(filePath).getParent();
+        if (selectedDirectory != null && selectedDirectory.getParentFile() != null) {
+            lastFolder = selectedDirectory.getParentFile();
         }
 
-        return filePath;
+        return selectedDirectory;
     }
 
     @FXML
     void imageLocationChange(ActionEvent event) {
         hideInlineErrorMessage();
-        updateImagePath(imageLocationText.getText());
+        updateImagePath(new File(imageLocationText.getText()));
     }
     @FXML
     void imageLocationChange(KeyEvent event) {
         hideInlineErrorMessage();
-        updateImagePath(imageLocationText.getText());
+        updateImagePath(new File(imageLocationText.getText()));
     }
-    private void updateImagePath(String updatedImagePath) {
-        imagePath = updatedImagePath;
-        Image image = new Image("file:///" + updatedImagePath);
+    private void updateImagePath(File updatedImageFile) {
+        // TODO: 16/07/2017 Make cross platorm
+        //Not sure if the part with "file:///" will work on systems other than windows.
+
+        imageFile = updatedImageFile;
+        Image image = new Image("file:///" + updatedImageFile.getAbsolutePath());
         imageView.setImage(image);
     }
 
