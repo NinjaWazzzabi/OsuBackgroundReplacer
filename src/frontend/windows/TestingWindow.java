@@ -36,15 +36,16 @@ public class TestingWindow extends WindowBase {
 
 
     private void startWork(int seconds) {
+        System.out.println("test run: " + seconds);
         Thread work = new Thread(() -> {
             WorkObservers workObservers = osu.getWorkObservers();
             workObservers.alertListenersWorkStarted();
 
-            for (double i = 0; i < seconds; i+=0.05) {
+            for (double i = 0; i < seconds; i+=0.005) {
                 workObservers.alertWorkProgress(i/seconds);
 
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(5);
                 } catch (InterruptedException ignored) {}
             }
 

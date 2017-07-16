@@ -90,6 +90,8 @@ public class Loading extends WindowBase {
         if (string.length() > 4) {
             string = string.substring(0,4);
         }
+
+        // FIXME: 16/07/2017 Gives "ArrayIndexOutOfBoundsException" when called too many times per second.
         this.text.setText(string + "%");
     }
 

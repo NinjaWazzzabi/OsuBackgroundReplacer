@@ -59,7 +59,9 @@ public class OsuBeatmapBackgroundChanger {
                     beatmapList.get(i).loadImages();
                 }
                 consumer.accept(beatmapList.get(i));
-                workObservers.alertWorkProgress((double) i / beatmapList.size());
+                if (i % 10 == 0) {
+                    workObservers.alertWorkProgress((double) i / beatmapList.size());
+                }
             }
         });
     }
