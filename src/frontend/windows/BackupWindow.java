@@ -41,11 +41,13 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
 
         backupManager = new BackupManager(obh);
 
-        if (!backupManager.allIsBackedUp()){
+        if (!backupManager.isBackupExists()){
             new BackupPrompt(this);
+        } else if (!backupManager.allIsBackedUp()) {
+            new BackupPrompt(this)
+                    .setTitle("Missing backups")
+                    .setText("There are beatmaps that are not  backed up yet. Would you like to try to save the beatmap images?");
         }
-
-
 
         autoUpdateLists();
     }

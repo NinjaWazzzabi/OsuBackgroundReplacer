@@ -29,7 +29,7 @@ public class BackupManager {
     private List<Beatmap> missingBackups;
 
     private final IOsuBackgroundHandler obh;
-    private boolean backupExists = false;
+    @Getter private boolean backupExists = false;
 
     public BackupManager(IOsuBackgroundHandler obh) {
         this.obh = obh;

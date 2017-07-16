@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -30,6 +31,11 @@ public class BackupPrompt {
     private JFXButton yes;
     @FXML
     private JFXButton no;
+
+    @FXML
+    private Text mainText;
+    @FXML
+    private Text title;
 
     private double xOffset;
     private double yOffset;
@@ -100,6 +106,16 @@ public class BackupPrompt {
             listeners.forEach(BackupPromptListener::backupNo);
             close();
         });
+    }
+
+    public BackupPrompt setText(String text) {
+        mainText.setText(text);
+        return this;
+    }
+
+    public BackupPrompt setTitle(String text) {
+        title.setText(text);
+        return this;
     }
 
     public void addListener(BackupPromptListener listener){
