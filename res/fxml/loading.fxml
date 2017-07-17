@@ -7,6 +7,6 @@
 <AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" styleClass="customDarkBackground" stylesheets="@/css/styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <JFXSpinner fx:id="spinner" layoutX="11.0" layoutY="11.0" radius="110.0" />
-      <Text fx:id="text" layoutX="62.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Loading..." />
+      <Text fx:id="text" layoutX="52.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lightBigText" text="Loading..." textAlignment="CENTER" wrappingWidth="150.0" />
    </children>
 </AnchorPane>
