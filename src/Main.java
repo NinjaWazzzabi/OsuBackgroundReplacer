@@ -95,7 +95,9 @@ public class Main extends Application implements WorkObserver, MainWindowListene
 
     @Override
     public void workProgress(double percentage) {
-        mainWindow.setLoadingPercentage(percentage);
+        if (startupComplete) {
+            Platform.runLater(() -> mainWindow.setLoadingPercentage(percentage));
+        }
     }
 
     public static void main(String[] args) {
