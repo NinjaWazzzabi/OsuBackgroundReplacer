@@ -12,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +104,15 @@ public class BackupWindow extends WindowBase implements BackupPromptListener {
         }
     }
 
+    @FXML
+    void openBackupFolder(ActionEvent event) {
+        try {
+            Desktop.getDesktop().open(backupManager.getBackupDirectory());
+        } catch (IOException e) {
+            errorMessage.setText("Directory not available");
+            super.flashRevealVisualComponent(errorMessage, FADE_LENGTH_MEDIUM);
+        }
+    }
 
     @FXML
     void refresh(ActionEvent event){

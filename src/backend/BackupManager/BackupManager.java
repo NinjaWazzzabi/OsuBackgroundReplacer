@@ -136,4 +136,8 @@ public class BackupManager {
         restore.start();
 
     }
+
+    public File getBackupDirectory() {
+        return new File(osu.getOsuInstallation().getDirectoryPath() + "/" + BACKUPFOLDER_RELATIVE_PATH);
+    }
 }
