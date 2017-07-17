@@ -22,24 +22,32 @@ public class Main extends Application implements WorkObserver, MainWindowListene
 
     @Override
     public void start(Stage stage) {
-        this.stage = stage;
         startupComplete = false;
-        initializeBackend();
-        initializeFrontend(stage);
-        startupComplete = true;
+        this.stage = stage;
+
+        Stage loadingStage = new Stage();
+        Loading loading = new Loading();
+        loadingStage.setScene(new Scene(loading.getVisualComponent()));
+        loadingStage.initStyle(StageStyle.TRANSPARENT);
+        loadingStage.show();
+
+        initializeBackend(() -> {
+            loadingStage.close();
+            initializeFrontend(stage);
+            startupComplete = true;
+        });
     }
 
 
-    private void initializeBackend() {
+    private void initializeBackend(Runnable runWhenFinished) {
         Thread backendStartup = new Thread(() -> {
             osu = new OsuDirectory();
             osu.getWorkObservers().addListener(this);
+
+            Platform.runLater(runWhenFinished);
         });
 
         backendStartup.start();
-        try {
-            backendStartup.join();
-        } catch (InterruptedException ignored) {}
     }
 
     private void initializeFrontend(Stage stage){
